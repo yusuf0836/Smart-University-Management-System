@@ -11,10 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('faculties', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+    Schema::create('faculties', function (Blueprint $table) {
+
+        $table->id();
+
+        $table->string('name');
+
+        $table->string('code')->unique();
+
+        $table->text('description')->nullable();
+
+        $table->boolean('status')->default(true);
+
+        $table->softDeletes();
+
+        $table->timestamps();
+
+    });
     }
 
     /**
