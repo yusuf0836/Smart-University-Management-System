@@ -15,4 +15,8 @@ class Faculty extends Model
         'description',
         'status',
     ];
+    public function departments()
+    {
+        return $this->hasMany(Department::class);
+    }
 }
