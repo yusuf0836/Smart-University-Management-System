@@ -31,4 +31,11 @@ class Course extends Model
     {
         return $this->belongsTo(Department::class);
     }
+    /**
+     * Course has many enrollments
+     */
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
 }

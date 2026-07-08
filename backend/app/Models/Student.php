@@ -44,4 +44,11 @@ class Student extends Model
     {
         return $this->belongsTo(Semester::class);
     }
+    /**
+     * Student has many enrollments
+     */
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
 }
