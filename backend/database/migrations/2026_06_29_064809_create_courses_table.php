@@ -12,7 +12,28 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('courses', function (Blueprint $table) {
+
             $table->id();
+
+            $table->foreignId('department_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
+            $table->string('course_code')->unique();
+
+            $table->string('course_title');
+
+            $table->decimal('credit', 3, 1);
+
+            $table->enum('type', [
+                'Theory',
+                'Lab'
+            ]);
+
+            $table->boolean('status')->default(true);
+
+            $table->softDeletes();
+
             $table->timestamps();
         });
     }
