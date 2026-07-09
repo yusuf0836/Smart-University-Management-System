@@ -45,5 +45,12 @@ class Course extends Model
     {
         return $this->hasMany(Attendance::class);
     }
+    /**
+     * Course has many routines
+     */
+    public function routines()
+    {
+        return $this->hasMany(Routine::class);
+    }
     
 }

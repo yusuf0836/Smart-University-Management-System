@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\EnrollmentController;
 use App\Http\Controllers\Api\ResultController;
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\NoticeController;
+use App\Http\Controllers\Api\RoutineController;
 
 Route::prefix('v1')->group(function () {
 
@@ -32,6 +33,7 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('results', ResultController::class);
         Route::apiResource('attendances', AttendanceController::class);
         Route::apiResource('notices', NoticeController::class);
+        Route::apiResource('routines', RoutineController::class);
 
     });
 

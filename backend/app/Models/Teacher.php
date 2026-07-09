@@ -27,4 +27,8 @@ class Teacher extends Model
     {
         return $this->belongsTo(Department::class);
     }
+    public function routines()
+    {
+        return $this->hasMany(Routine::class);
+    }
 }
