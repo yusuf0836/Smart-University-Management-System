@@ -2,20 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Enrollment extends Model
+class Attendance extends Model
 {
-    use HasFactory, SoftDeletes;
+    use SoftDeletes;
 
     protected $fillable = [
         'student_id',
         'course_id',
         'semester_id',
-        'enrollment_date',
+        'attendance_date',
         'status',
+        'remarks',
+    ];
+
+    protected $casts = [
+        'attendance_date' => 'date',
     ];
 
     /**
@@ -40,12 +44,5 @@ class Enrollment extends Model
     public function semester()
     {
         return $this->belongsTo(Semester::class);
-    }
-    /**
-     * An enrollment has one result.
-     */
-    public function result()
-    {
-        return $this->hasOne(Result::class);
     }
 }

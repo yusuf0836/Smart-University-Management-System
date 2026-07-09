@@ -9,6 +9,8 @@ use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\Api\SemesterController;
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\EnrollmentController;
+use App\Http\Controllers\Api\ResultController;
+use App\Http\Controllers\Api\AttendanceController;
 
 Route::prefix('v1')->group(function () {
 
@@ -26,6 +28,8 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('semesters', SemesterController::class);
         Route::apiResource('courses', CourseController::class);
         Route::apiResource('enrollments', EnrollmentController::class);
+        Route::apiResource('results', ResultController::class);
+        Route::apiResource('attendances', AttendanceController::class);
 
     });
 

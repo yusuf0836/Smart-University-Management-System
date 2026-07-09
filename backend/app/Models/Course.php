@@ -38,4 +38,12 @@ class Course extends Model
     {
         return $this->hasMany(Enrollment::class);
     }
+    /**
+     * Course has many attendances
+     */
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+    
 }
