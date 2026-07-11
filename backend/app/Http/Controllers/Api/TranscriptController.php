@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Transcript;
 use App\Services\TranscriptService;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Result;
 
 class TranscriptController extends Controller
 {
@@ -68,7 +70,32 @@ class TranscriptController extends Controller
             ])->latest()->get(),
         ]);
     }
+    /**
+     * Download Transcript as PDF
+     */
+    public function downloadPdf(Transcript $transcript)
+    {
+        $student = $transcript->student;
+        $semester = $transcript->semester;
 
+        $results = Result::with('enrollment.course')
+            ->whereHas('enrollment', function ($query) use ($student, $semester) {
+                $query->where('student_id', $student->id)
+                    ->where('semester_id', $semester->id);
+            })
+            ->get();
+
+        $pdf = Pdf::loadView('transcripts.pdf', [
+            'transcript' => $transcript,
+            'student' => $student,
+            'semester' => $semester,
+            'results' => $results,
+        ]);
+
+        return $pdf->download(
+            'Transcript_'.$student->student_id.'_'.$semester->name.'.pdf'
+        );
+    }
     /**
      * Delete Transcript
      */

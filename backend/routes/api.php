@@ -20,7 +20,7 @@ use App\Http\Controllers\Api\TranscriptController;
 Route::prefix('v1')->group(function () {
 
     Route::post('/login', [AuthController::class, 'login']);
-
+    Route::get('transcripts/{transcript}/pdf', [TranscriptController::class, 'downloadPdf']);
     Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/logout', [AuthController::class, 'logout']);
@@ -46,6 +46,7 @@ Route::prefix('v1')->group(function () {
         Route::get('transcripts', [TranscriptController::class, 'index']);
         Route::post('transcripts/generate', [TranscriptController::class, 'generate']);
         Route::get('transcripts/{transcript}', [TranscriptController::class, 'show']);
+        
         Route::delete('transcripts/{transcript}', [TranscriptController::class, 'destroy']);
 
     });
