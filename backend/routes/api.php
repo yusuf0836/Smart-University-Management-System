@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\NoticeController;
 use App\Http\Controllers\Api\RoutineController;
 use App\Http\Controllers\Api\FeeController;
 use App\Http\Controllers\Api\ExaminationController;
+use App\Http\Controllers\Api\TranscriptController;
 
 Route::prefix('v1')->group(function () {
 
@@ -38,6 +39,14 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('routines', RoutineController::class);
         Route::apiResource('fees', FeeController::class);
         Route::apiResource('examinations', ExaminationController::class);
+        
+        /**
+         * Transcript Routes
+         */
+        Route::get('transcripts', [TranscriptController::class, 'index']);
+        Route::post('transcripts/generate', [TranscriptController::class, 'generate']);
+        Route::get('transcripts/{transcript}', [TranscriptController::class, 'show']);
+        Route::delete('transcripts/{transcript}', [TranscriptController::class, 'destroy']);
 
     });
 

@@ -62,4 +62,11 @@ class Semester extends Model
     {
         return $this->hasMany(Examination::class);
     }
+    /**
+     * Semester has many transcripts
+     */
+    public function transcripts()
+    {
+        return $this->hasMany(Transcript::class);
+    }
 }
