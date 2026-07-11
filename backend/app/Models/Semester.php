@@ -55,4 +55,11 @@ class Semester extends Model
     {
         return $this->hasMany(Fee::class);
     }
+    /**
+     * Semester has many examinations
+     */
+    public function examinations()
+    {
+        return $this->hasMany(Examination::class);
+    }
 }

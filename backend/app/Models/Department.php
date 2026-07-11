@@ -29,4 +29,8 @@ class Department extends Model
     {
         return $this->hasMany(Routine::class);
     }
+    public function examinations()
+    {
+        return $this->hasMany(Examination::class);
+    }
 }

@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\NoticeController;
 use App\Http\Controllers\Api\RoutineController;
 use App\Http\Controllers\Api\FeeController;
+use App\Http\Controllers\Api\ExaminationController;
 
 Route::prefix('v1')->group(function () {
 
@@ -36,6 +37,7 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('notices', NoticeController::class);
         Route::apiResource('routines', RoutineController::class);
         Route::apiResource('fees', FeeController::class);
+        Route::apiResource('examinations', ExaminationController::class);
 
     });
 
