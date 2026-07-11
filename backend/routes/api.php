@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\RoutineController;
 use App\Http\Controllers\Api\FeeController;
 use App\Http\Controllers\Api\ExaminationController;
 use App\Http\Controllers\Api\TranscriptController;
+use App\Http\Controllers\Api\DashboardController;
 
 Route::prefix('v1')->group(function () {
 
@@ -48,6 +49,7 @@ Route::prefix('v1')->group(function () {
         Route::get('transcripts/{transcript}', [TranscriptController::class, 'show']);
         Route::get('transcripts/{transcript}/pdf', [TranscriptController::class, 'downloadPdf']);
         Route::delete('transcripts/{transcript}', [TranscriptController::class, 'destroy']);
+        Route::get('/dashboard', [DashboardController::class, 'index']);
 
     });
 
