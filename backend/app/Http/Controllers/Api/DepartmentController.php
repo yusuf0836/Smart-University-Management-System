@@ -9,6 +9,18 @@ use App\Http\Resources\DepartmentResource;
 
 class DepartmentController extends Controller
 {
+
+    /**
+     * List Departments
+     *
+     * Returns a list of all departments with faculty information.
+     *
+     * @group Department Management
+     *
+     * @authenticated
+     *
+     * @response 200 {"success": true}
+     */
     public function index()
     {
         $departments = Department::with('faculty')
@@ -21,6 +33,21 @@ class DepartmentController extends Controller
         ]);
     }
 
+    /**
+     * Create Department
+     *
+     * Creates a new department.
+     *
+     * @group Department Management
+     *
+     * @authenticated
+     *
+     * @bodyParam faculty_id integer required Faculty ID. Example: 1
+     * @bodyParam department_name string required Department Name. Example: Computer Science and Engineering
+     * @bodyParam department_code string required Department Code. Example: CSE
+     *
+     * @response 201 {"success": true}
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -38,6 +65,19 @@ class DepartmentController extends Controller
         ], 201);
     }
 
+    /**
+     * Show Department
+     *
+     * Returns details of a specific department.
+     *
+     * @group Department Management
+     *
+     * @authenticated
+     *
+     * @urlParam department integer required Department ID. Example: 1
+     *
+     * @response 200 {"success": true}
+     */
     public function show(Department $department)
     {
         $department->load('faculty');
@@ -48,6 +88,19 @@ class DepartmentController extends Controller
         ]);
     }
 
+    /**
+     * Update Department
+     *
+     * Updates an existing department.
+     *
+     * @group Department Management
+     *
+     * @authenticated
+     *
+     * @urlParam department integer required Department ID. Example: 1
+     *
+     * @response 200 {"success": true}
+     */
     public function update(Request $request, Department $department)
     {
         $validated = $request->validate([
@@ -65,6 +118,19 @@ class DepartmentController extends Controller
         ]);
     }
 
+    /**
+     * Delete Department
+     *
+     * Deletes a department.
+     *
+     * @group Department Management
+     *
+     * @authenticated
+     *
+     * @urlParam department integer required Department ID. Example: 1
+     *
+     * @response 200 {"success": true}
+     */
     public function destroy(Department $department)
     {
         $department->delete();

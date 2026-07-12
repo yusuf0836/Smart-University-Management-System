@@ -28,13 +28,33 @@ class DashboardController extends Controller
     {
         $this->dashboardService = $dashboardService;
     }
-    //
+    
+    /**
+     * Dashboard Statistics
+     *
+     * Returns the dashboard summary including statistics, recent activities and analytics.
+     *
+     * @group Dashboard
+     *
+     * @authenticated
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "message": "Dashboard data fetched successfully.",
+     *   "data": {
+     *     "total_students": 250,
+     *     "total_teachers": 30,
+     *     "total_courses": 45,
+     *     "total_departments": 5
+     *   }
+     * }
+     */
     public function index()
-{
-    return response()->json([
-        'success' => true,
-        'message' => 'Dashboard data fetched successfully.',
-        'data' => $this->dashboardService->getDashboardData(),
-    ]);
-}
+    {
+        return response()->json([
+            'success' => true,
+            'message' => 'Dashboard data fetched successfully.',
+            'data' => $this->dashboardService->getDashboardData(),
+        ]);
+    }
 }

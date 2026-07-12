@@ -9,8 +9,17 @@ use App\Http\Resources\SemesterResource;
 
 class SemesterController extends Controller
 {
+    
     /**
-     * Display all semesters.
+     * List Semesters
+     *
+     * Returns a list of all semesters.
+     *
+     * @group Semester Management
+     *
+     * @authenticated
+     *
+     * @response 200 {"success": true}
      */
     public function index()
     {
@@ -23,7 +32,21 @@ class SemesterController extends Controller
     }
 
     /**
-     * Store a newly created semester.
+     * Create Semester
+     *
+     * Creates a new semester.
+     *
+     * @group Semester Management
+     *
+     * @authenticated
+     *
+     * @bodyParam name string required Semester Name. Example: Spring 2026
+     * @bodyParam semester_code string required Semester Code. Example: SP26
+     * @bodyParam start_date date required Semester Start Date. Example: 2026-01-01
+     * @bodyParam end_date date required Semester End Date. Example: 2026-05-31
+     * @bodyParam status string required Status. Example: Active
+     *
+     * @response 201 {"success": true}
      */
     public function store(SemesterRequest $request)
     {
@@ -37,7 +60,17 @@ class SemesterController extends Controller
     }
 
     /**
-     * Display the specified semester.
+     * Show Semester
+     *
+     * Returns details of a specific semester.
+     *
+     * @group Semester Management
+     *
+     * @authenticated
+     *
+     * @urlParam semester integer required Semester ID. Example: 1
+     *
+     * @response 200 {"success": true}
      */
     public function show(Semester $semester)
     {
@@ -48,7 +81,23 @@ class SemesterController extends Controller
     }
 
     /**
-     * Update the specified semester.
+     * Update Semester
+     *
+     * Updates an existing semester.
+     *
+     * @group Semester Management
+     *
+     * @authenticated
+     *
+     * @urlParam semester integer required Semester ID. Example: 1
+     *
+     * @bodyParam name string Semester Name. Example: Spring 2026
+     * @bodyParam semester_code string Semester Code. Example: SP26
+     * @bodyParam start_date date Semester Start Date. Example: 2026-01-01
+     * @bodyParam end_date date Semester End Date. Example: 2026-05-31
+     * @bodyParam status string Status. Example: Active
+     *
+     * @response 200 {"success": true}
      */
     public function update(SemesterRequest $request, Semester $semester)
     {
@@ -62,7 +111,17 @@ class SemesterController extends Controller
     }
 
     /**
-     * Remove the specified semester.
+     * Delete Semester
+     *
+     * Deletes a semester.
+     *
+     * @group Semester Management
+     *
+     * @authenticated
+     *
+     * @urlParam semester integer required Semester ID. Example: 1
+     *
+     * @response 200 {"success": true}
      */
     public function destroy(Semester $semester)
     {

@@ -9,8 +9,17 @@ use App\Http\Resources\ResultResource;
 
 class ResultController extends Controller
 {
+    
     /**
-     * Display all results.
+     * List Results
+     *
+     * Returns a list of all student results with enrollment, student, course and semester information.
+     *
+     * @group Result Management
+     *
+     * @authenticated
+     *
+     * @response 200 {"success": true}
      */
     public function index()
     {
@@ -27,7 +36,22 @@ class ResultController extends Controller
     }
 
     /**
-     * Store a newly created result.
+     * Create Result
+     *
+     * Creates a new examination result for a student's enrollment. Grade and grade point are calculated automatically from the obtained marks.
+     *
+     * @group Result Management
+     *
+     * @authenticated
+     *
+     * @bodyParam enrollment_id integer required Enrollment ID. Example: 1
+     * @bodyParam marks number required Obtained marks (0-100). Example: 85
+     * @bodyParam remarks string Optional remarks. Example: Excellent performance
+     *
+     * @response 201 {
+     *   "success": true,
+     *   "message": "Result created successfully."
+     * }
      */
     public function store(ResultRequest $request)
     {
@@ -48,7 +72,17 @@ class ResultController extends Controller
     }
 
     /**
-     * Display the specified result.
+     * Show Result
+     *
+     * Returns details of a specific result.
+     *
+     * @group Result Management
+     *
+     * @authenticated
+     *
+     * @urlParam result integer required Result ID. Example: 1
+     *
+     * @response 200 {"success": true}
      */
     public function show(Result $result)
     {
@@ -65,7 +99,24 @@ class ResultController extends Controller
     }
 
     /**
-     * Update the specified result.
+     * Update Result
+     *
+     * Updates an existing result. Grade and grade point are recalculated automatically based on the updated marks.
+     *
+     * @group Result Management
+     *
+     * @authenticated
+     *
+     * @urlParam result integer required Result ID. Example: 1
+     *
+     * @bodyParam enrollment_id integer required Enrollment ID. Example: 1
+     * @bodyParam marks number required Obtained marks (0-100). Example: 90
+     * @bodyParam remarks string Optional remarks. Example: Updated after re-evaluation
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "message": "Result updated successfully."
+     * }
      */
     public function update(ResultRequest $request, Result $result)
     {
@@ -86,7 +137,20 @@ class ResultController extends Controller
     }
 
     /**
-     * Remove the specified result.
+     * Delete Result
+     *
+     * Deletes a student's result.
+     *
+     * @group Result Management
+     *
+     * @authenticated
+     *
+     * @urlParam result integer required Result ID. Example: 1
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "message": "Result deleted successfully."
+     * }
      */
     public function destroy(Result $result)
     {

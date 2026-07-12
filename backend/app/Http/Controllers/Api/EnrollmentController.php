@@ -9,8 +9,17 @@ use App\Http\Resources\EnrollmentResource;
 
 class EnrollmentController extends Controller
 {
+    
     /**
-     * Display all enrollments.
+     * List Enrollments
+     *
+     * Returns a list of all course enrollments with student, course and semester information.
+     *
+     * @group Enrollment Management
+     *
+     * @authenticated
+     *
+     * @response 200 {"success": true}
      */
     public function index()
     {
@@ -27,7 +36,24 @@ class EnrollmentController extends Controller
     }
 
     /**
-     * Store a newly created enrollment.
+     * Create Enrollment
+     *
+     * Enroll a student into a course for a specific semester.
+     *
+     * @group Enrollment Management
+     *
+     * @authenticated
+     *
+     * @bodyParam student_id integer required Student ID. Example: 1
+     * @bodyParam course_id integer required Course ID. Example: 5
+     * @bodyParam semester_id integer required Semester ID. Example: 2
+     * @bodyParam enrollment_date date required Enrollment Date. Example: 2026-01-15
+     * @bodyParam status string required Enrollment Status. Allowed values: Enrolled, Dropped, Completed. Example: Enrolled
+     *
+     * @response 201 {
+     *   "success": true,
+     *   "message": "Student enrolled successfully."
+     * }
      */
     public function store(EnrollmentRequest $request)
     {
@@ -41,7 +67,17 @@ class EnrollmentController extends Controller
     }
 
     /**
-     * Display the specified enrollment.
+     * Show Enrollment
+     *
+     * Returns details of a specific enrollment.
+     *
+     * @group Enrollment Management
+     *
+     * @authenticated
+     *
+     * @urlParam enrollment integer required Enrollment ID. Example: 1
+     *
+     * @response 200 {"success": true}
      */
     public function show(Enrollment $enrollment)
     {
@@ -58,7 +94,26 @@ class EnrollmentController extends Controller
     }
 
     /**
-     * Update the specified enrollment.
+     * Update Enrollment
+     *
+     * Update an existing enrollment.
+     *
+     * @group Enrollment Management
+     *
+     * @authenticated
+     *
+     * @urlParam enrollment integer required Enrollment ID. Example: 1
+     *
+     * @bodyParam student_id integer required Student ID. Example: 1
+     * @bodyParam course_id integer required Course ID. Example: 5
+     * @bodyParam semester_id integer required Semester ID. Example: 2
+     * @bodyParam enrollment_date date required Enrollment Date. Example: 2026-01-15
+     * @bodyParam status string required Enrollment Status. Allowed values: Enrolled, Dropped, Completed. Example: Enrolled
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "message": "Enrollment updated successfully."
+     * }
      */
     public function update(EnrollmentRequest $request, Enrollment $enrollment)
     {
@@ -72,7 +127,20 @@ class EnrollmentController extends Controller
     }
 
     /**
-     * Remove the specified enrollment.
+     * Delete Enrollment
+     *
+     * Deletes an enrollment.
+     *
+     * @group Enrollment Management
+     *
+     * @authenticated
+     *
+     * @urlParam enrollment integer required Enrollment ID. Example: 1
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "message": "Enrollment deleted successfully."
+     * }
      */
     public function destroy(Enrollment $enrollment)
     {

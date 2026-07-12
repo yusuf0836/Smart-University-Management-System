@@ -9,8 +9,17 @@ use App\Http\Resources\CourseResource;
 
 class CourseController extends Controller
 {
+    
     /**
-     * Display all courses.
+     * List Courses
+     *
+     * Returns a list of all courses with department and semester information.
+     *
+     * @group Course Management
+     *
+     * @authenticated
+     *
+     * @response 200 {"success": true}
      */
     public function index()
     {
@@ -25,7 +34,23 @@ class CourseController extends Controller
     }
 
     /**
-     * Store a newly created course.
+     * Create Course
+     *
+     * Creates a new course.
+     *
+     * @group Course Management
+     *
+     * @authenticated
+     *
+     * @bodyParam department_id integer required Department ID. Example: 1
+     * @bodyParam semester_id integer required Semester ID. Example: 1
+     * @bodyParam course_code string required Course Code. Example: CSE101
+     * @bodyParam course_title string required Course Name. Example: Introduction to Programming
+     * @bodyParam credit numeric required Credit Hours. Example: 3
+     * @bodyParam course_type string Course Type. Example: Theory
+     * @bodyParam status string Status. Example: Active
+     *
+     * @response 201 {"success": true}
      */
     public function store(CourseRequest $request)
     {
@@ -39,7 +64,17 @@ class CourseController extends Controller
     }
 
     /**
-     * Display the specified course.
+     * Show Course
+     *
+     * Returns details of a specific course.
+     *
+     * @group Course Management
+     *
+     * @authenticated
+     *
+     * @urlParam course integer required Course ID. Example: 1
+     *
+     * @response 200 {"success": true}
      */
     public function show(Course $course)
     {
@@ -52,8 +87,26 @@ class CourseController extends Controller
     }
 
     /**
-     * Update the specified course.
-     */
+     * Update Course
+    *
+    * Updates an existing course.
+    *
+    * @group Course Management
+    *
+    * @authenticated
+    *
+    * @urlParam course integer required Course ID. Example: 1
+    *
+    * @bodyParam department_id integer Department ID. Example: 1
+    * @bodyParam semester_id integer Semester ID. Example: 1
+    * @bodyParam course_code string Course Code. Example: CSE101
+    * @bodyParam course_title string Course Name. Example: Introduction to Programming
+    * @bodyParam credit numeric Credit Hours. Example: 3
+    * @bodyParam course_type string Course Type. Example: Theory
+    * @bodyParam status string Status. Example: Active
+    *
+    * @response 200 {"success": true}
+    */
     public function update(CourseRequest $request, Course $course)
     {
         $course->update($request->validated());
@@ -66,7 +119,17 @@ class CourseController extends Controller
     }
 
     /**
-     * Remove the specified course.
+     * Delete Course
+     *
+     * Deletes a course.
+     *
+     * @group Course Management
+     *
+     * @authenticated
+     *
+     * @urlParam course integer required Course ID. Example: 1
+     *
+     * @response 200 {"success": true}
      */
     public function destroy(Course $course)
     {

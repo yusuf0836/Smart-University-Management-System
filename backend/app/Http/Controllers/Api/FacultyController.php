@@ -10,8 +10,17 @@ use App\Models\Faculty;
 
 class FacultyController extends Controller
 {
+    
     /**
-     * Display a paginated list of faculties.
+     * List Faculties
+     *
+     * Returns a list of all faculties.
+     *
+     * @group Faculty Management
+     *
+     * @authenticated
+     *
+     * @response 200 {"success": true}
      */
     public function index()
     {
@@ -24,7 +33,18 @@ class FacultyController extends Controller
     }
 
     /**
-     * Store a new faculty.
+     * Create Faculty
+     *
+     * Creates a new faculty.
+     *
+     * @group Faculty Management
+     *
+     * @authenticated
+     *
+     * @bodyParam faculty_name string required Faculty Name. Example: Faculty of Engineering
+     * @bodyParam faculty_code string required Faculty Code. Example: FE
+     *
+     * @response 201 {"success": true}
      */
     public function store(StoreFacultyRequest $request)
     {
@@ -34,7 +54,17 @@ class FacultyController extends Controller
     }
 
     /**
-     * Display a specific faculty.
+     * Show Faculty
+     *
+     * Returns details of a specific faculty.
+     *
+     * @group Faculty Management
+     *
+     * @authenticated
+     *
+     * @urlParam faculty integer required Faculty ID. Example: 1
+     *
+     * @response 200 {"success": true}
      */
     public function show(Faculty $faculty)
     {
@@ -45,7 +75,17 @@ class FacultyController extends Controller
     }
 
     /**
-     * Update a faculty.
+     * Update Faculty
+     *
+     * Updates an existing faculty.
+     *
+     * @group Faculty Management
+     *
+     * @authenticated
+     *
+     * @urlParam faculty integer required Faculty ID. Example: 1
+     *
+     * @response 200 {"success": true}
      */
     public function update(UpdateFacultyRequest $request, Faculty $faculty)
     {
@@ -55,7 +95,17 @@ class FacultyController extends Controller
     }
 
     /**
-     * Soft delete a faculty.
+     * Delete Faculty
+     *
+     * Deletes a faculty.
+     *
+     * @group Faculty Management
+     *
+     * @authenticated
+     *
+     * @urlParam faculty integer required Faculty ID. Example: 1
+     *
+     * @response 200 {"success": true}
      */
     public function destroy(Faculty $faculty)
     {

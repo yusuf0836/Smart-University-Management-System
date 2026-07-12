@@ -21,6 +21,25 @@ class TranscriptController extends Controller
 
     /**
      * Generate Transcript
+     *
+     * Generates a transcript for a student in a specific semester, including GPA, CGPA, completed credits and course results.
+     *
+     * @group Transcript Management
+     *
+     * @authenticated
+     *
+     * @bodyParam student_id integer required Student ID. Example: 1
+     * @bodyParam semester_id integer required Semester ID. Example: 2
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "semester_gpa": 3.85,
+     *     "cgpa": 3.76,
+     *     "total_credit_completed": 18,
+     *     "total_courses": 6
+     *   }
+     * }
      */
     public function generate(Request $request)
     {
@@ -50,6 +69,16 @@ class TranscriptController extends Controller
 
     /**
      * Show Transcript
+     *
+     * Returns details of a specific transcript.
+     *
+     * @group Transcript Management
+     *
+     * @authenticated
+     *
+     * @urlParam transcript integer required Transcript ID. Example: 1
+     *
+     * @response 200 {"success": true}
      */
     public function show(Transcript $transcript)
     {
@@ -63,7 +92,15 @@ class TranscriptController extends Controller
     }
 
     /**
-     * List all Transcripts
+     * List Transcripts
+     *
+     * Returns a list of all generated transcripts with student and semester information.
+     *
+     * @group Transcript Management
+     *
+     * @authenticated
+     *
+     * @response 200 {"success": true}
      */
     public function index()
     {
@@ -75,8 +112,19 @@ class TranscriptController extends Controller
             ])->latest()->get(),
         ]);
     }
+    
     /**
-     * Download Transcript as PDF
+     * Download Transcript PDF
+     *
+     * Downloads the transcript as a PDF document.
+     *
+     * @group Transcript Management
+     *
+     * @authenticated
+     *
+     * @urlParam transcript integer required Transcript ID. Example: 1
+     *
+     * @response 200
      */
     public function downloadPdf(Transcript $transcript)
     {
@@ -101,8 +149,22 @@ class TranscriptController extends Controller
             'Transcript_'.$student->student_id.'_'.$semester->name.'.pdf'
         );
     }
+    
     /**
      * Delete Transcript
+     *
+     * Deletes a transcript.
+     *
+     * @group Transcript Management
+     *
+     * @authenticated
+     *
+     * @urlParam transcript integer required Transcript ID. Example: 1
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "message": "Transcript deleted successfully."
+     * }
      */
     public function destroy(Transcript $transcript)
     {
