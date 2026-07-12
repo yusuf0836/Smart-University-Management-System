@@ -15,9 +15,12 @@ class FacultyController extends Controller
      */
     public function index()
     {
-        $faculties = Faculty::latest()->paginate(10);
+        $faculties = Faculty::latest()->get();
 
-        return FacultyResource::collection($faculties);
+        return response()->json([
+            'success' => true,
+            'data' => FacultyResource::collection($faculties),
+        ]);
     }
 
     /**
@@ -35,7 +38,10 @@ class FacultyController extends Controller
      */
     public function show(Faculty $faculty)
     {
-        return new FacultyResource($faculty);
+        return response()->json([
+            'success' => true,
+            'data' => new FacultyResource($faculty),
+        ]);
     }
 
     /**

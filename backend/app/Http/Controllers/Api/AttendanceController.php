@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AttendanceRequest;
 use App\Models\Attendance;
+use App\Http\Resources\AttendanceResource;
 
 class AttendanceController extends Controller
 {
@@ -16,12 +17,12 @@ class AttendanceController extends Controller
         $attendances = Attendance::with([
             'student',
             'course',
-            'semester'
+            'semester',
         ])->latest()->get();
 
         return response()->json([
             'success' => true,
-            'data' => $attendances,
+            'data' => AttendanceResource::collection($attendances),
         ]);
     }
 
@@ -44,13 +45,15 @@ class AttendanceController extends Controller
      */
     public function show(Attendance $attendance)
     {
+        $attendance->load([
+            'student',
+            'course',
+            'semester',
+        ]);
+
         return response()->json([
             'success' => true,
-            'data' => $attendance->load([
-                'student',
-                'course',
-                'semester'
-            ]),
+            'data' => new AttendanceResource($attendance),
         ]);
     }
 

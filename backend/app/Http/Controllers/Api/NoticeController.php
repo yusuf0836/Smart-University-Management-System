@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\NoticeRequest;
 use App\Models\Notice;
+use App\Http\Resources\NoticeResource;
 
 class NoticeController extends Controller
 {
@@ -17,7 +18,7 @@ class NoticeController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $notices,
+            'data' => NoticeResource::collection($notices),
         ]);
     }
 
@@ -42,7 +43,7 @@ class NoticeController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => $notice,
+            'data' => new NoticeResource($notice),
         ]);
     }
 

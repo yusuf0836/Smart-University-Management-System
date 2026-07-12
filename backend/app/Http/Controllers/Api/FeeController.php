@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FeeRequest;
 use App\Models\Fee;
+use App\Http\Resources\FeeResource;
 
 class FeeController extends Controller
 {
@@ -20,7 +21,7 @@ class FeeController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $fees,
+            'data' => FeeResource::collection($fees),
         ]);
     }
 
@@ -43,12 +44,14 @@ class FeeController extends Controller
      */
     public function show(Fee $fee)
     {
+        $fee->load([
+            'student',
+            'semester',
+        ]);
+
         return response()->json([
             'success' => true,
-            'data' => $fee->load([
-                'student',
-                'semester',
-            ]),
+            'data' => new FeeResource($fee),
         ]);
     }
 

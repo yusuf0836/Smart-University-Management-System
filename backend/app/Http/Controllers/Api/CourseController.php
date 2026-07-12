@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CourseRequest;
 use App\Models\Course;
+use App\Http\Resources\CourseResource;
 
 class CourseController extends Controller
 {
@@ -19,7 +20,7 @@ class CourseController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $courses,
+            'data' => CourseResource::collection($courses),
         ]);
     }
 
@@ -42,9 +43,11 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
+        $course->load('department');
+
         return response()->json([
             'success' => true,
-            'data' => $course->load('department'),
+            'data' => new CourseResource($course),
         ]);
     }
 

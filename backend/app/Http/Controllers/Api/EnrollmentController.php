@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EnrollmentRequest;
 use App\Models\Enrollment;
+use App\Http\Resources\EnrollmentResource;
 
 class EnrollmentController extends Controller
 {
@@ -21,7 +22,7 @@ class EnrollmentController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $enrollments,
+            'data' => EnrollmentResource::collection($enrollments),
         ]);
     }
 
@@ -44,13 +45,15 @@ class EnrollmentController extends Controller
      */
     public function show(Enrollment $enrollment)
     {
+        $enrollment->load([
+            'student',
+            'course',
+            'semester'
+        ]);
+
         return response()->json([
             'success' => true,
-            'data' => $enrollment->load([
-                'student',
-                'course',
-                'semester'
-            ]),
+            'data' => new EnrollmentResource($enrollment),
         ]);
     }
 

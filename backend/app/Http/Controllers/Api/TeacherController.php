@@ -5,13 +5,17 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TeacherRequest;
 use App\Models\Teacher;
+use App\Http\Resources\TeacherResource;
 
 class TeacherController extends Controller
 {
     public function index()
     {
+        $teachers = Teacher::with('department')->latest()->get();
+
         return response()->json([
-            'data' => Teacher::with('department')->get()
+            'success' => true,
+            'data' => TeacherResource::collection($teachers),
         ]);
     }
 
@@ -23,11 +27,14 @@ class TeacherController extends Controller
             'data' => $teacher
         ], 201);
     }
-
+    
     public function show(Teacher $teacher)
     {
+        $teacher->load('department');
+
         return response()->json([
-            'data' => $teacher->load('department')
+            'success' => true,
+            'data' => new TeacherResource($teacher),
         ]);
     }
 

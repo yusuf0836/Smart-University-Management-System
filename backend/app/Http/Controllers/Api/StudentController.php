@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentRequest;
 use App\Models\Student;
+use App\Http\Resources\StudentResource;
 
 class StudentController extends Controller
 {
     /**
      * Display all students.
      */
+
     public function index()
     {
         $students = Student::with([
@@ -20,7 +22,7 @@ class StudentController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $students
+            'data' => StudentResource::collection($students)
         ]);
     }
 
@@ -43,12 +45,14 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
+        $student->load([
+            'department',
+            'semester'
+        ]);
+
         return response()->json([
             'success' => true,
-            'data' => $student->load([
-                'department',
-                'semester'
-            ])
+            'data' => new StudentResource($student)
         ]);
     }
 

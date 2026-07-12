@@ -5,13 +5,19 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use App\Http\Resources\DepartmentResource;
 
 class DepartmentController extends Controller
 {
     public function index()
     {
+        $departments = Department::with('faculty')
+            ->latest()
+            ->get();
+
         return response()->json([
-            'data' => Department::with('faculty')->get()
+            'success' => true,
+            'data' => DepartmentResource::collection($departments),
         ]);
     }
 
@@ -34,8 +40,11 @@ class DepartmentController extends Controller
 
     public function show(Department $department)
     {
+        $department->load('faculty');
+
         return response()->json([
-            'data' => $department->load('faculty')
+            'success' => true,
+            'data' => new DepartmentResource($department),
         ]);
     }
 

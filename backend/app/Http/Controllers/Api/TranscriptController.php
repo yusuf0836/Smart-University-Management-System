@@ -8,6 +8,7 @@ use App\Services\TranscriptService;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Result;
+use App\Resources\TranscriptResource;
 
 class TranscriptController extends Controller
 {
@@ -35,10 +36,14 @@ class TranscriptController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Transcript generated successfully.',
-            'data' => $transcript->load([
-                'student',
-                'semester',
+            'data' => new TranscriptResource([
+                'student' => $student,
+                'semester' => $semester,
+                'results' => $results,
+                'semester_gpa' => $semesterGpa,
+                'cgpa' => $cgpa,
+                'total_credit_completed' => $credits,
+                'total_courses' => $results->count(),
             ]),
         ]);
     }

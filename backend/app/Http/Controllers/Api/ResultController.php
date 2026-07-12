@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ResultRequest;
 use App\Models\Result;
+use App\Http\Resources\ResultResource;
 
 class ResultController extends Controller
 {
@@ -21,7 +22,7 @@ class ResultController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $results,
+            'data' => ResultResource::collection($results),
         ]);
     }
 
@@ -51,13 +52,15 @@ class ResultController extends Controller
      */
     public function show(Result $result)
     {
+        $result->load([
+            'enrollment.student',
+            'enrollment.course',
+            'enrollment.semester',
+        ]);
+
         return response()->json([
             'success' => true,
-            'data' => $result->load([
-                'enrollment.student',
-                'enrollment.course',
-                'enrollment.semester',
-            ]),
+            'data' => new ResultResource($result),
         ]);
     }
 

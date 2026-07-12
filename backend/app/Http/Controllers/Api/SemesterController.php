@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SemesterRequest;
 use App\Models\Semester;
+use App\Http\Resources\SemesterResource;
 
 class SemesterController extends Controller
 {
@@ -17,7 +18,7 @@ class SemesterController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $semesters
+            'data' => SemesterResource::collection($semesters),
         ]);
     }
 
@@ -42,7 +43,7 @@ class SemesterController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => $semester
+            'data' => new SemesterResource($semester),
         ]);
     }
 

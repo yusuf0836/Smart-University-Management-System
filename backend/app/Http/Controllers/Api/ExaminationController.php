@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ExaminationRequest;
 use App\Models\Examination;
+use App\Http\Resources\ExaminationResource;
 
 class ExaminationController extends Controller
 {
@@ -20,7 +21,7 @@ class ExaminationController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $examinations,
+            'data' => ExaminationResource::collection($examinations),
         ]);
     }
 
@@ -43,12 +44,14 @@ class ExaminationController extends Controller
      */
     public function show(Examination $examination)
     {
+        $examination->load([
+            'department',
+            'semester',
+        ]);
+
         return response()->json([
             'success' => true,
-            'data' => $examination->load([
-                'department',
-                'semester',
-            ]),
+            'data' => new ExaminationResource($examination),
         ]);
     }
 
