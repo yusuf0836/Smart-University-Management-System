@@ -1,0 +1,13 @@
+$kind: http-request
+name: Create Department
+description: Creates a new department.
+url: "{{baseUrl}}/api/v1/departments"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: json
+  content: '{"faculty_id":1,"name":"n","code":"g","description":"Eius et animi quos velit et.","status":false,"department_name":"Computer Science and Engineering","department_code":"CSE"}'
+examples: ./.resources/Create Department.resources/examples
+order: 2000

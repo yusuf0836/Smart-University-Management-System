@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentRequest;
 use App\Models\Student;
 use App\Http\Resources\StudentResource;
+use Illuminate\Http\Request;
+use App\Helpers\QueryFilter;
 
 class StudentController extends Controller
 {
@@ -31,16 +33,47 @@ class StudentController extends Controller
     * }
     */
 
-    public function index()
+    public function index(Request $request)
     {
-        $students = Student::with([
-            'department',
-            'semester'
-        ])->latest()->get();
+        $students = QueryFilter::apply(
+            Student::with(['department', 'semester']),
+            $request,
+
+            // Search Columns
+            [
+                'name',
+                'student_id',
+                'email',
+                'department.name',
+                'semester.name'
+            ],
+
+            // Filter Columns
+            [
+                'department_id',
+                'semester_id',
+                'status'
+            ],
+
+            // Sortable Columns
+            [
+                'id',
+                'name',
+                'student_id',
+                'email',
+                'created_at'
+            ]
+        );
 
         return response()->json([
             'success' => true,
-            'data' => StudentResource::collection($students)
+            'data' => StudentResource::collection($students),
+            'meta' => [
+                'current_page' => $students->currentPage(),
+                'last_page' => $students->lastPage(),
+                'per_page' => $students->perPage(),
+                'total' => $students->total(),
+            ],
         ]);
     }
 

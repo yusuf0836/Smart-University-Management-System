@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ResultRequest;
 use App\Models\Result;
 use App\Http\Resources\ResultResource;
+use Illuminate\Http\Request;
+use App\Helpers\QueryFilter;
 
 class ResultController extends Controller
 {
@@ -23,16 +25,30 @@ class ResultController extends Controller
      */
     public function index()
     {
-        $results = Result::with([
-            'enrollment.student',
-            'enrollment.course',
-            'enrollment.semester',
-        ])->latest()->get();
+        $results = QueryFilter::apply(
+            Result::with([
+                'enrollment.student',
+                'enrollment.course',
+                'enrollment.semester'
+            ]),
+            $request,
 
-        return response()->json([
-            'success' => true,
-            'data' => ResultResource::collection($results),
-        ]);
+            [
+                'grade'
+            ],
+
+            [
+                'enrollment_id',
+                'status'
+            ],
+
+            [
+                'id',
+                'gpa',
+                'grade',
+                'created_at'
+            ]
+        );
     }
 
     /**

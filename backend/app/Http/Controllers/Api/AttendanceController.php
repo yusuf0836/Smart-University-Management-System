@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AttendanceRequest;
 use App\Models\Attendance;
 use App\Http\Resources\AttendanceResource;
+use Illuminate\Http\Request;
+use App\Helpers\QueryFilter;
 
 class AttendanceController extends Controller
 {
@@ -23,16 +25,27 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        $attendances = Attendance::with([
-            'student',
-            'course',
-            'semester',
-        ])->latest()->get();
+        $attendances = QueryFilter::apply(
+            Attendance::with([
+                'student',
+                'course'
+            ]),
+            $request,
 
-        return response()->json([
-            'success' => true,
-            'data' => AttendanceResource::collection($attendances),
-        ]);
+            [],
+
+            [
+                'student_id',
+                'course_id',
+                'status'
+            ],
+
+            [
+                'id',
+                'attendance_date',
+                'created_at'
+            ]
+        );
     }
 
     /**

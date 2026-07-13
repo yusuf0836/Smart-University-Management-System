@@ -1,0 +1,16 @@
+$kind: http-request
+description: Deletes a class routine.
+url: "{{baseUrl}}/api/v1/routines/:id"
+method: DELETE
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the routine.
+  - key: routine
+    value: "1"
+    description: Routine ID.
+examples: ./.resources/Delete Routine.resources/examples
+order: 5000

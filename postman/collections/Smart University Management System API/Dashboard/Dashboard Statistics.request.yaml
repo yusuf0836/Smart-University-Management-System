@@ -1,0 +1,9 @@
+$kind: http-request
+description: Returns the dashboard summary including statistics, recent activities and analytics.
+url: "{{baseUrl}}/api/v1/dashboard"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+examples: ./.resources/Dashboard Statistics.resources/examples
+order: 1000

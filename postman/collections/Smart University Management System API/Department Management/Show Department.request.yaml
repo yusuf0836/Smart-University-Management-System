@@ -1,0 +1,16 @@
+$kind: http-request
+description: Returns details of a specific department.
+url: "{{baseUrl}}/api/v1/departments/:id"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the department.
+  - key: department
+    value: "1"
+    description: Department ID.
+examples: ./.resources/Show Department.resources/examples
+order: 3000

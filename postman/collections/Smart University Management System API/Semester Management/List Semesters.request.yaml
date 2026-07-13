@@ -1,0 +1,9 @@
+$kind: http-request
+description: Returns a list of all semesters.
+url: "{{baseUrl}}/api/v1/semesters"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+examples: ./.resources/List Semesters.resources/examples
+order: 1000

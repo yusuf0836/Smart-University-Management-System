@@ -1,0 +1,12 @@
+$kind: http-request
+description: Enroll a student into a course for a specific semester.
+url: "{{baseUrl}}/api/v1/enrollments"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: text
+  content: '{"student_id":1,"course_id":5,"semester_id":2,"enrollment_date":"2026-01-15","status":"Enrolled"}'
+examples: ./.resources/Create Enrollment.resources/examples
+order: 2000

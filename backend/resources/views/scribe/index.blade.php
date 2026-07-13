@@ -414,7 +414,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: July 12, 2026</li>
+        <li>Last updated: July 13, 2026</li>
     </ul>
 </div>
 
@@ -3561,7 +3561,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"faculty_id\": \"architecto\",
     \"name\": \"n\",
     \"description\": \"Eius et animi quos velit et.\",
-    \"status\": true
+    \"status\": false
 }"
 </code></pre></div>
 
@@ -3581,7 +3581,7 @@ let body = {
     "faculty_id": "architecto",
     "name": "n",
     "description": "Eius et animi quos velit et.",
-    "status": true
+    "status": false
 };
 
 fetch(url, {
@@ -3784,7 +3784,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
         </div>
         </form>
 
@@ -6491,7 +6491,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"name\": \"b\",
     \"code\": \"ngzmiyvdljnikhwa\",
     \"description\": \"Eius et animi quos velit et.\",
-    \"status\": false
+    \"status\": true
 }"
 </code></pre></div>
 
@@ -6511,7 +6511,7 @@ let body = {
     "name": "b",
     "code": "ngzmiyvdljnikhwa",
     "description": "Eius et animi quos velit et.",
-    "status": false
+    "status": true
 };
 
 fetch(url, {
@@ -6702,7 +6702,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
         </form>
 
@@ -11847,8 +11847,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"email\": \"yusuf@example.com\",
     \"phone\": \"01700000000\",
     \"gender\": \"Male\",
-    \"date_of_birth\": \"2026-07-12T17:56:24\",
-    \"admission_date\": \"2026-07-12T17:56:24\",
+    \"date_of_birth\": \"2026-07-13T07:09:15\",
+    \"admission_date\": \"2026-07-13T07:09:15\",
     \"status\": false
 }"
 </code></pre></div>
@@ -11873,8 +11873,8 @@ let body = {
     "email": "yusuf@example.com",
     "phone": "01700000000",
     "gender": "Male",
-    "date_of_birth": "2026-07-12T17:56:24",
-    "admission_date": "2026-07-12T17:56:24",
+    "date_of_birth": "2026-07-13T07:09:15",
+    "admission_date": "2026-07-13T07:09:15",
     "status": false
 };
 
@@ -12075,10 +12075,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="date_of_birth"                data-endpoint="POSTapi-v1-students"
-               value="2026-07-12T17:56:24"
+               value="2026-07-13T07:09:15"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-07-12T17:56:24</code></p>
+<p>Must be a valid date. Example: <code>2026-07-13T07:09:15</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>admission_date</code></b>&nbsp;&nbsp;
@@ -12087,10 +12087,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="admission_date"                data-endpoint="POSTapi-v1-students"
-               value="2026-07-12T17:56:24"
+               value="2026-07-13T07:09:15"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-07-12T17:56:24</code></p>
+<p>Must be a valid date. Example: <code>2026-07-13T07:09:15</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>status</code></b>&nbsp;&nbsp;
@@ -12307,8 +12307,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"email\": \"yusuf@example.com\",
     \"phone\": \"01712345678\",
     \"gender\": \"Male\",
-    \"date_of_birth\": \"2026-07-12T17:56:24\",
-    \"admission_date\": \"2026-07-12T17:56:24\",
+    \"date_of_birth\": \"2026-07-13T07:09:15\",
+    \"admission_date\": \"2026-07-13T07:09:15\",
     \"status\": \"Active\",
     \"blood_group\": \"O+\"
 }"
@@ -12334,8 +12334,8 @@ let body = {
     "email": "yusuf@example.com",
     "phone": "01712345678",
     "gender": "Male",
-    "date_of_birth": "2026-07-12T17:56:24",
-    "admission_date": "2026-07-12T17:56:24",
+    "date_of_birth": "2026-07-13T07:09:15",
+    "admission_date": "2026-07-13T07:09:15",
     "status": "Active",
     "blood_group": "O+"
 };
@@ -12564,10 +12564,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="date_of_birth"                data-endpoint="PUTapi-v1-students--id-"
-               value="2026-07-12T17:56:24"
+               value="2026-07-13T07:09:15"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-07-12T17:56:24</code></p>
+<p>Must be a valid date. Example: <code>2026-07-13T07:09:15</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>admission_date</code></b>&nbsp;&nbsp;
@@ -12576,10 +12576,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="admission_date"                data-endpoint="PUTapi-v1-students--id-"
-               value="2026-07-12T17:56:24"
+               value="2026-07-13T07:09:15"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-07-12T17:56:24</code></p>
+<p>Must be a valid date. Example: <code>2026-07-13T07:09:15</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>status</code></b>&nbsp;&nbsp;
@@ -13376,7 +13376,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"email\": \"rowan.gulgowski@example.com\",
     \"phone\": \"01712345678\",
     \"designation\": \"Associate Professor\",
-    \"joining_date\": \"2026-07-12T17:56:24\",
+    \"joining_date\": \"2026-07-13T07:09:15\",
     \"salary\": \"60000\",
     \"status\": \"Active\"
 }"
@@ -13401,7 +13401,7 @@ let body = {
     "email": "rowan.gulgowski@example.com",
     "phone": "01712345678",
     "designation": "Associate Professor",
-    "joining_date": "2026-07-12T17:56:24",
+    "joining_date": "2026-07-13T07:09:15",
     "salary": "60000",
     "status": "Active"
 };
@@ -13618,10 +13618,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="joining_date"                data-endpoint="PUTapi-v1-teachers--id-"
-               value="2026-07-12T17:56:24"
+               value="2026-07-13T07:09:15"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-07-12T17:56:24</code></p>
+<p>Must be a valid date. Example: <code>2026-07-13T07:09:15</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>salary</code></b>&nbsp;&nbsp;

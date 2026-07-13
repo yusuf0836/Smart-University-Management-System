@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Http\Resources\DepartmentResource;
+use App\Helpers\QueryFilter;
 
 class DepartmentController extends Controller
 {
@@ -21,15 +22,39 @@ class DepartmentController extends Controller
      *
      * @response 200 {"success": true}
      */
-    public function index()
+    public function index(Request $request)
     {
-        $departments = Department::with('faculty')
-            ->latest()
-            ->get();
+        $departments = QueryFilter::apply(
+            Department::query(),
+            $request,
+
+            [
+                'name',
+                'code'
+            ],
+
+            [
+                'faculty_id',
+                'status'
+            ],
+
+            [
+                'id',
+                'name',
+                'code',
+                'created_at'
+            ]
+        );
 
         return response()->json([
             'success' => true,
             'data' => DepartmentResource::collection($departments),
+            'meta' => [
+                'current_page' => $departments->currentPage(),
+                'last_page' => $departments->lastPage(),
+                'per_page' => $departments->perPage(),
+                'total' => $departments->total(),
+            ],
         ]);
     }
 

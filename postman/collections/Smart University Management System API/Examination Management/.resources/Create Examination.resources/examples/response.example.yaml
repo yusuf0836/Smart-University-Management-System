@@ -1,0 +1,21 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/examinations"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: text
+    content: '{"department_id":1,"semester_id":2,"exam_name":"Mid Term Examination","exam_type":"Mid","exam_date":"2026-08-15","start_time":"09:00","end_time":"12:00","venue":"Room 401","status":true}'
+response:
+  statusCode: 201
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "message": "Examination created successfully."
+      }
+order: 1000

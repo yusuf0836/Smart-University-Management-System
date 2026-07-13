@@ -307,7 +307,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -317,7 +317,7 @@ endpoints:
       name: b
       code: ngzmiyvdljnikhwa
       description: 'Eius et animi quos velit et.'
-      status: false
+      status: true
     fileParameters: []
     responses:
       -

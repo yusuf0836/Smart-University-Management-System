@@ -1,0 +1,16 @@
+$kind: http-request
+description: Deletes a department.
+url: "{{baseUrl}}/api/v1/departments/:id"
+method: DELETE
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the department.
+  - key: department
+    value: "1"
+    description: Department ID.
+examples: ./.resources/Delete Department.resources/examples
+order: 5000

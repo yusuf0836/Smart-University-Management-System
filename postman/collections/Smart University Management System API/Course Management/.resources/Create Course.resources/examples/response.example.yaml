@@ -1,0 +1,17 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/courses"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: text
+    content: '{"department_id":1,"course_code":"CSE101","course_title":"Introduction to Programming","credit":"3","type":"Lab","status":"Active","semester_id":1,"course_type":"Theory"}'
+response:
+  statusCode: 201
+  statusText: OK
+  body:
+    type: text
+    content: '{"success": true}'
+order: 1000

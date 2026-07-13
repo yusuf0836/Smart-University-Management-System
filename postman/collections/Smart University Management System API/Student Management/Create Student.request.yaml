@@ -1,0 +1,12 @@
+$kind: http-request
+description: Create a new student.
+url: "{{baseUrl}}/api/v1/students"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: text
+  content: '{"department_id":"architecto","semester_id":"architecto","name":"Md Yusuf Ali","student_id":"20230001","email":"yusuf@example.com","phone":"01700000000","gender":"Male","date_of_birth":"2026-07-13T07:09:15","admission_date":"2026-07-13T07:09:15","status":false}'
+examples: ./.resources/Create Student.resources/examples
+order: 2000

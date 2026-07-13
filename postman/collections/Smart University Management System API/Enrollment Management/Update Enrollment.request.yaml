@@ -1,0 +1,19 @@
+$kind: http-request
+description: Update an existing enrollment.
+url: "{{baseUrl}}/api/v1/enrollments/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the enrollment.
+  - key: enrollment
+    value: "1"
+    description: Enrollment ID.
+body:
+  type: text
+  content: '{"student_id":1,"course_id":5,"semester_id":2,"enrollment_date":"2026-01-15","status":"Enrolled"}'
+examples: ./.resources/Update Enrollment.resources/examples
+order: 4000

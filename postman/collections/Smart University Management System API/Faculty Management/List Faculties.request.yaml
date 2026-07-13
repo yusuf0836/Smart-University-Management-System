@@ -1,0 +1,9 @@
+$kind: http-request
+description: Returns a list of all faculties.
+url: "{{baseUrl}}/api/v1/faculties"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+examples: ./.resources/List Faculties.resources/examples
+order: 1000

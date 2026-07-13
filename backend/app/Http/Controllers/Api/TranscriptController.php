@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Result;
 use App\Resources\TranscriptResource;
+use App\Helpers\QueryFilter;
 
 class TranscriptController extends Controller
 {
@@ -43,28 +44,25 @@ class TranscriptController extends Controller
      */
     public function generate(Request $request)
     {
-        $validated = $request->validate([
-            'student_id'  => 'required|exists:students,id',
-            'semester_id' => 'required|exists:semesters,id',
-        ]);
-
-        $transcript = $this->transcriptService->generate(
-            $validated['student_id'],
-            $validated['semester_id']
-        );
-
-        return response()->json([
-            'success' => true,
-            'data' => new TranscriptResource([
-                'student' => $student,
-                'semester' => $semester,
-                'results' => $results,
-                'semester_gpa' => $semesterGpa,
-                'cgpa' => $cgpa,
-                'total_credit_completed' => $credits,
-                'total_courses' => $results->count(),
+        $transcripts = QueryFilter::apply(
+            Transcript::with([
+                'student',
+                'semester'
             ]),
-        ]);
+            $request,
+
+            [],
+
+            [
+                'student_id',
+                'semester_id'
+            ],
+
+            [
+                'id',
+                'created_at'
+            ]
+        );
     }
 
     /**

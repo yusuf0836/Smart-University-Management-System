@@ -1,0 +1,9 @@
+$kind: http-request
+description: Returns a list of all attendance records with student, course and semester information.
+url: "{{baseUrl}}/api/v1/attendances"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+examples: ./.resources/List Attendances.resources/examples
+order: 1000

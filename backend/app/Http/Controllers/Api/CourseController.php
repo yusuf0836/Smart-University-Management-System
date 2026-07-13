@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CourseRequest;
 use App\Models\Course;
 use App\Http\Resources\CourseResource;
+use Illuminate\Http\Request;
+use App\Helpers\QueryFilter;
 
 class CourseController extends Controller
 {
@@ -21,15 +23,42 @@ class CourseController extends Controller
      *
      * @response 200 {"success": true}
      */
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::with('department')
-            ->latest()
-            ->get();
+        $courses = QueryFilter::apply(
+            Course::with('department'),
+            $request,
+
+            [
+                'course_title',
+                'course_code',
+                'department.name'
+            ],
+
+            [
+                'department_id',
+                'type',
+                'status'
+            ],
+
+            [
+                'id',
+                'course_title',
+                'course_code',
+                'credit',
+                'created_at'
+            ]
+        );
 
         return response()->json([
             'success' => true,
             'data' => CourseResource::collection($courses),
+            'meta' => [
+                'current_page' => $courses->currentPage(),
+                'last_page' => $courses->lastPage(),
+                'per_page' => $courses->perPage(),
+                'total' => $courses->total(),
+            ],
         ]);
     }
 

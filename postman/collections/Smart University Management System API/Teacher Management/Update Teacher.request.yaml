@@ -1,0 +1,19 @@
+$kind: http-request
+description: Updates an existing teacher.
+url: "{{baseUrl}}/api/v1/teachers/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the teacher.
+  - key: teacher
+    value: "1"
+    description: The ID of the teacher.
+body:
+  type: text
+  content: '{"department_id":"architecto","name":"John Doe","employee_id":"g","email":"rowan.gulgowski@example.com","phone":"01712345678","designation":"Associate Professor","joining_date":"2026-07-13T07:09:15","salary":"60000","status":"Active"}'
+examples: ./.resources/Update Teacher.resources/examples
+order: 4000

@@ -1,0 +1,26 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/transcripts/generate"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: text
+    content: '{"student_id":1,"semester_id":2}'
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "data": {
+          "semester_gpa": 3.85,
+          "cgpa": 3.76,
+          "total_credit_completed": 18,
+          "total_courses": 6
+        }
+      }
+order: 1000

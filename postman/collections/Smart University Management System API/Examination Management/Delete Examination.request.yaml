@@ -1,0 +1,16 @@
+$kind: http-request
+description: Deletes an examination schedule.
+url: "{{baseUrl}}/api/v1/examinations/:id"
+method: DELETE
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the examination.
+  - key: examination
+    value: "1"
+    description: Examination ID.
+examples: ./.resources/Delete Examination.resources/examples
+order: 5000

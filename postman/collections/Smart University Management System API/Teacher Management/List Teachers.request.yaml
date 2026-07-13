@@ -1,0 +1,9 @@
+$kind: http-request
+description: Returns a list of all teachers with their department information.
+url: "{{baseUrl}}/api/v1/teachers"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+examples: ./.resources/List Teachers.resources/examples
+order: 1000

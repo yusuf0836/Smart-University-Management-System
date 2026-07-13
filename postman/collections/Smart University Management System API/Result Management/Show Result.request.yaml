@@ -1,0 +1,16 @@
+$kind: http-request
+description: Returns details of a specific result.
+url: "{{baseUrl}}/api/v1/results/:id"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the result.
+  - key: result
+    value: "1"
+    description: Result ID.
+examples: ./.resources/Show Result.resources/examples
+order: 3000

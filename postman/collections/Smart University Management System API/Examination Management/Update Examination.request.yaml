@@ -1,0 +1,19 @@
+$kind: http-request
+description: Updates an existing examination schedule.
+url: "{{baseUrl}}/api/v1/examinations/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the examination.
+  - key: examination
+    value: "1"
+    description: Examination ID.
+body:
+  type: text
+  content: '{"department_id":1,"semester_id":2,"exam_name":"Final Examination","exam_type":"Final","exam_date":"2026-12-20","start_time":"10:00","end_time":"13:00","venue":"Main Hall","status":true}'
+examples: ./.resources/Update Examination.resources/examples
+order: 4000

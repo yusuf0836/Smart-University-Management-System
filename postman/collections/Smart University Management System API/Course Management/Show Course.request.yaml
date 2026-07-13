@@ -1,0 +1,16 @@
+$kind: http-request
+description: Returns details of a specific course.
+url: "{{baseUrl}}/api/v1/courses/:id"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the course.
+  - key: course
+    value: "1"
+    description: Course ID.
+examples: ./.resources/Show Course.resources/examples
+order: 3000

@@ -1,0 +1,16 @@
+$kind: http-request
+description: Deletes a faculty.
+url: "{{baseUrl}}/api/v1/faculties/:id"
+method: DELETE
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the faculty.
+  - key: faculty
+    value: "1"
+    description: Faculty ID.
+examples: ./.resources/Delete Faculty.resources/examples
+order: 5000

@@ -1,0 +1,28 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/routines/:id"
+  method: PUT
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  pathVariables:
+    - key: id
+      value: "1"
+      description: The ID of the routine.
+    - key: routine
+      value: "1"
+      description: Routine ID.
+  body:
+    type: text
+    content: '{"department_id":1,"semester_id":2,"course_id":5,"teacher_id":3,"day":"Sunday","start_time":"09:00","end_time":"10:30","room_no":"A-401","status":true}'
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "message": "Routine updated successfully."
+      }
+order: 1000

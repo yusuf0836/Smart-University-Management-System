@@ -1,0 +1,24 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/semesters/:id"
+  method: PUT
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  pathVariables:
+    - key: id
+      value: "1"
+      description: The ID of the semester.
+    - key: semester
+      value: "1"
+      description: Semester ID.
+  body:
+    type: text
+    content: '{"name":"Spring 2026","start_date":"2026-01-01","end_date":"2026-05-31","status":"Active","semester_code":"SP26"}'
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: '{"success": true}'
+order: 1000

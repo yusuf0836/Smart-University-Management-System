@@ -1,0 +1,24 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/dashboard"
+  method: GET
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "message": "Dashboard data fetched successfully.",
+        "data": {
+          "total_students": 250,
+          "total_teachers": 30,
+          "total_courses": 45,
+          "total_departments": 5
+        }
+      }
+order: 1000

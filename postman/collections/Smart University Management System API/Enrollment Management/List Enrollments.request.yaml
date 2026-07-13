@@ -1,0 +1,9 @@
+$kind: http-request
+description: Returns a list of all course enrollments with student, course and semester information.
+url: "{{baseUrl}}/api/v1/enrollments"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+examples: ./.resources/List Enrollments.resources/examples
+order: 1000

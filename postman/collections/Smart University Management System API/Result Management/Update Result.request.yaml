@@ -1,0 +1,19 @@
+$kind: http-request
+description: Updates an existing result. Grade and grade point are recalculated automatically based on the updated marks.
+url: "{{baseUrl}}/api/v1/results/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the result.
+  - key: result
+    value: "1"
+    description: Result ID.
+body:
+  type: text
+  content: '{"enrollment_id":1,"marks":90,"remarks":"Updated after re-evaluation"}'
+examples: ./.resources/Update Result.resources/examples
+order: 4000

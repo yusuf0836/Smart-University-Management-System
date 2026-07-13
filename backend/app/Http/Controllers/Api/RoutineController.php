@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoutineRequest;
 use App\Models\Routine;
+use App\Http\Resources\RoutineResource;
+use Illuminate\Http\Request;
+use App\Helpers\QueryFilter;
 
 class RoutineController extends Controller
 {
@@ -22,17 +25,31 @@ class RoutineController extends Controller
      */
     public function index()
     {
-        $routines = Routine::with([
-            'department',
-            'semester',
-            'course',
-            'teacher',
-        ])->latest()->get();
+        $routines = QueryFilter::apply(
+            Routine::with([
+                'department',
+                'semester',
+                'course',
+                'teacher'
+            ]),
+            $request,
 
-        return response()->json([
-            'success' => true,
-            'data' => $routines,
-        ]);
+            [
+                'day'
+            ],
+
+            [
+                'department_id',
+                'semester_id',
+                'teacher_id'
+            ],
+
+            [
+                'id',
+                'day',
+                'start_time'
+            ]
+        );
     }
 
     /**

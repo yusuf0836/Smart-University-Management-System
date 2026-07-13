@@ -1,0 +1,9 @@
+$kind: http-request
+description: Returns a list of all generated transcripts with student and semester information.
+url: "{{baseUrl}}/api/v1/transcripts"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+examples: ./.resources/List Transcripts.resources/examples
+order: 1000

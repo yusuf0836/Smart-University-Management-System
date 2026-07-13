@@ -1,0 +1,9 @@
+$kind: http-request
+description: Returns a list of all students with their department and semester.
+url: "{{baseUrl}}/api/v1/students"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+examples: ./.resources/List Students.resources/examples
+order: 1000

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TeacherRequest;
 use App\Models\Teacher;
 use App\Http\Resources\TeacherResource;
+use Illuminate\Http\Request;
+use App\Helpers\QueryFilter;
 
 class TeacherController extends Controller
 {
@@ -31,13 +33,46 @@ class TeacherController extends Controller
      *   ]
      * }
      */
-    public function index()
+    public function index(Request $request)
     {
-        $teachers = Teacher::with('department')->latest()->get();
+        $teachers = QueryFilter::apply(
+            Teacher::with('department'),
+            $request,
+
+            // Search
+            [
+                'name',
+                'id',
+                'email',
+                'phone',
+                'department.name',
+            ],
+
+            // Filter
+            [
+                'department_id',
+                'status'
+            ],
+
+            // Sort
+            [
+                'id',
+                'name',
+                'id',
+                'email',
+                'created_at'
+            ]
+        );
 
         return response()->json([
             'success' => true,
             'data' => TeacherResource::collection($teachers),
+            'meta' => [
+                'current_page' => $teachers->currentPage(),
+                'last_page' => $teachers->lastPage(),
+                'per_page' => $teachers->perPage(),
+                'total' => $teachers->total(),
+            ],
         ]);
     }
 

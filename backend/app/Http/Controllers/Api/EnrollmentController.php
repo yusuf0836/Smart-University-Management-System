@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\EnrollmentRequest;
 use App\Models\Enrollment;
 use App\Http\Resources\EnrollmentResource;
+use Illuminate\Http\Request;
+use App\Helpers\QueryFilter;
 
 class EnrollmentController extends Controller
 {
@@ -23,16 +25,30 @@ class EnrollmentController extends Controller
      */
     public function index()
     {
-        $enrollments = Enrollment::with([
-            'student',
-            'course',
-            'semester'
-        ])->latest()->get();
+        $enrollments = QueryFilter::apply(
+            Enrollment::with(['student', 'course', 'semester']),
+            $request,
 
-        return response()->json([
-            'success' => true,
-            'data' => EnrollmentResource::collection($enrollments),
-        ]);
+            [
+                'academic_year',
+                'student.name',
+                'course.course_title',
+                'semester.name'
+            ],
+
+            [
+                'student_id',
+                'course_id',
+                'semester_id',
+                'status'
+            ],
+
+            [
+                'id',
+                'academic_year',
+                'created_at'
+            ]
+        );
     }
 
     /**

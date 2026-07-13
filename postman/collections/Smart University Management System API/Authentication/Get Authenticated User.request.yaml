@@ -1,0 +1,9 @@
+$kind: http-request
+description: Returns the currently authenticated user's information.
+url: "{{baseUrl}}/api/v1/me"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+examples: ./.resources/Get Authenticated User.resources/examples
+order: 3000

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\FeeRequest;
 use App\Models\Fee;
 use App\Http\Resources\FeeResource;
+use Illuminate\Http\Request;
+use App\Helpers\QueryFilter;
 
 class FeeController extends Controller
 {
@@ -23,15 +25,27 @@ class FeeController extends Controller
      */
     public function index()
     {
-        $fees = Fee::with([
-            'student',
-            'semester',
-        ])->latest()->get();
+        $fees = QueryFilter::apply(
+            Fee::with([
+                'student',
+                'semester'
+            ]),
+            $request,
 
-        return response()->json([
-            'success' => true,
-            'data' => FeeResource::collection($fees),
-        ]);
+            [],
+
+            [
+                'student_id',
+                'semester_id',
+                'status'
+            ],
+
+            [
+                'id',
+                'amount',
+                'created_at'
+            ]
+        );
     }
 
     /**

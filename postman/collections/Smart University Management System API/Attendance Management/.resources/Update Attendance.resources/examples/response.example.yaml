@@ -1,0 +1,28 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/attendances/:id"
+  method: PUT
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  pathVariables:
+    - key: id
+      value: "1"
+      description: The ID of the attendance.
+    - key: attendance
+      value: "1"
+      description: Attendance ID.
+  body:
+    type: text
+    content: '{"student_id":1,"course_id":3,"semester_id":2,"attendance_date":"2026-01-15","status":"Present","remarks":"Attendance updated after verification."}'
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "message": "Attendance updated successfully."
+      }
+order: 1000

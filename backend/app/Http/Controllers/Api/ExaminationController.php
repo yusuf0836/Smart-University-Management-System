@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ExaminationRequest;
 use App\Models\Examination;
 use App\Http\Resources\ExaminationResource;
+use Illuminate\Http\Request;
+use App\Helpers\QueryFilter;
 
 class ExaminationController extends Controller
 {
@@ -23,15 +25,29 @@ class ExaminationController extends Controller
      */
     public function index()
     {
-        $examinations = Examination::with([
-            'department',
-            'semester',
-        ])->latest()->get();
+        $examinations = QueryFilter::apply(
+            Examination::with([
+                'department',
+                'semester'
+            ]),
+            $request,
 
-        return response()->json([
-            'success' => true,
-            'data' => ExaminationResource::collection($examinations),
-        ]);
+            [
+                'title'
+            ],
+
+            [
+                'department_id',
+                'semester_id',
+                'status'
+            ],
+
+            [
+                'id',
+                'exam_date',
+                'created_at'
+            ]
+        );
     }
 
     /**

@@ -1,0 +1,16 @@
+$kind: http-request
+description: Deletes a student from the system.
+url: "{{baseUrl}}/api/v1/students/:id"
+method: DELETE
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the student.
+  - key: student
+    value: "1"
+    description: The ID of the student.
+examples: ./.resources/Delete Student.resources/examples
+order: 5000

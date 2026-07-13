@@ -1,0 +1,15 @@
+# Use this workspace to collaborate
+workspace:
+  id: feb329cd-e6c4-4780-8040-24c9133d0c70
+
+localResources:
+  collections:
+    - ../backend/storage/app/private/scribe/collection.json
+  specs:
+    - ../backend/storage/app/private/scribe/openapi.yaml
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections:
+    ../postman/collections/Smart University Management System API: aab4897e-05f0-4d0f-9ef3-d1ca17e96ad2

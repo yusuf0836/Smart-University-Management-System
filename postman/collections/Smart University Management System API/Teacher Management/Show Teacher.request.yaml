@@ -1,0 +1,16 @@
+$kind: http-request
+description: Returns details of a specific teacher.
+url: "{{baseUrl}}/api/v1/teachers/:id"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the teacher.
+  - key: teacher
+    value: "1"
+    description: The ID of the teacher.
+examples: ./.resources/Show Teacher.resources/examples
+order: 3000

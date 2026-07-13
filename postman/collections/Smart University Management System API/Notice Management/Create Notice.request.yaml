@@ -1,0 +1,12 @@
+$kind: http-request
+description: Creates a new notice.
+url: "{{baseUrl}}/api/v1/notices"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: text
+  content: '{"title":"Mid Term Examination Notice","description":"The Mid Term Examination will start from 15 August 2026.","publish_date":"2026-08-01","expiry_date":"2026-08-31","status":true}'
+examples: ./.resources/Create Notice.resources/examples
+order: 2000

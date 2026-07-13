@@ -1,0 +1,16 @@
+$kind: http-request
+description: Returns details of a specific fee record.
+url: "{{baseUrl}}/api/v1/fees/:id"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the fee.
+  - key: fee
+    value: "1"
+    description: Fee ID.
+examples: ./.resources/Show Fee.resources/examples
+order: 3000

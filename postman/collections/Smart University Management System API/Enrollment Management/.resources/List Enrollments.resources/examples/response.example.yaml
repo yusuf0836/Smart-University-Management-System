@@ -1,0 +1,14 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/enrollments"
+  method: GET
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: '{"success": true}'
+order: 1000

@@ -1,0 +1,9 @@
+$kind: collection
+name: Smart University Management System API
+description: REST API documentation for the Smart University Management System built with Laravel 12.
+variables:
+  baseUrl: http://localhost
+auth:
+  type: bearer
+  credentials:
+    token: 3|rDmWXT2uZQ7iYifL2lQYEvhGfmVwdqglAMUPfoiI2abe56cf

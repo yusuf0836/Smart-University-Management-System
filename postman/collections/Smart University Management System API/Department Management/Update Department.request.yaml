@@ -1,0 +1,19 @@
+$kind: http-request
+description: Updates an existing department.
+url: "{{baseUrl}}/api/v1/departments/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the department.
+  - key: department
+    value: "1"
+    description: Department ID.
+body:
+  type: text
+  content: '{"faculty_id":"architecto","name":"n","description":"Eius et animi quos velit et.","status":false}'
+examples: ./.resources/Update Department.resources/examples
+order: 4000

@@ -1,0 +1,12 @@
+$kind: http-request
+description: Creates a new faculty.
+url: "{{baseUrl}}/api/v1/faculties"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: text
+  content: '{"name":"b","code":"ngzmiyvdljnikhwa","description":"Eius et animi quos velit et.","status":false,"faculty_name":"Faculty of Engineering","faculty_code":"FE"}'
+examples: ./.resources/Create Faculty.resources/examples
+order: 2000

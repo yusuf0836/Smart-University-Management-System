@@ -332,7 +332,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -342,7 +342,7 @@ endpoints:
       faculty_id: architecto
       name: 'n'
       description: 'Eius et animi quos velit et.'
-      status: true
+      status: false
     fileParameters: []
     responses:
       -

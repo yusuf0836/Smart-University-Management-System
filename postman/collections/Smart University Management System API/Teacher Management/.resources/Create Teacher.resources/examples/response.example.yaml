@@ -1,0 +1,21 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/teachers"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: text
+    content: '{"department_id":1,"name":"John Doe","employee_id":"EMP001","email":"john@example.com","phone":"01712345678","designation":"Assistant Professor","joining_date":"2026-01-15","salary":"50000","status":"Active"}'
+response:
+  statusCode: 201
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "message": "Teacher created successfully."
+      }
+order: 1000

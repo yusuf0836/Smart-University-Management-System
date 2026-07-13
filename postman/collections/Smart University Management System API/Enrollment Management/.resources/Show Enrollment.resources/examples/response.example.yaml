@@ -1,0 +1,21 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/enrollments/:id"
+  method: GET
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  pathVariables:
+    - key: id
+      value: "1"
+      description: The ID of the enrollment.
+    - key: enrollment
+      value: "1"
+      description: Enrollment ID.
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: '{"success": true}'
+order: 1000

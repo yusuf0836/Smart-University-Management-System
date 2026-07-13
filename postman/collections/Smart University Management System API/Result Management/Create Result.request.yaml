@@ -1,0 +1,12 @@
+$kind: http-request
+description: Creates a new examination result for a student's enrollment. Grade and grade point are calculated automatically from the obtained marks.
+url: "{{baseUrl}}/api/v1/results"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: text
+  content: '{"enrollment_id":1,"marks":85,"remarks":"Excellent performance"}'
+examples: ./.resources/Create Result.resources/examples
+order: 2000

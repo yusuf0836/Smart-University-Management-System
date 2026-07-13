@@ -1,0 +1,28 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/fees/:id"
+  method: PUT
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  pathVariables:
+    - key: id
+      value: "1"
+      description: The ID of the fee.
+    - key: fee
+      value: "1"
+      description: Fee ID.
+  body:
+    type: text
+    content: '{"student_id":1,"semester_id":2,"amount":15000,"paid_amount":12000,"due_amount":3000,"payment_date":"2026-02-01","payment_method":"Mobile Banking","transaction_id":"TXN987654321","status":"Partial","remarks":"Second installment received."}'
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "message": "Fee updated successfully."
+      }
+order: 1000

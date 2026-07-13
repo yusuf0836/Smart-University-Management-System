@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SemesterRequest;
 use App\Models\Semester;
 use App\Http\Resources\SemesterResource;
+use Illuminate\Http\Request;
+use App\Helpers\QueryFilter;
 
 class SemesterController extends Controller
 {
@@ -21,13 +23,36 @@ class SemesterController extends Controller
      *
      * @response 200 {"success": true}
      */
-    public function index()
+    public function index(Request $request)
     {
-        $semesters = Semester::latest()->get();
+        $semesters = QueryFilter::apply(
+            Semester::query(),
+            $request,
+
+            [
+                'name'
+            ],
+
+            [
+                'status'
+            ],
+
+            [
+                'id',
+                'name',
+                'created_at'
+            ]
+        );
 
         return response()->json([
             'success' => true,
             'data' => SemesterResource::collection($semesters),
+            'meta' => [
+                'current_page' => $semesters->currentPage(),
+                'last_page' => $semesters->lastPage(),
+                'per_page' => $semesters->perPage(),
+                'total' => $semesters->total(),
+            ],
         ]);
     }
 

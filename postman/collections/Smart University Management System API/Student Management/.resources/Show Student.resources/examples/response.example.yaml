@@ -1,0 +1,29 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/students/:id"
+  method: GET
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  pathVariables:
+    - key: id
+      value: "1"
+      description: The ID of the student.
+    - key: student
+      value: "1"
+      description: Student ID.
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "data": {
+          "id": 1,
+          "student_id": "20230001",
+          "student_name": "Md Yusuf Ali"
+        }
+      }
+order: 1000

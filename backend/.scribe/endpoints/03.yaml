@@ -401,7 +401,7 @@ endpoints:
         name: joining_date
         description: 'Must be a valid date.'
         required: true
-        example: '2026-07-12T17:56:24'
+        example: '2026-07-13T07:09:15'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -436,7 +436,7 @@ endpoints:
       email: rowan.gulgowski@example.com
       phone: '01712345678'
       designation: 'Associate Professor'
-      joining_date: '2026-07-12T17:56:24'
+      joining_date: '2026-07-13T07:09:15'
       salary: '60000'
       status: Active
     fileParameters: []

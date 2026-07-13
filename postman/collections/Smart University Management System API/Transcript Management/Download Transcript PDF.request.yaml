@@ -1,0 +1,16 @@
+$kind: http-request
+description: Downloads the transcript as a PDF document.
+url: "{{baseUrl}}/api/v1/transcripts/:transcript_id/pdf"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: transcript_id
+    value: "3"
+    description: The ID of the transcript.
+  - key: transcript
+    value: "1"
+    description: Transcript ID.
+examples: ./.resources/Download Transcript PDF.resources/examples
+order: 4000

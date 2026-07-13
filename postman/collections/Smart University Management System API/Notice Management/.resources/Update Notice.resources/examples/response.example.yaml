@@ -1,0 +1,28 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/notices/:id"
+  method: PUT
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  pathVariables:
+    - key: id
+      value: "1"
+      description: The ID of the notice.
+    - key: notice
+      value: "1"
+      description: Notice ID.
+  body:
+    type: text
+    content: '{"title":"Updated Examination Notice","description":"Examination schedule has been updated.","publish_date":"2026-08-01","expiry_date":"2026-09-05","status":true}'
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "message": "Notice updated successfully."
+      }
+order: 1000

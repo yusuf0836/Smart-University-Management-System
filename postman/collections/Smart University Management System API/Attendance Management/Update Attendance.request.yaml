@@ -1,0 +1,19 @@
+$kind: http-request
+description: Updates an existing attendance record.
+url: "{{baseUrl}}/api/v1/attendances/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the attendance.
+  - key: attendance
+    value: "1"
+    description: Attendance ID.
+body:
+  type: text
+  content: '{"student_id":1,"course_id":3,"semester_id":2,"attendance_date":"2026-01-15","status":"Present","remarks":"Attendance updated after verification."}'
+examples: ./.resources/Update Attendance.resources/examples
+order: 4000

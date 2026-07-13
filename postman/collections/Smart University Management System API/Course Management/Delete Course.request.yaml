@@ -1,0 +1,16 @@
+$kind: http-request
+description: Deletes a course.
+url: "{{baseUrl}}/api/v1/courses/:id"
+method: DELETE
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the course.
+  - key: course
+    value: "1"
+    description: Course ID.
+examples: ./.resources/Delete Course.resources/examples
+order: 5000

@@ -1,0 +1,12 @@
+$kind: http-request
+description: Creates a new attendance record for a student.
+url: "{{baseUrl}}/api/v1/attendances"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: text
+  content: '{"student_id":1,"course_id":3,"semester_id":2,"attendance_date":"2026-01-15","status":"Present","remarks":"Arrived 10 minutes late."}'
+examples: ./.resources/Create Attendance.resources/examples
+order: 2000

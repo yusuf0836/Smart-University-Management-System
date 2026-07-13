@@ -1,0 +1,16 @@
+$kind: http-request
+description: Deletes a student's result.
+url: "{{baseUrl}}/api/v1/results/:id"
+method: DELETE
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the result.
+  - key: result
+    value: "1"
+    description: Result ID.
+examples: ./.resources/Delete Result.resources/examples
+order: 5000

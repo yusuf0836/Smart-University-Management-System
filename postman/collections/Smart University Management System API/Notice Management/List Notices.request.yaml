@@ -1,0 +1,9 @@
+$kind: http-request
+description: Returns a list of all published notices.
+url: "{{baseUrl}}/api/v1/notices"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+examples: ./.resources/List Notices.resources/examples
+order: 1000

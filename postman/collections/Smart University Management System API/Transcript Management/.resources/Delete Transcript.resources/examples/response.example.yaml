@@ -1,0 +1,25 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/transcripts/:transcript_id"
+  method: DELETE
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  pathVariables:
+    - key: transcript_id
+      value: "3"
+      description: The ID of the transcript.
+    - key: transcript
+      value: "1"
+      description: Transcript ID.
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "message": "Transcript deleted successfully."
+      }
+order: 1000

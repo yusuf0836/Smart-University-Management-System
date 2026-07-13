@@ -1,0 +1,9 @@
+$kind: http-request
+description: Returns a list of all student results with enrollment, student, course and semester information.
+url: "{{baseUrl}}/api/v1/results"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+examples: ./.resources/List Results.resources/examples
+order: 1000

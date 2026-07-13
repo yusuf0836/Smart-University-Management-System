@@ -1,0 +1,17 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/faculties"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: text
+    content: '{"name":"b","code":"ngzmiyvdljnikhwa","description":"Eius et animi quos velit et.","status":false,"faculty_name":"Faculty of Engineering","faculty_code":"FE"}'
+response:
+  statusCode: 201
+  statusText: OK
+  body:
+    type: text
+    content: '{"success": true}'
+order: 1000

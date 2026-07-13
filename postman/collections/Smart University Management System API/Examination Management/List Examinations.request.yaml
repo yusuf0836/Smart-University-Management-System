@@ -1,0 +1,9 @@
+$kind: http-request
+description: Returns a list of all examinations with department and semester information.
+url: "{{baseUrl}}/api/v1/examinations"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+examples: ./.resources/List Examinations.resources/examples
+order: 1000

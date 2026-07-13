@@ -1,0 +1,9 @@
+$kind: http-request
+description: Returns a list of all class routines with department, semester, course and teacher information.
+url: "{{baseUrl}}/api/v1/routines"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+examples: ./.resources/List Routines.resources/examples
+order: 1000

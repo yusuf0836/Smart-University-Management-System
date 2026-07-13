@@ -1,0 +1,25 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/students"
+  method: GET
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "data": [
+          {
+            "id": 1,
+            "student_id": "20230001",
+            "name": "Md Yusuf Ali",
+            "email": "yusuf@example.com"
+          }
+        ]
+      }
+order: 1000

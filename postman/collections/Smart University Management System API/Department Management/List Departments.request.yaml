@@ -1,0 +1,9 @@
+$kind: http-request
+description: Returns a list of all departments with faculty information.
+url: "{{baseUrl}}/api/v1/departments"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+examples: ./.resources/List Departments.resources/examples
+order: 1000

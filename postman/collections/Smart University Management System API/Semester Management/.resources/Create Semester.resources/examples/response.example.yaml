@@ -1,0 +1,17 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/semesters"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: text
+    content: '{"name":"Spring 2026","start_date":"2026-01-01","end_date":"2026-05-31","status":"Active","semester_code":"SP26"}'
+response:
+  statusCode: 201
+  statusText: OK
+  body:
+    type: text
+    content: '{"success": true}'
+order: 1000

@@ -1,0 +1,9 @@
+$kind: http-request
+description: Returns a list of all student fee records with student and semester information.
+url: "{{baseUrl}}/api/v1/fees"
+method: GET
+headers:
+  Content-Type: application/json
+  Accept: application/json
+examples: ./.resources/List Fees.resources/examples
+order: 1000

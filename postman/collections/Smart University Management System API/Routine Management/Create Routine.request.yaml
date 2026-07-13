@@ -1,0 +1,12 @@
+$kind: http-request
+description: Creates a new class routine.
+url: "{{baseUrl}}/api/v1/routines"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: text
+  content: '{"department_id":1,"semester_id":2,"course_id":5,"teacher_id":3,"day":"Sunday","start_time":"09:00","end_time":"10:30","room_no":"A-401","status":true}'
+examples: ./.resources/Create Routine.resources/examples
+order: 2000

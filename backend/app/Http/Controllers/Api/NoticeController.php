@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\NoticeRequest;
 use App\Models\Notice;
 use App\Http\Resources\NoticeResource;
+use Illuminate\Http\Request;
+use App\Helpers\QueryFilter;
 
 class NoticeController extends Controller
 {
@@ -23,12 +25,24 @@ class NoticeController extends Controller
      */
     public function index()
     {
-        $notices = Notice::latest()->get();
+        $notices = QueryFilter::apply(
+            Notice::query(),
+            $request,
 
-        return response()->json([
-            'success' => true,
-            'data' => NoticeResource::collection($notices),
-        ]);
+            [
+                'title'
+            ],
+
+            [
+                'status'
+            ],
+
+            [
+                'id',
+                'title',
+                'publish_date'
+            ]
+        );
     }
 
     /**

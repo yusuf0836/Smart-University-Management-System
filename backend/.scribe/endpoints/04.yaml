@@ -162,7 +162,7 @@ endpoints:
         name: date_of_birth
         description: 'Must be a valid date.'
         required: true
-        example: '2026-07-12T17:56:24'
+        example: '2026-07-13T07:09:15'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -173,7 +173,7 @@ endpoints:
         name: admission_date
         description: 'Must be a valid date.'
         required: true
-        example: '2026-07-12T17:56:24'
+        example: '2026-07-13T07:09:15'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -198,8 +198,8 @@ endpoints:
       email: yusuf@example.com
       phone: '01700000000'
       gender: Male
-      date_of_birth: '2026-07-12T17:56:24'
-      admission_date: '2026-07-12T17:56:24'
+      date_of_birth: '2026-07-13T07:09:15'
+      admission_date: '2026-07-13T07:09:15'
       status: false
     fileParameters: []
     responses:
@@ -425,7 +425,7 @@ endpoints:
         name: date_of_birth
         description: 'Must be a valid date.'
         required: true
-        example: '2026-07-12T17:56:24'
+        example: '2026-07-13T07:09:15'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -436,7 +436,7 @@ endpoints:
         name: admission_date
         description: 'Must be a valid date.'
         required: true
-        example: '2026-07-12T17:56:24'
+        example: '2026-07-13T07:09:15'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -472,8 +472,8 @@ endpoints:
       email: yusuf@example.com
       phone: '01712345678'
       gender: Male
-      date_of_birth: '2026-07-12T17:56:24'
-      admission_date: '2026-07-12T17:56:24'
+      date_of_birth: '2026-07-13T07:09:15'
+      admission_date: '2026-07-13T07:09:15'
       status: Active
       blood_group: O+
     fileParameters: []

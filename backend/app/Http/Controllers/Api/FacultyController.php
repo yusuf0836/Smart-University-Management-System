@@ -7,6 +7,8 @@ use App\Http\Requests\Faculty\StoreFacultyRequest;
 use App\Http\Requests\Faculty\UpdateFacultyRequest;
 use App\Http\Resources\FacultyResource;
 use App\Models\Faculty;
+use Illuminate\Http\Request;
+use App\Helpers\QueryFilter;
 
 class FacultyController extends Controller
 {
@@ -22,13 +24,43 @@ class FacultyController extends Controller
      *
      * @response 200 {"success": true}
      */
-    public function index()
+    public function index(Request $request)
     {
-        $faculties = Faculty::latest()->get();
+        $faculties = QueryFilter::apply(
+            Faculty::query(),
+            $request,
+
+            // Search Columns
+            [
+                'name',
+                'code',
+                'description',
+            ],
+
+            // Filter Columns
+            [
+                'status',
+            ],
+
+            // Sortable Columns
+            [
+                'id',
+                'name',
+                'code',
+                'description',
+                'created_at',
+            ]
+        );
 
         return response()->json([
             'success' => true,
             'data' => FacultyResource::collection($faculties),
+            'meta' => [
+                'current_page' => $faculties->currentPage(),
+                'last_page' => $faculties->lastPage(),
+                'per_page' => $faculties->perPage(),
+                'total' => $faculties->total(),
+            ],
         ]);
     }
 

@@ -1,0 +1,16 @@
+$kind: http-request
+description: Deletes an attendance record.
+url: "{{baseUrl}}/api/v1/attendances/:id"
+method: DELETE
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the attendance.
+  - key: attendance
+    value: "1"
+    description: Attendance ID.
+examples: ./.resources/Delete Attendance.resources/examples
+order: 5000

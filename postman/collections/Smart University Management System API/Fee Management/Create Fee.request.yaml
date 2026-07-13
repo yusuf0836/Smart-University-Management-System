@@ -1,0 +1,12 @@
+$kind: http-request
+description: Creates a new student fee record.
+url: "{{baseUrl}}/api/v1/fees"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: text
+  content: '{"student_id":1,"semester_id":2,"amount":15000,"paid_amount":10000,"due_amount":5000,"payment_date":"2026-01-20","payment_method":"Bank","transaction_id":"TXN123456789","status":"Partial","remarks":"First installment paid."}'
+examples: ./.resources/Create Fee.resources/examples
+order: 2000

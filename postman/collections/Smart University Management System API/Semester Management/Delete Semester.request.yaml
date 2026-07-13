@@ -1,0 +1,16 @@
+$kind: http-request
+description: Deletes a semester.
+url: "{{baseUrl}}/api/v1/semesters/:id"
+method: DELETE
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the semester.
+  - key: semester
+    value: "1"
+    description: Semester ID.
+examples: ./.resources/Delete Semester.resources/examples
+order: 5000

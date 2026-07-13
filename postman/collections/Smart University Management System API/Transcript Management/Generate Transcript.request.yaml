@@ -1,0 +1,12 @@
+$kind: http-request
+description: Generates a transcript for a student in a specific semester, including GPA, CGPA, completed credits and course results.
+url: "{{baseUrl}}/api/v1/transcripts/generate"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: text
+  content: '{"student_id":1,"semester_id":2}'
+examples: ./.resources/Generate Transcript.resources/examples
+order: 2000

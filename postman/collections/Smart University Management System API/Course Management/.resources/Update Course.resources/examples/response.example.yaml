@@ -1,0 +1,24 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/courses/:id"
+  method: PUT
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  pathVariables:
+    - key: id
+      value: "1"
+      description: The ID of the course.
+    - key: course
+      value: "1"
+      description: Course ID.
+  body:
+    type: text
+    content: '{"department_id":1,"course_code":"CSE101","course_title":"Introduction to Programming","credit":"3","type":"Theory","status":"Active","semester_id":1,"course_type":"Theory"}'
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: '{"success": true}'
+order: 1000

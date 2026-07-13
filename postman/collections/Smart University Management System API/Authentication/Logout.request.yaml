@@ -1,0 +1,9 @@
+$kind: http-request
+description: Revoke the current Sanctum access token and log out the authenticated user.
+url: "{{baseUrl}}/api/v1/logout"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+examples: ./.resources/Logout.resources/examples
+order: 2000

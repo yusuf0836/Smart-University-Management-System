@@ -1,0 +1,16 @@
+$kind: http-request
+description: Deletes a notice.
+url: "{{baseUrl}}/api/v1/notices/:id"
+method: DELETE
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: The ID of the notice.
+  - key: notice
+    value: "1"
+    description: Notice ID.
+examples: ./.resources/Delete Notice.resources/examples
+order: 5000
