@@ -8,6 +8,7 @@ use App\Models\Fee;
 use App\Http\Resources\FeeResource;
 use Illuminate\Http\Request;
 use App\Helpers\QueryFilter;
+use App\Helpers\ApiResponse;
 
 class FeeController extends Controller
 {
@@ -46,6 +47,12 @@ class FeeController extends Controller
                 'created_at'
             ]
         );
+
+        return ApiResponse::success(
+            FeeResource::collection($fees),
+            'Fees retrieved successfully',
+            $fees
+        );
     }
 
     /**
@@ -77,11 +84,10 @@ class FeeController extends Controller
     {
         $fee = Fee::create($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Fee created successfully.',
-            'data' => $fee,
-        ], 201);
+        return ApiResponse::created(
+            new FeeResource($fee),
+            'Fee created successfully'
+        );
     }
 
     /**
@@ -104,10 +110,10 @@ class FeeController extends Controller
             'semester',
         ]);
 
-        return response()->json([
-            'success' => true,
-            'data' => new FeeResource($fee),
-        ]);
+        return ApiResponse::success(
+            new FeeResource($fee),
+            'Fee retrieved successfully'
+        );
     }
 
     /**
@@ -141,11 +147,10 @@ class FeeController extends Controller
     {
         $fee->update($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Fee updated successfully.',
-            'data' => $fee,
-        ]);
+        return ApiResponse::success(
+            new FeeResource($fee),
+            'Fee updated successfully'
+        );
     }
 
     /**
@@ -168,9 +173,8 @@ class FeeController extends Controller
     {
         $fee->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Fee deleted successfully.',
-        ]);
+        return ApiResponse::deleted(
+            'Fee deleted successfully'
+        );
     }
 }

@@ -10,6 +10,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Result;
 use App\Resources\TranscriptResource;
 use App\Helpers\QueryFilter;
+use App\Helpers\ApiResponse;
 
 class TranscriptController extends Controller
 {
@@ -63,6 +64,12 @@ class TranscriptController extends Controller
                 'created_at'
             ]
         );
+
+        return ApiResponse::success(
+            TranscriptResource::collection($transcripts),
+            'Transcripts retrieved successfully',
+            $transcripts
+        );
     }
 
     /**
@@ -80,13 +87,10 @@ class TranscriptController extends Controller
      */
     public function show(Transcript $transcript)
     {
-        return response()->json([
-            'success' => true,
-            'data' => $transcript->load([
-                'student',
-                'semester',
-            ]),
-        ]);
+        return ApiResponse::success(
+            new TranscriptResource($transcript),
+            'Transcript retrieved successfully'
+        );
     }
 
     /**
@@ -102,13 +106,10 @@ class TranscriptController extends Controller
      */
     public function index()
     {
-        return response()->json([
-            'success' => true,
-            'data' => Transcript::with([
-                'student',
-                'semester',
-            ])->latest()->get(),
-        ]);
+        return ApiResponse::success(
+            TranscriptResource::collection(Transcript::with(['student', 'semester'])->get()),
+            'Transcripts retrieved successfully'
+        );
     }
     
     /**
@@ -168,9 +169,8 @@ class TranscriptController extends Controller
     {
         $transcript->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Transcript deleted successfully.',
-        ]);
+        return ApiResponse::deleted(
+            'Transcript deleted successfully'
+        );
     }
 }

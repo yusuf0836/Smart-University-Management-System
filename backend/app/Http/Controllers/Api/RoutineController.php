@@ -8,6 +8,7 @@ use App\Models\Routine;
 use App\Http\Resources\RoutineResource;
 use Illuminate\Http\Request;
 use App\Helpers\QueryFilter;
+use App\Helpers\ApiResponse;
 
 class RoutineController extends Controller
 {
@@ -50,6 +51,12 @@ class RoutineController extends Controller
                 'start_time'
             ]
         );
+
+        return ApiResponse::success(
+            RoutineResource::collection($routines),
+            'Routines retrieved successfully',
+            $routines
+        );
     }
 
     /**
@@ -80,11 +87,10 @@ class RoutineController extends Controller
     {
         $routine = Routine::create($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Routine created successfully.',
-            'data' => $routine,
-        ], 201);
+        return ApiResponse::created(
+            new RoutineResource($routine),
+            'Routine created successfully'
+        );
     }
 
     /**
@@ -102,15 +108,10 @@ class RoutineController extends Controller
      */
     public function show(Routine $routine)
     {
-        return response()->json([
-            'success' => true,
-            'data' => $routine->load([
-                'department',
-                'semester',
-                'course',
-                'teacher',
-            ]),
-        ]);
+        return ApiResponse::success(
+            new RoutineResource($routine),
+            'Routine retrieved successfully'
+        );
     }
 
     /**
@@ -143,11 +144,10 @@ class RoutineController extends Controller
     {
         $routine->update($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Routine updated successfully.',
-            'data' => $routine,
-        ]);
+        return ApiResponse::success(
+            new RoutineResource($routine),
+            'Routine updated successfully'
+        );
     }
 
     /**
@@ -170,9 +170,8 @@ class RoutineController extends Controller
     {
         $routine->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Routine deleted successfully.',
-        ]);
+        return ApiResponse::deleted(
+            'Routine deleted successfully'
+        );
     }
 }

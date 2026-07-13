@@ -19,6 +19,7 @@ use App\Models\Examination;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Services\DashboardService;
+use App\Helpers\ApiResponse;
 
 class DashboardController extends Controller
 {
@@ -51,10 +52,9 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return response()->json([
-            'success' => true,
-            'message' => 'Dashboard data fetched successfully.',
-            'data' => $this->dashboardService->getDashboardData(),
-        ]);
+        return ApiResponse::success(
+            $this->dashboardService->getDashboardData(),
+            'Dashboard data fetched successfully'
+        );
     }
 }

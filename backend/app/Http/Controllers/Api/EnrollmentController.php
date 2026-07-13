@@ -8,6 +8,7 @@ use App\Models\Enrollment;
 use App\Http\Resources\EnrollmentResource;
 use Illuminate\Http\Request;
 use App\Helpers\QueryFilter;
+use App\Helpers\ApiResponse;
 
 class EnrollmentController extends Controller
 {
@@ -49,6 +50,12 @@ class EnrollmentController extends Controller
                 'created_at'
             ]
         );
+
+        return ApiResponse::success(
+            EnrollmentResource::collection($enrollments),
+            'Enrollments retrieved successfully',
+            $enrollments
+        );
     }
 
     /**
@@ -75,11 +82,10 @@ class EnrollmentController extends Controller
     {
         $enrollment = Enrollment::create($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Student enrolled successfully.',
-            'data' => $enrollment,
-        ], 201);
+        return ApiResponse::created(
+            new EnrollmentResource($enrollment),
+            'Student enrolled successfully'
+        );
     }
 
     /**
@@ -103,10 +109,10 @@ class EnrollmentController extends Controller
             'semester'
         ]);
 
-        return response()->json([
-            'success' => true,
-            'data' => new EnrollmentResource($enrollment),
-        ]);
+        return ApiResponse::success(
+            new EnrollmentResource($enrollment),
+            'Enrollment retrieved successfully'
+        );
     }
 
     /**
@@ -135,11 +141,10 @@ class EnrollmentController extends Controller
     {
         $enrollment->update($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Enrollment updated successfully.',
-            'data' => $enrollment,
-        ]);
+        return ApiResponse::success(
+            new EnrollmentResource($enrollment),
+            'Enrollment updated successfully'
+        );
     }
 
     /**
@@ -162,9 +167,8 @@ class EnrollmentController extends Controller
     {
         $enrollment->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Enrollment deleted successfully.',
-        ]);
+        return ApiResponse::deleted(
+            'Enrollment deleted successfully'
+        );
     }
 }

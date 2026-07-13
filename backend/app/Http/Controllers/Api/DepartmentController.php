@@ -7,6 +7,7 @@ use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Http\Resources\DepartmentResource;
 use App\Helpers\QueryFilter;
+use App\Helpers\ApiResponse;
 
 class DepartmentController extends Controller
 {
@@ -46,16 +47,11 @@ class DepartmentController extends Controller
             ]
         );
 
-        return response()->json([
-            'success' => true,
-            'data' => DepartmentResource::collection($departments),
-            'meta' => [
-                'current_page' => $departments->currentPage(),
-                'last_page' => $departments->lastPage(),
-                'per_page' => $departments->perPage(),
-                'total' => $departments->total(),
-            ],
-        ]);
+        return ApiResponse::success(
+            DepartmentResource::collection($departments),
+            'Departments retrieved successfully',
+            $departments
+        );
     }
 
     /**
@@ -85,9 +81,10 @@ class DepartmentController extends Controller
 
         $department = Department::create($validated);
 
-        return response()->json([
-            'data' => $department
-        ], 201);
+        return ApiResponse::created(
+            new DepartmentResource($department),
+            'Department created successfully'
+        );
     }
 
     /**
@@ -107,10 +104,10 @@ class DepartmentController extends Controller
     {
         $department->load('faculty');
 
-        return response()->json([
-            'success' => true,
-            'data' => new DepartmentResource($department),
-        ]);
+        return ApiResponse::success(
+            new DepartmentResource($department),
+            'Department retrieved successfully'
+        );
     }
 
     /**
@@ -138,9 +135,10 @@ class DepartmentController extends Controller
 
         $department->update($validated);
 
-        return response()->json([
-            'data' => $department
-        ]);
+        return ApiResponse::success(
+            new DepartmentResource($department),
+            'Department updated successfully'
+        );
     }
 
     /**
@@ -160,8 +158,8 @@ class DepartmentController extends Controller
     {
         $department->delete();
 
-        return response()->json([
-            'message' => 'Department deleted successfully'
-        ]);
+        return ApiResponse::deleted(
+            'Department deleted successfully'
+        );
     }
 }

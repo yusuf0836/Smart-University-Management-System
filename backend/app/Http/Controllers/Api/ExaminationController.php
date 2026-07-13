@@ -8,6 +8,7 @@ use App\Models\Examination;
 use App\Http\Resources\ExaminationResource;
 use Illuminate\Http\Request;
 use App\Helpers\QueryFilter;
+use App\Helpers\ApiResponse;
 
 class ExaminationController extends Controller
 {
@@ -48,6 +49,12 @@ class ExaminationController extends Controller
                 'created_at'
             ]
         );
+
+        return ApiResponse::success(
+            ExaminationResource::collection($examinations),
+            'Examinations retrieved successfully',
+            $examinations
+        );
     }
 
     /**
@@ -78,11 +85,10 @@ class ExaminationController extends Controller
     {
         $examination = Examination::create($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Examination created successfully.',
-            'data' => $examination,
-        ], 201);
+        return ApiResponse::created(
+            new ExaminationResource($examination),
+            'Examination created successfully'
+        );
     }
 
     /**
@@ -105,10 +111,10 @@ class ExaminationController extends Controller
             'semester',
         ]);
 
-        return response()->json([
-            'success' => true,
-            'data' => new ExaminationResource($examination),
-        ]);
+        return ApiResponse::success(
+            new ExaminationResource($examination),
+            'Examination retrieved successfully'
+        );
     }
 
     /**
@@ -141,11 +147,10 @@ class ExaminationController extends Controller
     {
         $examination->update($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Examination updated successfully.',
-            'data' => $examination,
-        ]);
+        return ApiResponse::success(
+            new ExaminationResource($examination),
+            'Examination updated successfully'
+        );
     }
 
     /**
@@ -168,9 +173,8 @@ class ExaminationController extends Controller
     {
         $examination->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Examination deleted successfully.',
-        ]);
+        return ApiResponse::deleted(
+            'Examination deleted successfully'
+        );
     }
 }

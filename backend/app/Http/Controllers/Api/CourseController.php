@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Http\Resources\CourseResource;
 use Illuminate\Http\Request;
 use App\Helpers\QueryFilter;
+use App\Helpers\ApiResponse;
 
 class CourseController extends Controller
 {
@@ -50,16 +51,11 @@ class CourseController extends Controller
             ]
         );
 
-        return response()->json([
-            'success' => true,
-            'data' => CourseResource::collection($courses),
-            'meta' => [
-                'current_page' => $courses->currentPage(),
-                'last_page' => $courses->lastPage(),
-                'per_page' => $courses->perPage(),
-                'total' => $courses->total(),
-            ],
-        ]);
+        return ApiResponse::success(
+            CourseResource::collection($courses),
+            'Courses retrieved successfully',
+            $courses
+        );
     }
 
     /**
@@ -85,11 +81,10 @@ class CourseController extends Controller
     {
         $course = Course::create($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Course created successfully.',
-            'data' => $course,
-        ], 201);
+        return ApiResponse::created(
+            new CourseResource($course),
+            'Course created successfully'
+        );
     }
 
     /**
@@ -109,10 +104,10 @@ class CourseController extends Controller
     {
         $course->load('department');
 
-        return response()->json([
-            'success' => true,
-            'data' => new CourseResource($course),
-        ]);
+        return ApiResponse::success(
+            new CourseResource($course),
+            'Course retrieved successfully'
+        );
     }
 
     /**
@@ -140,11 +135,10 @@ class CourseController extends Controller
     {
         $course->update($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Course updated successfully.',
-            'data' => $course,
-        ]);
+        return ApiResponse::success(
+            new CourseResource($course),
+            'Course updated successfully'
+        );
     }
 
     /**
@@ -164,9 +158,8 @@ class CourseController extends Controller
     {
         $course->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Course deleted successfully.',
-        ]);
+        return ApiResponse::deleted(
+            'Course deleted successfully'
+        );
     }
 }

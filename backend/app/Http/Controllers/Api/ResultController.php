@@ -8,6 +8,7 @@ use App\Models\Result;
 use App\Http\Resources\ResultResource;
 use Illuminate\Http\Request;
 use App\Helpers\QueryFilter;
+use App\Helpers\ApiResponse;
 
 class ResultController extends Controller
 {
@@ -49,6 +50,12 @@ class ResultController extends Controller
                 'created_at'
             ]
         );
+
+        return ApiResponse::success(
+            ResultResource::collection($results),
+            'Results retrieved successfully',
+            $results
+        );
     }
 
     /**
@@ -80,11 +87,10 @@ class ResultController extends Controller
 
         $result = Result::create($data);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Result created successfully.',
-            'data' => $result,
-        ], 201);
+        return ApiResponse::created(
+            new ResultResource($result),
+            'Result created successfully'
+        );
     }
 
     /**
@@ -108,10 +114,10 @@ class ResultController extends Controller
             'enrollment.semester',
         ]);
 
-        return response()->json([
-            'success' => true,
-            'data' => new ResultResource($result),
-        ]);
+        return ApiResponse::success(
+            new ResultResource($result),
+            'Result retrieved successfully'
+        );
     }
 
     /**
@@ -145,11 +151,10 @@ class ResultController extends Controller
 
         $result->update($data);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Result updated successfully.',
-            'data' => $result,
-        ]);
+        return ApiResponse::success(
+            new ResultResource($result),
+            'Result updated successfully'
+        );
     }
 
     /**
@@ -172,10 +177,9 @@ class ResultController extends Controller
     {
         $result->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Result deleted successfully.',
-        ]);
+        return ApiResponse::deleted(
+            'Result deleted successfully'
+        );
     }
 
     /**

@@ -8,6 +8,7 @@ use App\Models\Teacher;
 use App\Http\Resources\TeacherResource;
 use Illuminate\Http\Request;
 use App\Helpers\QueryFilter;
+use App\Helpers\ApiResponse;
 
 class TeacherController extends Controller
 {
@@ -64,16 +65,11 @@ class TeacherController extends Controller
             ]
         );
 
-        return response()->json([
-            'success' => true,
-            'data' => TeacherResource::collection($teachers),
-            'meta' => [
-                'current_page' => $teachers->currentPage(),
-                'last_page' => $teachers->lastPage(),
-                'per_page' => $teachers->perPage(),
-                'total' => $teachers->total(),
-            ],
-        ]);
+        return ApiResponse::success(
+            TeacherResource::collection($teachers),
+            'Teachers retrieved successfully',
+            $teachers
+        );
     }
 
     /**
@@ -104,9 +100,10 @@ class TeacherController extends Controller
     {
         $teacher = Teacher::create($request->validated());
 
-        return response()->json([
-            'data' => $teacher
-        ], 201);
+        return ApiResponse::created(
+            new TeacherResource($teacher),
+            'Teacher created successfully'
+        );
     }
     
     /**
@@ -134,10 +131,10 @@ class TeacherController extends Controller
     {
         $teacher->load('department');
 
-        return response()->json([
-            'success' => true,
-            'data' => new TeacherResource($teacher),
-        ]);
+        return ApiResponse::success(
+            new TeacherResource($teacher),
+            'Teacher retrieved successfully'
+        );
     }
 
     /**
@@ -166,9 +163,10 @@ class TeacherController extends Controller
     {
         $teacher->update($request->validated());
 
-        return response()->json([
-            'data' => $teacher
-        ]);
+        return ApiResponse::success(
+            new TeacherResource($teacher),
+            'Teacher updated successfully'
+        );
     }
 
     /**
@@ -191,8 +189,8 @@ class TeacherController extends Controller
     {
         $teacher->delete();
 
-        return response()->json([
-            'message' => 'Teacher deleted successfully'
-        ]);
+        return ApiResponse::deleted(
+            'Teacher deleted successfully'
+        );
     }
 }

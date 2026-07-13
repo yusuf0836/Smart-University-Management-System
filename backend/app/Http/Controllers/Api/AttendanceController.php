@@ -8,6 +8,7 @@ use App\Models\Attendance;
 use App\Http\Resources\AttendanceResource;
 use Illuminate\Http\Request;
 use App\Helpers\QueryFilter;
+use App\Helpers\ApiResponse;
 
 class AttendanceController extends Controller
 {
@@ -46,6 +47,11 @@ class AttendanceController extends Controller
                 'created_at'
             ]
         );
+        return ApiResponse::success(
+            AttendanceResource::collection($attendances),
+            'Attendances retrieved successfully',
+            $attendances
+        );
     }
 
     /**
@@ -73,11 +79,10 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::create($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Attendance created successfully.',
-            'data' => $attendance,
-        ], 201);
+        return ApiResponse::created(
+            new AttendanceResource($attendance),
+            'Attendance created successfully'
+        );
     }
 
     /**
@@ -101,10 +106,10 @@ class AttendanceController extends Controller
             'semester',
         ]);
 
-        return response()->json([
-            'success' => true,
-            'data' => new AttendanceResource($attendance),
-        ]);
+        return ApiResponse::success(
+            new AttendanceResource($attendance),
+            'Attendance retrieved successfully'
+        );
     }
 
     /**
@@ -134,11 +139,10 @@ class AttendanceController extends Controller
     {
         $attendance->update($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Attendance updated successfully.',
-            'data' => $attendance,
-        ]);
+        return ApiResponse::success(
+            new AttendanceResource($attendance),
+            'Attendance updated successfully'
+        );
     }
 
     /**
@@ -161,9 +165,8 @@ class AttendanceController extends Controller
     {
         $attendance->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Attendance deleted successfully.',
-        ]);
+        return ApiResponse::deleted(
+            'Attendance deleted successfully'
+        );
     }
 }

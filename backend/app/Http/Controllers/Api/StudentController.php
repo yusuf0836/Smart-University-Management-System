@@ -8,6 +8,7 @@ use App\Models\Student;
 use App\Http\Resources\StudentResource;
 use Illuminate\Http\Request;
 use App\Helpers\QueryFilter;
+use App\Helpers\ApiResponse;
 
 class StudentController extends Controller
 {
@@ -65,16 +66,11 @@ class StudentController extends Controller
             ]
         );
 
-        return response()->json([
-            'success' => true,
-            'data' => StudentResource::collection($students),
-            'meta' => [
-                'current_page' => $students->currentPage(),
-                'last_page' => $students->lastPage(),
-                'per_page' => $students->perPage(),
-                'total' => $students->total(),
-            ],
-        ]);
+        return ApiResponse::success(
+            StudentResource::collection($students),
+            'Students retrieved successfully',
+            $students
+        );
     }
 
     /**
@@ -100,11 +96,10 @@ class StudentController extends Controller
     {
         $student = Student::create($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Student created successfully.',
-            'data' => $student
-        ], 201);
+        return ApiResponse::created(
+            new StudentResource($student),
+            'Student created successfully'
+        );
     }
 
     /**
@@ -134,10 +129,10 @@ class StudentController extends Controller
             'semester'
         ]);
 
-        return response()->json([
-            'success' => true,
-            'data' => new StudentResource($student)
-        ]);
+        return ApiResponse::success(
+            new StudentResource($student),
+            'Student retrieved successfully'
+        );
     }
 
     /**
@@ -170,11 +165,10 @@ class StudentController extends Controller
     {
         $student->update($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Student updated successfully.',
-            'data' => $student
-        ]);
+        return ApiResponse::success(
+            new StudentResource($student),
+            'Student updated successfully'
+        );
     }
 
     /**
@@ -197,9 +191,8 @@ class StudentController extends Controller
     {
         $student->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Student deleted successfully.'
-        ]);
+        return ApiResponse::deleted(
+            'Student deleted successfully'
+        );
     }
 }

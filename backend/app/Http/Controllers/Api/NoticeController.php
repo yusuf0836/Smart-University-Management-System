@@ -8,6 +8,7 @@ use App\Models\Notice;
 use App\Http\Resources\NoticeResource;
 use Illuminate\Http\Request;
 use App\Helpers\QueryFilter;
+use App\Helpers\ApiResponse;
 
 class NoticeController extends Controller
 {
@@ -43,6 +44,12 @@ class NoticeController extends Controller
                 'publish_date'
             ]
         );
+
+        return ApiResponse::success(
+            NoticeResource::collection($notices),
+            'Notices retrieved successfully',
+            $notices
+        );
     }
 
     /**
@@ -69,11 +76,10 @@ class NoticeController extends Controller
     {
         $notice = Notice::create($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Notice created successfully.',
-            'data' => $notice,
-        ], 201);
+        return ApiResponse::created(
+            new NoticeResource($notice),
+            'Notice created successfully'
+        );
     }
 
     /**
@@ -91,10 +97,10 @@ class NoticeController extends Controller
      */
     public function show(Notice $notice)
     {
-        return response()->json([
-            'success' => true,
-            'data' => new NoticeResource($notice),
-        ]);
+        return ApiResponse::success(
+            new NoticeResource($notice),
+            'Notice retrieved successfully'
+        );
     }
 
     /**
@@ -123,11 +129,10 @@ class NoticeController extends Controller
     {
         $notice->update($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Notice updated successfully.',
-            'data' => $notice,
-        ]);
+        return ApiResponse::success(
+            new NoticeResource($notice),
+            'Notice updated successfully'
+        );
     }
 
     /**
@@ -150,9 +155,8 @@ class NoticeController extends Controller
     {
         $notice->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Notice deleted successfully.',
-        ]);
+        return ApiResponse::deleted(
+            'Notice deleted successfully'
+        );
     }
 }

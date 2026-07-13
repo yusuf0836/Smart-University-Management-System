@@ -8,6 +8,7 @@ use App\Models\Semester;
 use App\Http\Resources\SemesterResource;
 use Illuminate\Http\Request;
 use App\Helpers\QueryFilter;
+use App\Helpers\ApiResponse;
 
 class SemesterController extends Controller
 {
@@ -44,16 +45,11 @@ class SemesterController extends Controller
             ]
         );
 
-        return response()->json([
-            'success' => true,
-            'data' => SemesterResource::collection($semesters),
-            'meta' => [
-                'current_page' => $semesters->currentPage(),
-                'last_page' => $semesters->lastPage(),
-                'per_page' => $semesters->perPage(),
-                'total' => $semesters->total(),
-            ],
-        ]);
+        return ApiResponse::success(
+            SemesterResource::collection($semesters),
+            'Semesters retrieved successfully',
+            $semesters
+        );
     }
 
     /**
@@ -77,11 +73,10 @@ class SemesterController extends Controller
     {
         $semester = Semester::create($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Semester created successfully.',
-            'data' => $semester
-        ], 201);
+        return ApiResponse::created(
+            new SemesterResource($semester),
+            'Semester created successfully'
+        );
     }
 
     /**
@@ -99,10 +94,10 @@ class SemesterController extends Controller
      */
     public function show(Semester $semester)
     {
-        return response()->json([
-            'success' => true,
-            'data' => new SemesterResource($semester),
-        ]);
+        return ApiResponse::success(
+            new SemesterResource($semester),
+            'Semester retrieved successfully'
+        );
     }
 
     /**
@@ -128,11 +123,10 @@ class SemesterController extends Controller
     {
         $semester->update($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Semester updated successfully.',
-            'data' => $semester
-        ]);
+        return ApiResponse::success(
+            new SemesterResource($semester),
+            'Semester updated successfully'
+        );
     }
 
     /**
@@ -152,9 +146,8 @@ class SemesterController extends Controller
     {
         $semester->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Semester deleted successfully.'
-        ]);
+        return ApiResponse::deleted(
+            'Semester deleted successfully'
+        );
     }
 }

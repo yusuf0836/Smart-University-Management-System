@@ -9,6 +9,7 @@ use App\Http\Resources\FacultyResource;
 use App\Models\Faculty;
 use Illuminate\Http\Request;
 use App\Helpers\QueryFilter;
+use App\Helpers\ApiResponse;
 
 class FacultyController extends Controller
 {
@@ -52,16 +53,11 @@ class FacultyController extends Controller
             ]
         );
 
-        return response()->json([
-            'success' => true,
-            'data' => FacultyResource::collection($faculties),
-            'meta' => [
-                'current_page' => $faculties->currentPage(),
-                'last_page' => $faculties->lastPage(),
-                'per_page' => $faculties->perPage(),
-                'total' => $faculties->total(),
-            ],
-        ]);
+        return ApiResponse::success(
+            FacultyResource::collection($faculties),
+            'Faculties retrieved successfully',
+            $faculties
+        );
     }
 
     /**
@@ -82,7 +78,10 @@ class FacultyController extends Controller
     {
         $faculty = Faculty::create($request->validated());
 
-        return new FacultyResource($faculty);
+        return ApiResponse::created(
+            new FacultyResource($faculty),
+            'Faculty created successfully'
+        );
     }
 
     /**
@@ -100,10 +99,10 @@ class FacultyController extends Controller
      */
     public function show(Faculty $faculty)
     {
-        return response()->json([
-            'success' => true,
-            'data' => new FacultyResource($faculty),
-        ]);
+        return ApiResponse::success(
+            new FacultyResource($faculty),
+            'Faculty retrieved successfully'
+        );
     }
 
     /**
@@ -123,7 +122,10 @@ class FacultyController extends Controller
     {
         $faculty->update($request->validated());
 
-        return new FacultyResource($faculty);
+        return ApiResponse::success(
+            new FacultyResource($faculty),
+            'Faculty updated successfully'
+        );
     }
 
     /**
@@ -143,9 +145,8 @@ class FacultyController extends Controller
     {
         $faculty->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Faculty deleted successfully.'
-        ]);
+        return ApiResponse::deleted(
+            'Faculty deleted successfully'
+        );
     }
 }
