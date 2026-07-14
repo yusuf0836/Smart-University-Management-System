@@ -24,7 +24,7 @@ class EnrollmentController extends Controller
      *
      * @response 200 {"success": true}
      */
-    public function index()
+    public function index(Request $request)
     {
         $enrollments = QueryFilter::apply(
             Enrollment::with(['student', 'course', 'semester']),

@@ -60,7 +60,8 @@ class RolePermissionSeeder extends Seeder
             'teacher.view',
             'faculty.view',
             'semester.view',
-            'semester.create',
+            
+            'enrollment.view',
         ]);
 
         /*

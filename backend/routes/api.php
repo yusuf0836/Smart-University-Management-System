@@ -76,12 +76,32 @@ Route::prefix('v1')->group(function () {
          */
         Route::middleware('role:Admin|Teacher')->group(function () {
 
-            Route::apiResource('enrollments', EnrollmentController::class);
             Route::apiResource('results', ResultController::class);
             Route::apiResource('attendances', AttendanceController::class);
             Route::apiResource('routines', RoutineController::class);
             Route::apiResource('examinations', ExaminationController::class);
 
+        });
+
+        /**
+         * Enrollment Management
+         */
+        Route::prefix('enrollments')->group(function () {
+
+            Route::get('/', [EnrollmentController::class, 'index'])
+                ->middleware('permission:enrollment.view');
+
+            Route::post('/', [EnrollmentController::class, 'store'])
+                ->middleware('permission:enrollment.create');
+
+            Route::get('/{enrollment}', [EnrollmentController::class, 'show'])
+                ->middleware('permission:enrollment.view');
+
+            Route::put('/{enrollment}', [EnrollmentController::class, 'update'])
+                ->middleware('permission:enrollment.update');
+
+            Route::delete('/{enrollment}', [EnrollmentController::class, 'destroy'])
+                ->middleware('permission:enrollment.delete');
         });
 
         /**
