@@ -66,7 +66,6 @@ Route::prefix('v1')->group(function () {
          * Admin Only
          */
         Route::middleware('role:Admin')->group(function () {
-            Route::apiResource('notices', NoticeController::class);
 
         });
 
@@ -75,6 +74,27 @@ Route::prefix('v1')->group(function () {
          */
         Route::middleware('role:Admin|Teacher')->group(function () {
 
+        });
+
+        /**
+         * Notice Management
+         */
+        Route::prefix('notices')->group(function () {
+
+            Route::get('/', [NoticeController::class, 'index'])
+                ->middleware('permission:notice.view');
+
+            Route::post('/', [NoticeController::class, 'store'])
+                ->middleware('permission:notice.create');
+
+            Route::get('/{notice}', [NoticeController::class, 'show'])
+                ->middleware('permission:notice.view');
+
+            Route::put('/{notice}', [NoticeController::class, 'update'])
+                ->middleware('permission:notice.update');
+
+            Route::delete('/{notice}', [NoticeController::class, 'destroy'])
+                ->middleware('permission:notice.delete');
         });
 
         /**

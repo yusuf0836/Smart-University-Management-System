@@ -64,6 +64,8 @@ class RolePermissionSeeder extends Seeder
 
             'enrollment.view',
             'examination.view',
+
+            'notice.view',
         ]);
 
         /*
@@ -72,6 +74,7 @@ class RolePermissionSeeder extends Seeder
         $student->syncPermissions([
             'transcript.view',
             'dashboard.view',
+            'notice.view',
         ]);
 
         /*
@@ -84,6 +87,7 @@ class RolePermissionSeeder extends Seeder
             'fee.delete',
 
             'dashboard.view',
+            'notice.view',
         ]);
 
         /*
@@ -91,6 +95,7 @@ class RolePermissionSeeder extends Seeder
         */
         $librarian->syncPermissions([
             'dashboard.view',
+            'notice.view',
         ]);
     }
 }
