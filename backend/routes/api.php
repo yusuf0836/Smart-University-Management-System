@@ -66,7 +66,6 @@ Route::prefix('v1')->group(function () {
          * Admin Only
          */
         Route::middleware('role:Admin')->group(function () {
-            Route::apiResource('courses', CourseController::class);
             Route::apiResource('fees', FeeController::class);
             Route::apiResource('notices', NoticeController::class);
 
@@ -83,6 +82,27 @@ Route::prefix('v1')->group(function () {
             Route::apiResource('routines', RoutineController::class);
             Route::apiResource('examinations', ExaminationController::class);
 
+        });
+
+        /**
+         * Course Management
+         */
+        Route::prefix('courses')->group(function () {
+
+            Route::get('/', [CourseController::class, 'index'])
+                ->middleware('permission:course.view');
+
+            Route::post('/', [CourseController::class, 'store'])
+                ->middleware('permission:course.create');
+
+            Route::get('/{course}', [CourseController::class, 'show'])
+                ->middleware('permission:course.view');
+
+            Route::put('/{course}', [CourseController::class, 'update'])
+                ->middleware('permission:course.update');
+
+            Route::delete('/{course}', [CourseController::class, 'destroy'])
+                ->middleware('permission:course.delete');
         });
 
         /**
