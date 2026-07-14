@@ -76,11 +76,31 @@ Route::prefix('v1')->group(function () {
          */
         Route::middleware('role:Admin|Teacher')->group(function () {
 
-            Route::apiResource('results', ResultController::class);
             Route::apiResource('attendances', AttendanceController::class);
             Route::apiResource('routines', RoutineController::class);
             Route::apiResource('examinations', ExaminationController::class);
 
+        });
+
+        /**
+         * Result Management
+         */
+        Route::prefix('results')->group(function () {
+
+            Route::get('/', [ResultController::class, 'index'])
+                ->middleware('permission:result.view');
+
+            Route::post('/', [ResultController::class, 'store'])
+                ->middleware('permission:result.create');
+
+            Route::get('/{result}', [ResultController::class, 'show'])
+                ->middleware('permission:result.view');
+
+            Route::put('/{result}', [ResultController::class, 'update'])
+                ->middleware('permission:result.update');
+
+            Route::delete('/{result}', [ResultController::class, 'destroy'])
+                ->middleware('permission:result.delete');
         });
 
         /**

@@ -24,7 +24,7 @@ class ResultController extends Controller
      *
      * @response 200 {"success": true}
      */
-    public function index()
+    public function index(Request $request)
     {
         $results = QueryFilter::apply(
             Result::with([
