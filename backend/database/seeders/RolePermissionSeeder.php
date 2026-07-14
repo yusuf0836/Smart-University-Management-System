@@ -59,6 +59,8 @@ class RolePermissionSeeder extends Seeder
             'course.view',
             'teacher.view',
             'faculty.view',
+            'semester.view',
+            'semester.create',
         ]);
 
         /*
