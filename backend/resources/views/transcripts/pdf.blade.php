@@ -89,11 +89,11 @@
 
 <tr>
 
-<td>{{ $result->enrollment->course->course_code }}</td>
+<td>{{ $result->enrollment?->course?->course_code ?? 'N/A' }}</td>
 
-<td>{{ $result->enrollment->course->course_title }}</td>
+<td>{{ $result->enrollment?->course?->course_title ?? 'N/A' }}</td>
 
-<td>{{ $result->enrollment->course->credit }}</td>
+<td>{{ $result->enrollment?->course?->credit ?? 'N/A' }}</td>
 
 <td>{{ $result->marks }}</td>
 

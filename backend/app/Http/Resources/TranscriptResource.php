@@ -7,32 +7,32 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class TranscriptResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     */
     public function toArray(Request $request): array
     {
         return [
 
-            'student' => new StudentResource($this['student']),
+            'id' => $this->id,
 
-            'semester' => new SemesterResource($this['semester']),
+            'student' => new StudentResource(
+                $this->whenLoaded('student')
+            ),
 
-            'results' => ResultResource::collection($this['results']),
+            'semester' => new SemesterResource(
+                $this->whenLoaded('semester')
+            ),
 
-            'summary' => [
+            'semester_gpa' => $this->semester_gpa,
 
-                'semester_gpa' => $this['semester_gpa'],
+            'cgpa' => $this->cgpa,
 
-                'cgpa' => $this['cgpa'],
+            'total_credits' => $this->total_credits,
 
-                'total_credit_completed' => $this['total_credit_completed'],
+            'status' => $this->status,
 
-                'total_courses' => $this['total_courses'],
+            'created_at' => $this->created_at,
 
-            ],
+            'updated_at' => $this->updated_at,
 
-            'generated_at' => now()->format('Y-m-d H:i:s'),
         ];
     }
 }

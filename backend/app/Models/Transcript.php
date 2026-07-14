@@ -22,19 +22,14 @@ class Transcript extends Model
         'semester_gpa' => 'decimal:2',
         'cgpa' => 'decimal:2',
         'total_credits' => 'decimal:2',
+        'status' => 'boolean',
     ];
 
-    /**
-     * Student Relationship
-     */
     public function student()
     {
         return $this->belongsTo(Student::class);
     }
 
-    /**
-     * Semester Relationship
-     */
     public function semester()
     {
         return $this->belongsTo(Semester::class);

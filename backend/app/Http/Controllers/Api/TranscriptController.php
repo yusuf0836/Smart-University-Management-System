@@ -8,7 +8,7 @@ use App\Services\TranscriptService;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Result;
-use App\Resources\TranscriptResource;
+use App\Http\Resources\TranscriptResource;
 use App\Helpers\QueryFilter;
 use App\Helpers\ApiResponse;
 
@@ -45,30 +45,24 @@ class TranscriptController extends Controller
      */
     public function generate(Request $request)
     {
-        $transcripts = QueryFilter::apply(
-            Transcript::with([
-                'student',
-                'semester'
-            ]),
-            $request,
+        $request->validate([
+            'student_id' => ['required', 'exists:students,id'],
+            'semester_id' => ['required', 'exists:semesters,id'],
+        ]);
 
-            [],
-
-            [
-                'student_id',
-                'semester_id'
-            ],
-
-            [
-                'id',
-                'created_at'
-            ]
+        $transcript = $this->transcriptService->generate(
+            $request->student_id,
+            $request->semester_id
         );
 
+        $transcript->load([
+            'student',
+            'semester'
+        ]);
+
         return ApiResponse::success(
-            TranscriptResource::collection($transcripts),
-            'Transcripts retrieved successfully',
-            $transcripts
+            new TranscriptResource($transcript),
+            'Transcript generated successfully.'
         );
     }
 
@@ -87,6 +81,11 @@ class TranscriptController extends Controller
      */
     public function show(Transcript $transcript)
     {
+        $transcript->load([
+            'student',
+            'semester'
+        ]);
+
         return ApiResponse::success(
             new TranscriptResource($transcript),
             'Transcript retrieved successfully'
@@ -104,11 +103,35 @@ class TranscriptController extends Controller
      *
      * @response 200 {"success": true}
      */
-    public function index()
+    public function index(Request $request)
     {
+        $transcripts = QueryFilter::apply(
+            Transcript::with([
+                'student',
+                'semester'
+            ]),
+            $request,
+
+            [],
+
+            [
+                'student_id',
+                'semester_id',
+                'status'
+            ],
+
+            [
+                'id',
+                'semester_gpa',
+                'cgpa',
+                'created_at'
+            ]
+        );
+
         return ApiResponse::success(
-            TranscriptResource::collection(Transcript::with(['student', 'semester'])->get()),
-            'Transcripts retrieved successfully'
+            TranscriptResource::collection($transcripts),
+            'Transcripts retrieved successfully',
+            $transcripts
         );
     }
     
@@ -127,22 +150,27 @@ class TranscriptController extends Controller
      */
     public function downloadPdf(Transcript $transcript)
     {
+        $transcript->load([
+            'student',
+            'semester'
+        ]);
         $student = $transcript->student;
         $semester = $transcript->semester;
-
+        
         $results = Result::with('enrollment.course')
             ->whereHas('enrollment', function ($query) use ($student, $semester) {
                 $query->where('student_id', $student->id)
                     ->where('semester_id', $semester->id);
             })
             ->get();
-
+            
         $pdf = Pdf::loadView('transcripts.pdf', [
             'transcript' => $transcript,
             'student' => $student,
             'semester' => $semester,
             'results' => $results,
         ]);
+        
 
         return $pdf->download(
             'Transcript_'.$student->student_id.'_'.$semester->name.'.pdf'

@@ -334,12 +334,28 @@ Route::prefix('v1')->group(function () {
          */
         Route::middleware('role:Admin|Teacher|Student')->group(function () {
 
-            Route::get('transcripts', [TranscriptController::class, 'index']);
-            Route::post('transcripts/generate', [TranscriptController::class, 'generate']);
-            Route::get('transcripts/{transcript}', [TranscriptController::class, 'show']);
-            Route::get('transcripts/{transcript}/pdf', [TranscriptController::class, 'downloadPdf']);
-            Route::delete('transcripts/{transcript}', [TranscriptController::class, 'destroy']);
 
+        });
+
+        /**
+         * Transcript Management
+         */
+        Route::prefix('transcripts')->group(function () {
+
+            Route::get('/', [TranscriptController::class, 'index'])
+                ->middleware('permission:transcript.view');
+
+            Route::post('/generate', [TranscriptController::class, 'generate'])
+                ->middleware('permission:transcript.generate');
+
+            Route::get('/{transcript}', [TranscriptController::class, 'show'])
+                ->middleware('permission:transcript.view');
+
+            Route::get('/{transcript}/pdf', [TranscriptController::class, 'downloadPdf'])
+                ->middleware('permission:transcript.download');
+
+            Route::delete('/{transcript}', [TranscriptController::class, 'destroy'])
+                ->middleware('permission:transcript.delete');
         });
 
     });

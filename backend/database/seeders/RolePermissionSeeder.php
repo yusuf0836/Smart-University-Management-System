@@ -54,6 +54,7 @@ class RolePermissionSeeder extends Seeder
 
             'transcript.view',
             'transcript.generate',
+            'transcript.download',
 
             'dashboard.view',
             'department.view',
@@ -73,6 +74,7 @@ class RolePermissionSeeder extends Seeder
         */
         $student->syncPermissions([
             'transcript.view',
+            'transcript.download',
             'dashboard.view',
             'notice.view',
         ]);
