@@ -63,6 +63,7 @@ class RolePermissionSeeder extends Seeder
             'semester.view',
 
             'enrollment.view',
+            'examination.view',
         ]);
 
         /*

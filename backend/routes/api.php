@@ -75,8 +75,28 @@ Route::prefix('v1')->group(function () {
          * Admin & Teacher
          */
         Route::middleware('role:Admin|Teacher')->group(function () {
-            Route::apiResource('examinations', ExaminationController::class);
 
+        });
+
+        /**
+         * Examination Management
+         */
+        Route::prefix('examinations')->group(function () {
+
+            Route::get('/', [ExaminationController::class, 'index'])
+                ->middleware('permission:examination.view');
+
+            Route::post('/', [ExaminationController::class, 'store'])
+                ->middleware('permission:examination.create');
+
+            Route::get('/{examination}', [ExaminationController::class, 'show'])
+                ->middleware('permission:examination.view');
+
+            Route::put('/{examination}', [ExaminationController::class, 'update'])
+                ->middleware('permission:examination.update');
+
+            Route::delete('/{examination}', [ExaminationController::class, 'destroy'])
+                ->middleware('permission:examination.delete');
         });
 
         /**

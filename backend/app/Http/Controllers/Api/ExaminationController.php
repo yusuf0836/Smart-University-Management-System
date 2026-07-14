@@ -24,7 +24,7 @@ class ExaminationController extends Controller
      *
      * @response 200 {"success": true}
      */
-    public function index()
+    public function index(Request $request)
     {
         $examinations = QueryFilter::apply(
             Examination::with([
