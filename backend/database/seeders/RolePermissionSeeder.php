@@ -58,6 +58,7 @@ class RolePermissionSeeder extends Seeder
             'department.view',
             'course.view',
             'teacher.view',
+            'faculty.view',
         ]);
 
         /*
