@@ -66,7 +66,6 @@ Route::prefix('v1')->group(function () {
          * Admin Only
          */
         Route::middleware('role:Admin')->group(function () {
-            Route::apiResource('fees', FeeController::class);
             Route::apiResource('notices', NoticeController::class);
 
         });
@@ -76,6 +75,27 @@ Route::prefix('v1')->group(function () {
          */
         Route::middleware('role:Admin|Teacher')->group(function () {
 
+        });
+
+        /**
+         * Fee Management
+         */
+        Route::prefix('fees')->group(function () {
+
+            Route::get('/', [FeeController::class, 'index'])
+                ->middleware('permission:fee.view');
+
+            Route::post('/', [FeeController::class, 'store'])
+                ->middleware('permission:fee.create');
+
+            Route::get('/{fee}', [FeeController::class, 'show'])
+                ->middleware('permission:fee.view');
+
+            Route::put('/{fee}', [FeeController::class, 'update'])
+                ->middleware('permission:fee.update');
+
+            Route::delete('/{fee}', [FeeController::class, 'destroy'])
+                ->middleware('permission:fee.delete');
         });
 
         /**
