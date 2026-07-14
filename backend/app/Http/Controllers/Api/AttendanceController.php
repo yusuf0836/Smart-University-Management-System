@@ -24,7 +24,7 @@ class AttendanceController extends Controller
      *
      * @response 200 {"success": true}
      */
-    public function index()
+    public function index(Request $request)
     {
         $attendances = QueryFilter::apply(
             Attendance::with([
