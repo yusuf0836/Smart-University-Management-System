@@ -24,7 +24,7 @@ class RoutineController extends Controller
      *
      * @response 200 {"success": true}
      */
-    public function index()
+    public function index(Request $request)
     {
         $routines = QueryFilter::apply(
             Routine::with([

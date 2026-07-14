@@ -75,10 +75,29 @@ Route::prefix('v1')->group(function () {
          * Admin & Teacher
          */
         Route::middleware('role:Admin|Teacher')->group(function () {
-            Route::apiResource('attendances', AttendanceController::class);
-            Route::apiResource('routines', RoutineController::class);
             Route::apiResource('examinations', ExaminationController::class);
 
+        });
+
+        /**
+         * Routine Management
+         */
+        Route::prefix('routines')->group(function () {
+
+            Route::get('/', [RoutineController::class, 'index'])
+                ->middleware('permission:routine.view');
+
+            Route::post('/', [RoutineController::class, 'store'])
+                ->middleware('permission:routine.create');
+
+            Route::get('/{routine}', [RoutineController::class, 'show'])
+                ->middleware('permission:routine.view');
+
+            Route::put('/{routine}', [RoutineController::class, 'update'])
+                ->middleware('permission:routine.update');
+
+            Route::delete('/{routine}', [RoutineController::class, 'destroy'])
+                ->middleware('permission:routine.delete');
         });
 
         /**

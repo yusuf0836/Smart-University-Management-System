@@ -50,6 +50,7 @@ class RolePermissionSeeder extends Seeder
             'result.update',
 
             'routine.view',
+            'routine.update',
 
             'transcript.view',
             'transcript.generate',
@@ -60,7 +61,7 @@ class RolePermissionSeeder extends Seeder
             'teacher.view',
             'faculty.view',
             'semester.view',
-            
+
             'enrollment.view',
         ]);
 
