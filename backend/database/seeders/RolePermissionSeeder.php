@@ -55,6 +55,8 @@ class RolePermissionSeeder extends Seeder
             'transcript.generate',
 
             'dashboard.view',
+            'department.view',
+            'course.view',
         ]);
 
         /*

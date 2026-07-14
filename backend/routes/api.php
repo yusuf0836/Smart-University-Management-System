@@ -68,7 +68,6 @@ Route::prefix('v1')->group(function () {
         Route::middleware('role:Admin')->group(function () {
         
             Route::apiResource('faculties', FacultyController::class);
-            Route::apiResource('departments', DepartmentController::class);
             Route::apiResource('teachers', TeacherController::class);
             Route::apiResource('semesters', SemesterController::class);
             Route::apiResource('courses', CourseController::class);
@@ -88,6 +87,28 @@ Route::prefix('v1')->group(function () {
             Route::apiResource('routines', RoutineController::class);
             Route::apiResource('examinations', ExaminationController::class);
 
+        });
+
+        /**
+         * Department Management
+         * Accessible by Admin & Teacher
+         */
+        Route::prefix('departments')->group(function () {
+
+            Route::get('/', [DepartmentController::class, 'index'])
+                ->middleware('permission:department.view');
+
+            Route::post('/', [DepartmentController::class, 'store'])
+                ->middleware('permission:department.create');
+
+            Route::get('/{department}', [DepartmentController::class, 'show'])
+                ->middleware('permission:department.view');
+
+            Route::put('/{department}', [DepartmentController::class, 'update'])
+                ->middleware('permission:department.update');
+
+            Route::delete('/{department}', [DepartmentController::class, 'destroy'])
+                ->middleware('permission:department.delete');
         });
 
         /**
