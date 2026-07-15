@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\FeeController;
 use App\Http\Controllers\Api\ExaminationController;
 use App\Http\Controllers\Api\TranscriptController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\AcademicSessionController;
 
 Route::prefix('v1')->group(function () {
 
@@ -39,7 +40,44 @@ Route::prefix('v1')->group(function () {
         /**
          * Dashboard
          */
-        Route::get('/dashboard', [DashboardController::class, 'index']);
+        Route::prefix('dashboard')->group(function () {
+
+            Route::get('/', [DashboardController::class, 'index'])
+                ->middleware('permission:dashboard.view');
+
+        });
+        
+        Route::middleware([
+            'auth:sanctum'
+        ])->group(function () {
+
+            Route::apiResource(
+                'academic-sessions',
+                AcademicSessionController::class
+            );
+
+        });
+
+        /**
+         * Academic Session Management
+         */
+        //Route::prefix('academic_session')->group(function () {
+
+         //   Route::get('/', [AcademicSessionController::class, 'index'])
+                //->middleware('permission:academic_session.view');
+
+            //Route::post('/', [AcademicSessionController::class, 'store'])
+              //  ->middleware('permission:academic_session.create');
+
+            //Route::get('/{academicSession}', [AcademicSessionController::class, 'show'])
+              //  ->middleware('permission:academic_session.view');
+
+            //Route::put('/{academicSession}', [AcademicSessionController::class, 'update'])
+              //  ->middleware('permission:academic_session.update');
+
+            //Route::delete('/{academicSession}', [AcademicSessionController::class, 'destroy'])
+             //   ->middleware('permission:academic_session.delete');
+        //});
 
         /**
          * Student Management

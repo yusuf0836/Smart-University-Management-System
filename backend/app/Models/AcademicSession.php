@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\AcademicSession;
+
+class AcademicSession extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'start_date',
+        'end_date',
+        'status',
+        'is_current',
+        'description',
+    ];
+
+    protected $casts = [
+
+        'start_date'=>'date',
+        'end_date'=>'date',
+
+        'is_current'=>'boolean',
+
+    ];
+}

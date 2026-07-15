@@ -5,108 +5,139 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
-use Spatie\Permission\Models\Role;
 
 class PermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        $permissions = [
+        $modules = [
 
-            // Faculty
-            'faculty.view',
-            'faculty.create',
-            'faculty.update',
-            'faculty.delete',
+            'dashboard' => [
+                'view',
+            ],
 
-            // Department
-            'department.view',
-            'department.create',
-            'department.update',
-            'department.delete',
+            'academic_session' => [
+                'view',
+                'create',
+                'update',
+                'delete',
+            ],
 
-            // Teacher
-            'teacher.view',
-            'teacher.create',
-            'teacher.update',
-            'teacher.delete',
+            'faculty' => [
+                'view',
+                'create',
+                'update',
+                'delete',
+            ],
 
-            // Student
-            'student.view',
-            'student.create',
-            'student.update',
-            'student.delete',
+            'department' => [
+                'view',
+                'create',
+                'update',
+                'delete',
+            ],
 
-            // Semester
-            'semester.view',
-            'semester.create',
-            'semester.update',
-            'semester.delete',
+            'teacher' => [
+                'view',
+                'create',
+                'update',
+                'delete',
+            ],
 
-            // Course
-            'course.view',
-            'course.create',
-            'course.update',
-            'course.delete',
+            'student' => [
+                'view',
+                'create',
+                'update',
+                'delete',
+            ],
 
-            // Enrollment
-            'enrollment.view',
-            'enrollment.create',
-            'enrollment.update',
-            'enrollment.delete',
+            'semester' => [
+                'view',
+                'create',
+                'update',
+                'delete',
+            ],
 
-            // Attendance
-            'attendance.view',
-            'attendance.create',
-            'attendance.update',
-            'attendance.delete',
+            'course' => [
+                'view',
+                'create',
+                'update',
+                'delete',
+            ],
 
-            // Result
-            'result.view',
-            'result.create',
-            'result.update',
-            'result.delete',
+            'enrollment' => [
+                'view',
+                'create',
+                'update',
+                'delete',
+            ],
 
-            // Notice
-            'notice.view',
-            'notice.create',
-            'notice.update',
-            'notice.delete',
+            'attendance' => [
+                'view',
+                'create',
+                'update',
+                'delete',
+            ],
 
-            // Routine
-            'routine.view',
-            'routine.create',
-            'routine.update',
-            'routine.delete',
+            'result' => [
+                'view',
+                'create',
+                'update',
+                'delete',
+            ],
 
-            // Fee
-            'fee.view',
-            'fee.create',
-            'fee.update',
-            'fee.delete',
+            'routine' => [
+                'view',
+                'create',
+                'update',
+                'delete',
+            ],
 
-            // Examination
-            'examination.view',
-            'examination.create',
-            'examination.update',
-            'examination.delete',
+            'notice' => [
+                'view',
+                'create',
+                'update',
+                'delete',
+            ],
 
-            // Transcript
-            'transcript.view',
-            'transcript.generate',
-            'transcript.download',
-            'transcript.delete',
+            'fee' => [
+                'view',
+                'create',
+                'update',
+                'delete',
+            ],
 
-            // Dashboard
-            'dashboard.view',
+            'examination' => [
+                'view',
+                'create',
+                'update',
+                'delete',
+            ],
+
+            'transcript' => [
+                'view',
+                'generate',
+                'download',
+                'delete',
+            ],
+
         ];
 
-        foreach ($permissions as $permission) {
-            Permission::firstOrCreate([
-                'name' => $permission,
-            ]);
+        foreach ($modules as $module => $actions) {
+
+            foreach ($actions as $action) {
+
+                Permission::firstOrCreate([
+                    'name' => "{$module}.{$action}",
+                    'guard_name' => 'web',
+                ]);
+
+            }
+
         }
+
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 }

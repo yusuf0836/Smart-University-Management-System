@@ -23,12 +23,9 @@ use App\Helpers\ApiResponse;
 
 class DashboardController extends Controller
 {
-    protected DashboardService $dashboardService;
-
-    public function __construct(DashboardService $dashboardService)
-    {
-        $this->dashboardService = $dashboardService;
-    }
+    public function __construct(
+        protected DashboardService $dashboardService
+    ) {}
     
     /**
      * Dashboard Statistics
@@ -50,11 +47,15 @@ class DashboardController extends Controller
      *   }
      * }
      */
-    public function index()
+    public function index(Request $request)
     {
+        $dashboard = $this->dashboardService->getDashboard(
+            $request->user()
+        );
+
         return ApiResponse::success(
-            $this->dashboardService->getDashboardData(),
-            'Dashboard data fetched successfully'
+            $dashboard,
+            'Dashboard data retrieved successfully.'
         );
     }
 }

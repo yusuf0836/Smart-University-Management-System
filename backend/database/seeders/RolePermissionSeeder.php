@@ -3,43 +3,92 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
 class RolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        Role::firstOrCreate(['name' => 'Super Admin']);
-        Role::firstOrCreate(['name' => 'Admin']);
-        Role::firstOrCreate(['name' => 'Teacher']);
-        Role::firstOrCreate(['name' => 'Student']);
-        Role::firstOrCreate(['name' => 'Accountant']);
-        Role::firstOrCreate(['name' => 'Librarian']);
-        app()[PermissionRegistrar::class]->forgetCachedPermissions();
-        /*
-            * Create roles
-        */
-        $superAdmin = Role::firstOrCreate(['name' => 'Super Admin']);
-        $admin = Role::firstOrCreate(['name' => 'Admin']);
-        $teacher = Role::firstOrCreate(['name' => 'Teacher']);
-        $student = Role::firstOrCreate(['name' => 'Student']);
-        $accountant = Role::firstOrCreate(['name' => 'Accountant']);
-        $librarian = Role::firstOrCreate(['name' => 'Librarian']);
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
 
         /*
-            * Assign all permissions to Super Admin
+        |--------------------------------------------------------------------------
+        | Create Roles
+        |--------------------------------------------------------------------------
         */
+
+        $superAdmin = Role::firstOrCreate([
+            'name' => 'Super Admin',
+            'guard_name' => 'web',
+        ]);
+
+        $admin = Role::firstOrCreate([
+            'name' => 'Admin',
+            'guard_name' => 'web',
+        ]);
+
+        $teacher = Role::firstOrCreate([
+            'name' => 'Teacher',
+            'guard_name' => 'web',
+        ]);
+
+        $student = Role::firstOrCreate([
+            'name' => 'Student',
+            'guard_name' => 'web',
+        ]);
+
+        $accountant = Role::firstOrCreate([
+            'name' => 'Accountant',
+            'guard_name' => 'web',
+        ]);
+
+        $librarian = Role::firstOrCreate([
+            'name' => 'Librarian',
+            'guard_name' => 'web',
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Super Admin
+        |--------------------------------------------------------------------------
+        */
+
         $superAdmin->syncPermissions(Permission::all());
+
+        /*
+        |--------------------------------------------------------------------------
+        | Admin
+        |--------------------------------------------------------------------------
+        */
 
         $admin->syncPermissions(Permission::all());
 
         /*
-            * Assign specific permissions to Teacher
+        |--------------------------------------------------------------------------
+        | Teacher
+        |--------------------------------------------------------------------------
         */
+
         $teacher->syncPermissions([
+
+            'dashboard.view',
+
+            'faculty.view',
+            'department.view',
+            'teacher.view',
+
+            'academic_session.view',
+            'academic_session.update',
+
+            'semester.view',
+
+            'course.view',
+
             'student.view',
+
+            'enrollment.view',
 
             'attendance.view',
             'attendance.create',
@@ -50,54 +99,69 @@ class RolePermissionSeeder extends Seeder
             'result.update',
 
             'routine.view',
-            'routine.update',
+
+            'notice.view',
 
             'transcript.view',
             'transcript.generate',
             'transcript.download',
 
-            'dashboard.view',
-            'department.view',
-            'course.view',
-            'teacher.view',
-            'faculty.view',
-            'semester.view',
-
-            'enrollment.view',
             'examination.view',
-
-            'notice.view',
         ]);
 
         /*
-            * Assign specific permissions to Student
+        |--------------------------------------------------------------------------
+        | Student
+        |--------------------------------------------------------------------------
         */
+
         $student->syncPermissions([
-            'transcript.view',
-            'transcript.download',
+
             'dashboard.view',
+
             'notice.view',
+
+            'routine.view',
+
+            'transcript.view',
+
+            'transcript.download',
+
         ]);
 
         /*
-            * Assign specific permissions to Accountant
+        |--------------------------------------------------------------------------
+        | Accountant
+        |--------------------------------------------------------------------------
         */
+
         $accountant->syncPermissions([
+
+            'dashboard.view',
+
+            'notice.view',
+
             'fee.view',
             'fee.create',
             'fee.update',
             'fee.delete',
 
-            'dashboard.view',
-            'notice.view',
         ]);
 
         /*
-            * Assign specific permissions to Librarian
+        |--------------------------------------------------------------------------
+        | Librarian
+        |--------------------------------------------------------------------------
         */
+
         $librarian->syncPermissions([
+
             'dashboard.view',
+
             'notice.view',
+
         ]);
+
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 }

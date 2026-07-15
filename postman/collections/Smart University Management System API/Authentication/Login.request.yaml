@@ -1,4 +1,5 @@
 $kind: http-request
+name: Login
 description: Authenticate a user and return a Sanctum access token.
 url: "{{baseUrl}}/api/v1/login"
 method: POST
@@ -6,8 +7,14 @@ headers:
   Content-Type: application/json
   Accept: application/json
 body:
-  type: text
-  content: '{"email":"admin@example.com","password":"password123"}'
+  type: json
+  content: "{\r
+
+    \    \"email\": \"admin@sums.com\",\r
+
+    \    \"password\": \"password\"\r
+
+    }"
 auth:
   type: noauth
 examples: ./.resources/Login.resources/examples

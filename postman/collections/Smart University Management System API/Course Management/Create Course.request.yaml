@@ -1,4 +1,5 @@
 $kind: http-request
+name: Create Course
 description: Creates a new course.
 url: "{{baseUrl}}/api/v1/courses"
 method: POST
@@ -6,7 +7,7 @@ headers:
   Content-Type: application/json
   Accept: application/json
 body:
-  type: text
-  content: '{"department_id":1,"course_code":"CSE101","course_title":"Introduction to Programming","credit":"3","type":"Lab","status":"Active","semester_id":1,"course_type":"Theory"}'
+  type: json
+  content: '{"department_id":1,"course_code":"CSE116","course_title":"Microprocessor 1","credit":"3","type":"Lab","status": true,"semester_id":2,"course_type":"Theory"}'
 examples: ./.resources/Create Course.resources/examples
 order: 2000
