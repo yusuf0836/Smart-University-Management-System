@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
 
             DemoUserSeeder::class,
             FacultyPermissionSeeder::class,
+            DepartmentPermissionSeeder::class,
 
         ]);
     }

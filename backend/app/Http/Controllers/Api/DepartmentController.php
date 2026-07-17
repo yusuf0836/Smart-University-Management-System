@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\Department;
-use Illuminate\Http\Request;
-use App\Http\Resources\DepartmentResource;
-use App\Helpers\QueryFilter;
 use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreDepartmentRequest;
+use App\Http\Requests\UpdateDepartmentRequest;
+use App\Http\Resources\DepartmentResource;
+use App\Models\Department;
+use App\Services\DepartmentService;
+use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
 {
+    public function __construct(
+        protected DepartmentService $service
+    ) {}
 
     /**
      * List Departments
@@ -25,31 +30,38 @@ class DepartmentController extends Controller
      */
     public function index(Request $request)
     {
-        $departments = QueryFilter::apply(
-            Department::query(),
-            $request,
+        $query = Department::with('faculty');
 
-            [
-                'name',
-                'code'
-            ],
+        // Search
+        if ($request->filled('search')) {
+            $search = $request->search;
 
-            [
-                'faculty_id',
-                'status'
-            ],
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%");
+            });
+        }
 
-            [
-                'id',
-                'name',
-                'code',
-                'created_at'
-            ]
-        );
+        // Filter
+        if ($request->filled('faculty_id')) {
+            $query->where('faculty_id', $request->faculty_id);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Sorting
+        $sortBy = $request->get('sort_by', 'id');
+        $sortOrder = $request->get('sort_order', 'desc');
+
+        $departments = $query
+            ->orderBy($sortBy, $sortOrder)
+            ->paginate(10);
 
         return ApiResponse::success(
             DepartmentResource::collection($departments),
-            'Departments retrieved successfully',
+            'Departments retrieved successfully.',
             $departments
         );
     }
@@ -69,21 +81,15 @@ class DepartmentController extends Controller
      *
      * @response 201 {"success": true}
      */
-    public function store(Request $request)
+    public function store(StoreDepartmentRequest $request)
     {
-        $validated = $request->validate([
-            'faculty_id' => 'required|exists:faculties,id',
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:departments,code',
-            'description' => 'nullable|string',
-            'status' => 'boolean',
-        ]);
-
-        $department = Department::create($validated);
+        $department = $this->service->store(
+            $request->validated()
+        );
 
         return ApiResponse::created(
             new DepartmentResource($department),
-            'Department created successfully'
+            'Department created successfully.'
         );
     }
 
@@ -106,7 +112,7 @@ class DepartmentController extends Controller
 
         return ApiResponse::success(
             new DepartmentResource($department),
-            'Department retrieved successfully'
+            'Department retrieved successfully.'
         );
     }
 
@@ -123,21 +129,18 @@ class DepartmentController extends Controller
      *
      * @response 200 {"success": true}
      */
-    public function update(Request $request, Department $department)
-    {
-        $validated = $request->validate([
-            'faculty_id' => 'required|exists:faculties,id',
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:departments,code,' . $department->id,
-            'description' => 'nullable|string',
-            'status' => 'boolean',
-        ]);
-
-        $department->update($validated);
+    public function update(
+        UpdateDepartmentRequest $request,
+        Department $department
+    ) {
+        $department = $this->service->update(
+            $department,
+            $request->validated()
+        );
 
         return ApiResponse::success(
             new DepartmentResource($department),
-            'Department updated successfully'
+            'Department updated successfully.'
         );
     }
 
@@ -156,10 +159,10 @@ class DepartmentController extends Controller
      */
     public function destroy(Department $department)
     {
-        $department->delete();
+        $this->service->destroy($department);
 
         return ApiResponse::deleted(
-            'Department deleted successfully'
+            'Department deleted successfully.'
         );
     }
 }
