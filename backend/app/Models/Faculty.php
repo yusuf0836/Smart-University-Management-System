@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Faculty extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -15,8 +16,8 @@ class Faculty extends Model
         'description',
         'status',
     ];
-    public function departments()
-    {
-        return $this->hasMany(Department::class);
-    }
+
+    protected $casts = [
+        'status' => 'boolean',
+    ];
 }

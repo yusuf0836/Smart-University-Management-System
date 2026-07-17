@@ -6,4 +6,4 @@ variables:
 auth:
   type: bearer
   credentials:
-    token: 1|1RsUJVnZUdYiLrquxGxyVX2Nc5ApgJIwhYIusMlL65f2f24c
+    token: 2|qJfCKOuMPMK9iFeviKKzV4SX2vB1q92mfjlV8bEkd0c16b2a

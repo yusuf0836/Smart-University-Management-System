@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             SuperAdminSeeder::class,
 
             DemoUserSeeder::class,
+            FacultyPermissionSeeder::class,
 
         ]);
     }

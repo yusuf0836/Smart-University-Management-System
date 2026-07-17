@@ -3,17 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Faculty\StoreFacultyRequest;
-use App\Http\Requests\Faculty\UpdateFacultyRequest;
+use App\Http\Requests\StoreFacultyRequest;
+use App\Http\Requests\UpdateFacultyRequest;
 use App\Http\Resources\FacultyResource;
 use App\Models\Faculty;
 use Illuminate\Http\Request;
 use App\Helpers\QueryFilter;
 use App\Helpers\ApiResponse;
+use App\Services\FacultyService;
+use Illuminate\Validation\ValidationException;
 
 class FacultyController extends Controller
 {
-    
+    public function __construct(
+        protected FacultyService $service
+    ) {}
     /**
      * List Faculties
      *
@@ -27,35 +31,58 @@ class FacultyController extends Controller
      */
     public function index(Request $request)
     {
-        $faculties = QueryFilter::apply(
-            Faculty::query(),
-            $request,
+        $query = Faculty::query();
 
-            // Search Columns
-            [
-                'name',
-                'code',
-                'description',
-            ],
+        /**
+         * Search
+         */
+        if ($request->filled('search')) {
 
-            // Filter Columns
-            [
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%");
+
+            });
+        }
+
+        /**
+         * Status Filter
+         */
+        if ($request->filled('status')) {
+
+            $query->where(
                 'status',
-            ],
+                $request->status
+            );
 
-            // Sortable Columns
-            [
-                'id',
-                'name',
-                'code',
-                'description',
-                'created_at',
-            ]
-        );
+        }
+
+        /**
+         * Sorting
+         */
+        if ($request->sort == 'oldest') {
+
+            $query->oldest();
+
+        } else {
+
+            $query->latest();
+
+        }
+
+        /**
+         * Pagination
+         */
+        $perPage = $request->get('per_page', 10);
+
+        $faculties = $query->paginate($perPage);
 
         return ApiResponse::success(
             FacultyResource::collection($faculties),
-            'Faculties retrieved successfully',
+            'Faculty list retrieved successfully.',
             $faculties
         );
     }
@@ -74,13 +101,16 @@ class FacultyController extends Controller
      *
      * @response 201 {"success": true}
      */
-    public function store(StoreFacultyRequest $request)
+    public function store(StoreFacultyRequest $request) 
     {
-        $faculty = Faculty::create($request->validated());
+
+        $faculty = $this->service->store(
+            $request->validated()
+        );
 
         return ApiResponse::created(
             new FacultyResource($faculty),
-            'Faculty created successfully'
+            'Faculty created successfully.'
         );
     }
 
@@ -120,11 +150,14 @@ class FacultyController extends Controller
      */
     public function update(UpdateFacultyRequest $request, Faculty $faculty)
     {
-        $faculty->update($request->validated());
+        $faculty = $this->service->update(
+            $faculty,
+            $request->validated()
+        );
 
         return ApiResponse::success(
             new FacultyResource($faculty),
-            'Faculty updated successfully'
+            'Faculty updated successfully.'
         );
     }
 
@@ -143,7 +176,7 @@ class FacultyController extends Controller
      */
     public function destroy(Faculty $faculty)
     {
-        $faculty->delete();
+        $this->service->destroy($faculty);
 
         return ApiResponse::deleted(
             'Faculty deleted successfully'
