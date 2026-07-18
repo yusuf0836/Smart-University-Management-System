@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\SemesterRequest;
-use App\Models\Semester;
-use App\Http\Resources\SemesterResource;
-use Illuminate\Http\Request;
-use App\Helpers\QueryFilter;
 use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreSemesterRequest;
+use App\Http\Requests\UpdateSemesterRequest;
+use App\Http\Resources\SemesterResource;
+use App\Models\Semester;
+use App\Services\SemesterService;
 
 class SemesterController extends Controller
 {
-    
+    public function __construct(
+        protected SemesterService $service
+    ) {}
     /**
      * List Semesters
      *
@@ -24,30 +26,13 @@ class SemesterController extends Controller
      *
      * @response 200 {"success": true}
      */
-    public function index(Request $request)
+    public function index()
     {
-        $semesters = QueryFilter::apply(
-            Semester::query(),
-            $request,
-
-            [
-                'name'
-            ],
-
-            [
-                'status'
-            ],
-
-            [
-                'id',
-                'name',
-                'created_at'
-            ]
-        );
+        $semesters = Semester::latest()->paginate(10);
 
         return ApiResponse::success(
             SemesterResource::collection($semesters),
-            'Semesters retrieved successfully',
+            'Semesters retrieved successfully.',
             $semesters
         );
     }
@@ -69,13 +54,15 @@ class SemesterController extends Controller
      *
      * @response 201 {"success": true}
      */
-    public function store(SemesterRequest $request)
+    public function store(StoreSemesterRequest $request)
     {
-        $semester = Semester::create($request->validated());
+        $semester = $this->service->store(
+            $request->validated()
+        );
 
         return ApiResponse::created(
             new SemesterResource($semester),
-            'Semester created successfully'
+            'Semester created successfully.'
         );
     }
 
@@ -96,7 +83,7 @@ class SemesterController extends Controller
     {
         return ApiResponse::success(
             new SemesterResource($semester),
-            'Semester retrieved successfully'
+            'Semester retrieved successfully.'
         );
     }
 
@@ -119,13 +106,18 @@ class SemesterController extends Controller
      *
      * @response 200 {"success": true}
      */
-    public function update(SemesterRequest $request, Semester $semester)
-    {
-        $semester->update($request->validated());
+    public function update(
+        UpdateSemesterRequest $request,
+        Semester $semester
+    ) {
+        $semester = $this->service->update(
+            $semester,
+            $request->validated()
+        );
 
         return ApiResponse::success(
             new SemesterResource($semester),
-            'Semester updated successfully'
+            'Semester updated successfully.'
         );
     }
 
@@ -144,10 +136,10 @@ class SemesterController extends Controller
      */
     public function destroy(Semester $semester)
     {
-        $semester->delete();
+        $this->service->destroy($semester);
 
         return ApiResponse::deleted(
-            'Semester deleted successfully'
+            'Semester deleted successfully.'
         );
     }
 }

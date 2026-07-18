@@ -126,6 +126,7 @@ class RolePermissionSeeder extends Seeder
             'transcript.view',
 
             'transcript.download',
+            'semester.view'
 
         ]);
 

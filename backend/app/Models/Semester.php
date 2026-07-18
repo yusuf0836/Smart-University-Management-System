@@ -18,9 +18,9 @@ class Semester extends Model
     ];
 
     protected $casts = [
-        'start_date' => 'date',
-        'end_date' => 'date',
-        'status' => 'boolean',
+        'start_date' => 'date:Y-m-d',
+        'end_date'   => 'date:Y-m-d',
+        'status'     => 'boolean',
     ];
 
     public function students()
