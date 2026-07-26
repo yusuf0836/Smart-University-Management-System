@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CourseRequest;
-use App\Models\Course;
-use App\Http\Resources\CourseResource;
-use Illuminate\Http\Request;
-use App\Helpers\QueryFilter;
 use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCourseRequest;
+use App\Http\Requests\UpdateCourseRequest;
+use App\Http\Resources\CourseResource;
+use App\Models\Course;
+use App\Services\CourseService;
 
 class CourseController extends Controller
 {
+    public function __construct(
+        protected CourseService $service
+    ) {}
     
     /**
      * List Courses
@@ -24,36 +27,18 @@ class CourseController extends Controller
      *
      * @response 200 {"success": true}
      */
-    public function index(Request $request)
+    public function index()
     {
-        $courses = QueryFilter::apply(
-            Course::with('department'),
-            $request,
-
-            [
-                'course_title',
-                'course_code',
-                'department.name'
-            ],
-
-            [
-                'department_id',
-                'type',
-                'status'
-            ],
-
-            [
-                'id',
-                'course_title',
-                'course_code',
-                'credit',
-                'created_at'
-            ]
-        );
+        $courses = Course::with([
+            'department',
+            'semester'
+        ])
+        ->latest()
+        ->paginate(10);
 
         return ApiResponse::success(
             CourseResource::collection($courses),
-            'Courses retrieved successfully',
+            'Courses retrieved successfully.',
             $courses
         );
     }
@@ -77,13 +62,20 @@ class CourseController extends Controller
      *
      * @response 201 {"success": true}
      */
-    public function store(CourseRequest $request)
+    public function store(StoreCourseRequest $request)
     {
-        $course = Course::create($request->validated());
+        $course = $this->service->store(
+            $request->validated()
+        );
 
         return ApiResponse::created(
-            new CourseResource($course),
-            'Course created successfully'
+            new CourseResource(
+                $course->load([
+                    'department',
+                    'semester'
+                ])
+            ),
+            'Course created successfully.'
         );
     }
 
@@ -102,13 +94,17 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        $course->load('department');
-
         return ApiResponse::success(
-            new CourseResource($course),
-            'Course retrieved successfully'
+            new CourseResource(
+                $course->load([
+                    'department',
+                    'semester'
+                ])
+            ),
+            'Course retrieved successfully.'
         );
     }
+
 
     /**
      * Update Course
@@ -131,13 +127,24 @@ class CourseController extends Controller
     *
     * @response 200 {"success": true}
     */
-    public function update(CourseRequest $request, Course $course)
-    {
-        $course->update($request->validated());
+    public function update(
+        UpdateCourseRequest $request,
+        Course $course
+    ) {
+
+        $course = $this->service->update(
+            $course,
+            $request->validated()
+        );
 
         return ApiResponse::success(
-            new CourseResource($course),
-            'Course updated successfully'
+            new CourseResource(
+                $course->load([
+                    'department',
+                    'semester'
+                ])
+            ),
+            'Course updated successfully.'
         );
     }
 
@@ -156,10 +163,10 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        $course->delete();
+        $this->service->destroy($course);
 
         return ApiResponse::deleted(
-            'Course deleted successfully'
+            'Course deleted successfully.'
         );
     }
 }

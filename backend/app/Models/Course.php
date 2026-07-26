@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Course extends Model
 {
@@ -12,6 +12,7 @@ class Course extends Model
 
     protected $fillable = [
         'department_id',
+        'semester_id',
         'course_code',
         'course_title',
         'credit',
@@ -24,33 +25,19 @@ class Course extends Model
         'status' => 'boolean',
     ];
 
-    /**
-     * A course belongs to a department.
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+
     public function department()
     {
         return $this->belongsTo(Department::class);
     }
-    /**
-     * Course has many enrollments
-     */
-    public function enrollments()
+
+    public function semester()
     {
-        return $this->hasMany(Enrollment::class);
+        return $this->belongsTo(Semester::class);
     }
-    /**
-     * Course has many attendances
-     */
-    public function attendances()
-    {
-        return $this->hasMany(Attendance::class);
-    }
-    /**
-     * Course has many routines
-     */
-    public function routines()
-    {
-        return $this->hasMany(Routine::class);
-    }
-    
 }
