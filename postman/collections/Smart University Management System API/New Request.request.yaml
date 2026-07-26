@@ -1,5 +1,26 @@
 $kind: http-request
 name: New Request
-url: ""
+url: "{{baseUrl}}/api/v1/teacher-course-assignments"
 method: GET
+body:
+  type: json
+  content: "{\r
+
+    \    \"teacher_id\": 1,\r
+
+    \    \"course_id\": 1,\r
+
+    \    \"semester_id\": 1,\r
+
+    \    \"academic_session_id\": 1,\r
+
+    \    \"section\": \"A\",\r
+
+    \    \"assigned_date\": \"2026-07-27\",\r
+
+    \    \"status\": true,\r
+
+    \    \"remarks\": \"Regular Course Assignment\"\r
+
+    }"
 order: 1431825883867808

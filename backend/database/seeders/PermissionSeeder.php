@@ -46,6 +46,13 @@ class PermissionSeeder extends Seeder
                 'delete',
             ],
 
+            'teacher_course_assignment' => [
+                'view',
+                'create',
+                'update',
+                'delete',
+            ],
+
             'student' => [
                 'view',
                 'create',

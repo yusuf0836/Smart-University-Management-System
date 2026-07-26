@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Enrollment;
+use App\Models\TeacherCourseAssignment;
 
 class Semester extends Model
 {
@@ -69,5 +70,10 @@ class Semester extends Model
     public function transcripts()
     {
         return $this->hasMany(Transcript::class);
+    }
+
+    public function courseAssignments()
+    {
+        return $this->hasMany(TeacherCourseAssignment::class);
     }
 }

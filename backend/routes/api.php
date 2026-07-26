@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\ExaminationController;
 use App\Http\Controllers\Api\TranscriptController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\AcademicSessionController;
+use App\Http\Controllers\Api\TeacherCourseAssignmentController;
 
 Route::prefix('v1')->group(function () {
 
@@ -54,6 +55,11 @@ Route::prefix('v1')->group(function () {
             Route::apiResource(
                 'academic-sessions',
                 AcademicSessionController::class
+            );
+
+            Route::apiResource(
+                'teacher-course-assignments',
+                TeacherCourseAssignmentController::class
             );
 
         });

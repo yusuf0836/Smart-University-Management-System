@@ -81,6 +81,8 @@ class RolePermissionSeeder extends Seeder
 
             'academic_session.view',
             'academic_session.update',
+            
+            'teacher_course_assignment.view',
 
             'semester.view',
 

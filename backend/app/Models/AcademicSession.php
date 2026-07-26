@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\AcademicSession;
 use App\Models\Enrollment;
+use App\Models\TeacherCourseAssignment;
 
 class AcademicSession extends Model
 {
@@ -32,5 +33,10 @@ class AcademicSession extends Model
     public function enrollments()
     {
         return $this->hasMany(Enrollment::class);
+    }
+
+    public function courseAssignments()
+    {
+        return $this->hasMany(TeacherCourseAssignment::class);
     }
 }

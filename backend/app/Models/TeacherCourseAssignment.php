@@ -5,25 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Enrollment;
-use App\Models\TeacherCourseAssignment;
 
-class Course extends Model
+class TeacherCourseAssignment extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'department_id',
+        'teacher_id',
+        'course_id',
         'semester_id',
-        'course_code',
-        'course_title',
-        'credit',
-        'type',
+        'academic_session_id',
+        'section',
+        'assigned_date',
         'status',
+        'remarks',
     ];
 
     protected $casts = [
-        'credit' => 'decimal:1',
+        'assigned_date' => 'date',
         'status' => 'boolean',
     ];
 
@@ -33,9 +32,14 @@ class Course extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function department()
+    public function teacher()
     {
-        return $this->belongsTo(Department::class);
+        return $this->belongsTo(Teacher::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
     }
 
     public function semester()
@@ -43,13 +47,8 @@ class Course extends Model
         return $this->belongsTo(Semester::class);
     }
 
-    public function enrollments()
+    public function academicSession()
     {
-        return $this->hasMany(Enrollment::class);
-    }
-
-    public function courseAssignments()
-    {
-        return $this->hasMany(TeacherCourseAssignment::class);
+        return $this->belongsTo(AcademicSession::class);
     }
 }
