@@ -13,54 +13,55 @@ class Student extends Model
     protected $fillable = [
         'department_id',
         'semester_id',
-        'name',
+        'academic_session_id',
+
         'student_id',
+        'name',
         'email',
         'phone',
+
         'gender',
         'date_of_birth',
         'admission_date',
+
+        'blood_group',
+
+        'guardian_name',
+        'guardian_phone',
+
+        'address',
+        'photo',
+
         'status',
     ];
 
     protected $casts = [
-        'status' => 'boolean',
+
         'date_of_birth' => 'date',
+
         'admission_date' => 'date',
+
+        'status' => 'boolean',
     ];
 
-    /**
-     * Student belongs to a Department
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+
     public function department()
     {
         return $this->belongsTo(Department::class);
     }
 
-    /**
-     * Student belongs to a Semester
-     */
     public function semester()
     {
         return $this->belongsTo(Semester::class);
     }
-    /**
-     * Student has many enrollments
-     */
-    public function enrollments()
+
+    public function academicSession()
     {
-        return $this->hasMany(Enrollment::class);
-    }
-    public function attendances()
-    {
-        return $this->hasMany(Attendance::class);
-    }
-    public function fees()
-    {
-        return $this->hasMany(Fee::class);
-    }
-    public function transcripts()
-    {
-        return $this->hasMany(Transcript::class);
+        return $this->belongsTo(AcademicSession::class);
     }
 }

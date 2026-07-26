@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StudentRequest;
-use App\Models\Student;
-use App\Http\Resources\StudentResource;
-use Illuminate\Http\Request;
-use App\Helpers\QueryFilter;
 use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreStudentRequest;
+use App\Http\Requests\UpdateStudentRequest;
+use App\Http\Resources\StudentResource;
+use App\Models\Student;
+use App\Services\StudentService;
 
 class StudentController extends Controller
 {
+    public function __construct(
+        protected StudentService $service
+    ) {}
+
     /**
     * List Students
     *
@@ -34,41 +38,19 @@ class StudentController extends Controller
     * }
     */
 
-    public function index(Request $request)
+    public function index()
     {
-        $students = QueryFilter::apply(
-            Student::with(['department', 'semester']),
-            $request,
-
-            // Search Columns
-            [
-                'name',
-                'student_id',
-                'email',
-                'department.name',
-                'semester.name'
-            ],
-
-            // Filter Columns
-            [
-                'department_id',
-                'semester_id',
-                'status'
-            ],
-
-            // Sortable Columns
-            [
-                'id',
-                'name',
-                'student_id',
-                'email',
-                'created_at'
-            ]
-        );
+        $students = Student::with([
+            'department',
+            'semester',
+            'academicSession'
+        ])
+        ->latest()
+        ->paginate(10);
 
         return ApiResponse::success(
             StudentResource::collection($students),
-            'Students retrieved successfully',
+            'Students retrieved successfully.',
             $students
         );
     }
@@ -92,13 +74,21 @@ class StudentController extends Controller
      *   "message": "Student created successfully."
      * }
      */
-    public function store(StudentRequest $request)
+    public function store(StoreStudentRequest $request)
     {
-        $student = Student::create($request->validated());
+        $student = $this->service->store(
+            $request->validated()
+        );
+
+        $student->load([
+            'department',
+            'semester',
+            'academicSession'
+        ]);
 
         return ApiResponse::created(
             new StudentResource($student),
-            'Student created successfully'
+            'Student created successfully.'
         );
     }
 
@@ -126,12 +116,13 @@ class StudentController extends Controller
     {
         $student->load([
             'department',
-            'semester'
+            'semester',
+            'academicSession'
         ]);
 
         return ApiResponse::success(
             new StudentResource($student),
-            'Student retrieved successfully'
+            'Student retrieved successfully.'
         );
     }
 
@@ -161,13 +152,25 @@ class StudentController extends Controller
      *   "message": "Student updated successfully."
      * }
      */
-    public function update(StudentRequest $request, Student $student)
-    {
-        $student->update($request->validated());
+    public function update(
+        UpdateStudentRequest $request,
+        Student $student
+    ) {
+
+        $student = $this->service->update(
+            $student,
+            $request->validated()
+        );
+
+        $student->load([
+            'department',
+            'semester',
+            'academicSession'
+        ]);
 
         return ApiResponse::success(
             new StudentResource($student),
-            'Student updated successfully'
+            'Student updated successfully.'
         );
     }
 
@@ -189,10 +192,10 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        $student->delete();
+        $this->service->destroy($student);
 
         return ApiResponse::deleted(
-            'Student deleted successfully'
+            'Student deleted successfully.'
         );
     }
 }
