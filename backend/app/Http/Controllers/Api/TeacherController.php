@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\TeacherRequest;
-use App\Models\Teacher;
-use App\Http\Resources\TeacherResource;
-use Illuminate\Http\Request;
-use App\Helpers\QueryFilter;
 use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreTeacherRequest;
+use App\Http\Requests\UpdateTeacherRequest;
+use App\Http\Resources\TeacherResource;
+use App\Models\Teacher;
+use App\Services\TeacherService;
+use Illuminate\Http\Request;
 
 class TeacherController extends Controller
 {
+    public function __construct(
+        protected TeacherService $service
+    ) {}
+
     /**
      * List Teachers
      *
@@ -36,38 +41,19 @@ class TeacherController extends Controller
      */
     public function index(Request $request)
     {
-        $teachers = QueryFilter::apply(
-            Teacher::with('department'),
-            $request,
-
-            // Search
-            [
-                'name',
-                'id',
-                'email',
-                'phone',
-                'department.name',
-            ],
-
-            // Filter
-            [
-                'department_id',
-                'status'
-            ],
-
-            // Sort
-            [
-                'id',
-                'name',
-                'id',
-                'email',
-                'created_at'
-            ]
-        );
+        $teachers = Teacher::query()
+            ->with([
+                'faculty',
+                'department',
+            ])
+            ->latest()
+            ->paginate(
+                $request->get('per_page', 10)
+            );
 
         return ApiResponse::success(
             TeacherResource::collection($teachers),
-            'Teachers retrieved successfully',
+            'Teacher list retrieved successfully.',
             $teachers
         );
     }
@@ -96,13 +82,20 @@ class TeacherController extends Controller
      *   "message": "Teacher created successfully."
      * }
      */
-    public function store(TeacherRequest $request)
+    public function store(StoreTeacherRequest $request)
     {
-        $teacher = Teacher::create($request->validated());
+        $teacher = $this->service->store(
+            $request->validated()
+        );
 
         return ApiResponse::created(
-            new TeacherResource($teacher),
-            'Teacher created successfully'
+            new TeacherResource(
+                $teacher->load([
+                    'faculty',
+                    'department',
+                ])
+            ),
+            'Teacher created successfully.'
         );
     }
     
@@ -129,11 +122,14 @@ class TeacherController extends Controller
      */
     public function show(Teacher $teacher)
     {
-        $teacher->load('department');
-
         return ApiResponse::success(
-            new TeacherResource($teacher),
-            'Teacher retrieved successfully'
+            new TeacherResource(
+                $teacher->load([
+                    'faculty',
+                    'department',
+                ])
+            ),
+            'Teacher retrieved successfully.'
         );
     }
 
@@ -159,13 +155,24 @@ class TeacherController extends Controller
      *   "message": "Teacher updated successfully."
      * }
      */
-    public function update(TeacherRequest $request, Teacher $teacher)
-    {
-        $teacher->update($request->validated());
+     public function update(
+        UpdateTeacherRequest $request,
+        Teacher $teacher
+    ) {
+
+        $teacher = $this->service->update(
+            $teacher,
+            $request->validated()
+        );
 
         return ApiResponse::success(
-            new TeacherResource($teacher),
-            'Teacher updated successfully'
+            new TeacherResource(
+                $teacher->load([
+                    'faculty',
+                    'department',
+                ])
+            ),
+            'Teacher updated successfully.'
         );
     }
 
@@ -187,10 +194,10 @@ class TeacherController extends Controller
      */
     public function destroy(Teacher $teacher)
     {
-        $teacher->delete();
+        $this->service->destroy($teacher);
 
         return ApiResponse::deleted(
-            'Teacher deleted successfully'
+            'Teacher deleted successfully.'
         );
     }
 }

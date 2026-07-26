@@ -7,31 +7,54 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class TeacherResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
+
             'id' => $this->id,
-            'employee_id' => $this->employee_id,
-            'name' => $this->name,
-            'email' => $this->email,
-            'phone' => $this->phone,
-            'designation' => $this->designation,
-            'joining_date' => $this->joining_date,
-            'salary' => $this->salary,
-            'status' => $this->status,
+
+            'faculty' => $this->faculty ? [
+                'id' => $this->faculty->id,
+                'name' => $this->faculty->name,
+            ] : null,
 
             'department' => [
-                'id' => $this->department?->id,
-                'name' => $this->department?->name,
+                'id' => $this->department->id,
+                'name' => $this->department->name,
             ],
 
-            'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
+            'name' => $this->name,
+
+            'employee_id' => $this->employee_id,
+
+            'email' => $this->email,
+
+            'phone' => $this->phone,
+
+            'gender' => $this->gender,
+
+            'designation' => $this->designation,
+
+            'qualification' => $this->qualification,
+
+            'joining_date' => optional($this->joining_date)
+                ->format('Y-m-d'),
+
+            'salary' => $this->salary,
+
+            'blood_group' => $this->blood_group,
+
+            'address' => $this->address,
+
+            'photo' => $this->photo,
+
+            'status' => $this->status,
+
+            'created_at' => optional($this->created_at)
+                ->format('Y-m-d H:i:s'),
+
+            'updated_at' => optional($this->updated_at)
+                ->format('Y-m-d H:i:s'),
         ];
     }
 }
