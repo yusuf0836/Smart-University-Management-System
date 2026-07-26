@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Enrollment extends Model
 {
@@ -14,38 +14,39 @@ class Enrollment extends Model
         'student_id',
         'course_id',
         'semester_id',
+        'academic_session_id',
         'enrollment_date',
         'status',
+        'remarks',
     ];
 
-    /**
-     * Student Relationship
-     */
+    protected $casts = [
+        'enrollment_date' => 'date',
+    ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+
     public function student()
     {
         return $this->belongsTo(Student::class);
     }
 
-    /**
-     * Course Relationship
-     */
     public function course()
     {
         return $this->belongsTo(Course::class);
     }
 
-    /**
-     * Semester Relationship
-     */
     public function semester()
     {
         return $this->belongsTo(Semester::class);
     }
-    /**
-     * An enrollment has one result.
-     */
-    public function result()
+
+    public function academicSession()
     {
-        return $this->hasOne(Result::class);
+        return $this->belongsTo(AcademicSession::class);
     }
 }

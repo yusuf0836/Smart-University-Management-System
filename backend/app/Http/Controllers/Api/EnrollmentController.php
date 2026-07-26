@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\EnrollmentRequest;
-use App\Models\Enrollment;
-use App\Http\Resources\EnrollmentResource;
-use Illuminate\Http\Request;
-use App\Helpers\QueryFilter;
 use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreEnrollmentRequest;
+use App\Http\Requests\UpdateEnrollmentRequest;
+use App\Http\Resources\EnrollmentResource;
+use App\Models\Enrollment;
+use App\Services\EnrollmentService;
+use Illuminate\Http\Request;
 
 class EnrollmentController extends Controller
 {
-    
+    public function __construct(
+        protected EnrollmentService $service
+    ) {}
+
     /**
      * List Enrollments
      *
@@ -26,34 +30,21 @@ class EnrollmentController extends Controller
      */
     public function index(Request $request)
     {
-        $enrollments = QueryFilter::apply(
-            Enrollment::with(['student', 'course', 'semester']),
-            $request,
-
-            [
-                'academic_year',
-                'student.name',
-                'course.course_title',
-                'semester.name'
-            ],
-
-            [
-                'student_id',
-                'course_id',
-                'semester_id',
-                'status'
-            ],
-
-            [
-                'id',
-                'academic_year',
-                'created_at'
-            ]
-        );
+        $enrollments = Enrollment::query()
+            ->with([
+                'student',
+                'course',
+                'semester',
+                'academicSession'
+            ])
+            ->latest()
+            ->paginate(
+                $request->get('per_page', 10)
+            );
 
         return ApiResponse::success(
             EnrollmentResource::collection($enrollments),
-            'Enrollments retrieved successfully',
+            'Enrollment list retrieved successfully.',
             $enrollments
         );
     }
@@ -78,13 +69,22 @@ class EnrollmentController extends Controller
      *   "message": "Student enrolled successfully."
      * }
      */
-    public function store(EnrollmentRequest $request)
+    public function store(StoreEnrollmentRequest $request)
     {
-        $enrollment = Enrollment::create($request->validated());
+        $enrollment = $this->service->store(
+            $request->validated()
+        );
 
         return ApiResponse::created(
-            new EnrollmentResource($enrollment),
-            'Student enrolled successfully'
+            new EnrollmentResource(
+                $enrollment->load([
+                    'student',
+                    'course',
+                    'semester',
+                    'academicSession'
+                ])
+            ),
+            'Enrollment created successfully.'
         );
     }
 
@@ -103,15 +103,16 @@ class EnrollmentController extends Controller
      */
     public function show(Enrollment $enrollment)
     {
-        $enrollment->load([
-            'student',
-            'course',
-            'semester'
-        ]);
-
         return ApiResponse::success(
-            new EnrollmentResource($enrollment),
-            'Enrollment retrieved successfully'
+            new EnrollmentResource(
+                $enrollment->load([
+                    'student',
+                    'course',
+                    'semester',
+                    'academicSession'
+                ])
+            ),
+            'Enrollment retrieved successfully.'
         );
     }
 
@@ -137,13 +138,26 @@ class EnrollmentController extends Controller
      *   "message": "Enrollment updated successfully."
      * }
      */
-    public function update(EnrollmentRequest $request, Enrollment $enrollment)
-    {
-        $enrollment->update($request->validated());
+    public function update(
+        UpdateEnrollmentRequest $request,
+        Enrollment $enrollment
+    ) {
+
+        $enrollment = $this->service->update(
+            $enrollment,
+            $request->validated()
+        );
 
         return ApiResponse::success(
-            new EnrollmentResource($enrollment),
-            'Enrollment updated successfully'
+            new EnrollmentResource(
+                $enrollment->load([
+                    'student',
+                    'course',
+                    'semester',
+                    'academicSession'
+                ])
+            ),
+            'Enrollment updated successfully.'
         );
     }
 
@@ -163,12 +177,16 @@ class EnrollmentController extends Controller
      *   "message": "Enrollment deleted successfully."
      * }
      */
-    public function destroy(Enrollment $enrollment)
-    {
-        $enrollment->delete();
+    public function destroy(
+        Enrollment $enrollment
+    ) {
+
+        $this->service->destroy(
+            $enrollment
+        );
 
         return ApiResponse::deleted(
-            'Enrollment deleted successfully'
+            'Enrollment deleted successfully.'
         );
     }
 }

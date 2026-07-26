@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\AcademicSession;
+use App\Models\Enrollment;
 
 class AcademicSession extends Model
 {
@@ -27,4 +28,9 @@ class AcademicSession extends Model
         'is_current'=>'boolean',
 
     ];
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
 }
