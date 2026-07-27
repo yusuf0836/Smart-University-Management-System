@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\RoutineRequest;
-use App\Models\Routine;
-use App\Http\Resources\RoutineResource;
-use Illuminate\Http\Request;
-use App\Helpers\QueryFilter;
 use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreRoutineRequest;
+use App\Http\Requests\UpdateRoutineRequest;
+use App\Http\Resources\RoutineResource;
+use App\Models\Routine;
+use App\Services\RoutineService;
+use Illuminate\Http\Request;
 
 class RoutineController extends Controller
 {
-    
+    public function __construct(
+        protected RoutineService $service
+    ) {}
+
     /**
      * List Routines
      *
@@ -26,35 +30,18 @@ class RoutineController extends Controller
      */
     public function index(Request $request)
     {
-        $routines = QueryFilter::apply(
-            Routine::with([
-                'department',
-                'semester',
-                'course',
-                'teacher'
-            ]),
-            $request,
-
-            [
-                'day'
-            ],
-
-            [
-                'department_id',
-                'semester_id',
-                'teacher_id'
-            ],
-
-            [
-                'id',
-                'day',
-                'start_time'
-            ]
-        );
+        $routines = Routine::with([
+            'department',
+            'semester',
+            'course',
+            'teacher',
+        ])
+        ->latest()
+        ->paginate($request->get('per_page', 10));
 
         return ApiResponse::success(
             RoutineResource::collection($routines),
-            'Routines retrieved successfully',
+            'Routine list retrieved successfully.',
             $routines
         );
     }
@@ -83,13 +70,22 @@ class RoutineController extends Controller
      *   "message": "Routine created successfully."
      * }
      */
-    public function store(RoutineRequest $request)
+    public function store(StoreRoutineRequest $request)
     {
-        $routine = Routine::create($request->validated());
+        $routine = $this->service->store(
+            $request->validated()
+        );
 
         return ApiResponse::created(
-            new RoutineResource($routine),
-            'Routine created successfully'
+            new RoutineResource(
+                $routine->load([
+                    'department',
+                    'semester',
+                    'course',
+                    'teacher',
+                ])
+            ),
+            'Routine created successfully.'
         );
     }
 
@@ -109,8 +105,15 @@ class RoutineController extends Controller
     public function show(Routine $routine)
     {
         return ApiResponse::success(
-            new RoutineResource($routine),
-            'Routine retrieved successfully'
+            new RoutineResource(
+                $routine->load([
+                    'department',
+                    'semester',
+                    'course',
+                    'teacher',
+                ])
+            ),
+            'Routine retrieved successfully.'
         );
     }
 
@@ -140,13 +143,25 @@ class RoutineController extends Controller
      *   "message": "Routine updated successfully."
      * }
      */
-    public function update(RoutineRequest $request, Routine $routine)
-    {
-        $routine->update($request->validated());
+    public function update(
+        UpdateRoutineRequest $request,
+        Routine $routine
+    ) {
+        $routine = $this->service->update(
+            $routine,
+            $request->validated()
+        );
 
         return ApiResponse::success(
-            new RoutineResource($routine),
-            'Routine updated successfully'
+            new RoutineResource(
+                $routine->load([
+                    'department',
+                    'semester',
+                    'course',
+                    'teacher',
+                ])
+            ),
+            'Routine updated successfully.'
         );
     }
 
@@ -168,10 +183,10 @@ class RoutineController extends Controller
      */
     public function destroy(Routine $routine)
     {
-        $routine->delete();
+        $this->service->destroy($routine);
 
         return ApiResponse::deleted(
-            'Routine deleted successfully'
+            'Routine deleted successfully.'
         );
     }
 }

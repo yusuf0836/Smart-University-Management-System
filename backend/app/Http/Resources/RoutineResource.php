@@ -7,24 +7,40 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class RoutineResource extends JsonResource
 {
+    /**
+     * Transform the resource into an array.
+     */
     public function toArray(Request $request): array
     {
         return [
+
             'id' => $this->id,
 
-            'course' => new CourseResource($this->whenLoaded('course')),
+            'department' => $this->department,
 
-            'teacher' => new TeacherResource($this->whenLoaded('teacher')),
+            'semester' => $this->semester,
 
-            'semester' => new SemesterResource($this->whenLoaded('semester')),
+            'course' => $this->course,
+
+            'teacher' => $this->teacher,
 
             'day' => $this->day,
+
             'start_time' => $this->start_time,
+
             'end_time' => $this->end_time,
-            'room' => $this->room,
+
+            'room_no' => $this->room_no,
+
+            'building' => $this->building,
+
             'status' => $this->status,
 
-            'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
+            'remarks' => $this->remarks,
+
+            'created_at' => $this->created_at,
+
+            'updated_at' => $this->updated_at,
         ];
     }
 }

@@ -10,15 +10,23 @@ class Routine extends Model
     use SoftDeletes;
 
     protected $fillable = [
+
         'department_id',
         'semester_id',
         'course_id',
         'teacher_id',
+
         'day',
         'start_time',
         'end_time',
+
         'room_no',
+
+        'building',
+
         'status',
+
+        'remarks',
     ];
 
     protected $casts = [
