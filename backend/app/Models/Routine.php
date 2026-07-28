@@ -64,4 +64,8 @@ class Routine extends Model
     {
         return $this->belongsTo(Teacher::class);
     }
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
 }

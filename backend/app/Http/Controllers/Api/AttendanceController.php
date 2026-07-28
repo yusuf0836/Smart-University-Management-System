@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\AttendanceRequest;
-use App\Models\Attendance;
-use App\Http\Resources\AttendanceResource;
-use Illuminate\Http\Request;
-use App\Helpers\QueryFilter;
 use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreAttendanceRequest;
+use App\Http\Requests\UpdateAttendanceRequest;
+use App\Http\Resources\AttendanceResource;
+use App\Models\Attendance;
+use App\Services\AttendanceService;
+use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
 {
     
+    public function __construct(
+        protected AttendanceService $attendanceService
+    ) {}
     /**
      * List Attendances
      *
@@ -26,30 +30,18 @@ class AttendanceController extends Controller
      */
     public function index(Request $request)
     {
-        $attendances = QueryFilter::apply(
-            Attendance::with([
-                'student',
-                'course'
-            ]),
-            $request,
+        $attendances = Attendance::with([
+            'student',
+            'course',
+            'semester',
+            'routine'
+        ])
+        ->latest()
+        ->paginate($request->get('per_page', 10));
 
-            [],
-
-            [
-                'student_id',
-                'course_id',
-                'status'
-            ],
-
-            [
-                'id',
-                'attendance_date',
-                'created_at'
-            ]
-        );
         return ApiResponse::success(
             AttendanceResource::collection($attendances),
-            'Attendances retrieved successfully',
+            'Attendance list retrieved successfully.',
             $attendances
         );
     }
@@ -75,13 +67,22 @@ class AttendanceController extends Controller
      *   "message": "Attendance created successfully."
      * }
      */
-    public function store(AttendanceRequest $request)
+    public function store(StoreAttendanceRequest $request)
     {
-        $attendance = Attendance::create($request->validated());
+        $attendance = $this->attendanceService->store(
+            $request->validated()
+        );
 
         return ApiResponse::created(
-            new AttendanceResource($attendance),
-            'Attendance created successfully'
+            new AttendanceResource(
+                $attendance->load([
+                    'student',
+                    'course',
+                    'semester',
+                    'routine'
+                ])
+            ),
+            'Attendance created successfully.'
         );
     }
 
@@ -100,15 +101,16 @@ class AttendanceController extends Controller
      */
     public function show(Attendance $attendance)
     {
-        $attendance->load([
-            'student',
-            'course',
-            'semester',
-        ]);
-
         return ApiResponse::success(
-            new AttendanceResource($attendance),
-            'Attendance retrieved successfully'
+            new AttendanceResource(
+                $attendance->load([
+                    'student',
+                    'course',
+                    'semester',
+                    'routine'
+                ])
+            ),
+            'Attendance retrieved successfully.'
         );
     }
 
@@ -135,13 +137,25 @@ class AttendanceController extends Controller
      *   "message": "Attendance updated successfully."
      * }
      */
-    public function update(AttendanceRequest $request, Attendance $attendance)
-    {
-        $attendance->update($request->validated());
+    public function update(
+        UpdateAttendanceRequest $request,
+        Attendance $attendance
+    ) {
+        $attendance = $this->attendanceService->update(
+            $attendance,
+            $request->validated()
+        );
 
         return ApiResponse::success(
-            new AttendanceResource($attendance),
-            'Attendance updated successfully'
+            new AttendanceResource(
+                $attendance->load([
+                    'student',
+                    'course',
+                    'semester',
+                    'routine'
+                ])
+            ),
+            'Attendance updated successfully.'
         );
     }
 
@@ -163,10 +177,10 @@ class AttendanceController extends Controller
      */
     public function destroy(Attendance $attendance)
     {
-        $attendance->delete();
+        $this->attendanceService->destroy($attendance);
 
         return ApiResponse::deleted(
-            'Attendance deleted successfully'
+            'Attendance deleted successfully.'
         );
     }
 }

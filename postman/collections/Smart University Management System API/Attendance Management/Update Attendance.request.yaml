@@ -1,4 +1,5 @@
 $kind: http-request
+name: Update Attendance
 description: Updates an existing attendance record.
 url: "{{baseUrl}}/api/v1/attendances/:id"
 method: PUT
@@ -13,7 +14,23 @@ pathVariables:
     value: "1"
     description: Attendance ID.
 body:
-  type: text
-  content: '{"student_id":1,"course_id":3,"semester_id":2,"attendance_date":"2026-01-15","status":"Present","remarks":"Attendance updated after verification."}'
+  type: json
+  content: "{\r
+
+    \    \"student_id\": 1,\r
+
+    \    \"course_id\": 1,\r
+
+    \    \"semester_id\": 1,\r
+
+    \    \"routine_id\": 1,\r
+
+    \    \"attendance_date\": \"2026-07-28\",\r
+
+    \    \"status\": \"Present\",\r
+
+    \    \"remarks\": \"Present in class\"\r
+
+    }"
 examples: ./.resources/Update Attendance.resources/examples
 order: 4000
