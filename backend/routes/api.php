@@ -152,20 +152,24 @@ Route::prefix('v1')->group(function () {
          */
         Route::prefix('notices')->group(function () {
 
-            Route::get('/', [NoticeController::class, 'index'])
-                ->middleware('permission:notice.view');
+            Route::get('/', [NoticeController::class, 'index']);
 
-            Route::post('/', [NoticeController::class, 'store'])
-                ->middleware('permission:notice.create');
+            Route::get('/published', [NoticeController::class, 'published']);
 
-            Route::get('/{notice}', [NoticeController::class, 'show'])
-                ->middleware('permission:notice.view');
+            Route::get('/pinned', [NoticeController::class, 'pinned']);
 
-            Route::put('/{notice}', [NoticeController::class, 'update'])
-                ->middleware('permission:notice.update');
+            Route::get('/audience/{audience}', [NoticeController::class, 'audience']);
 
-            Route::delete('/{notice}', [NoticeController::class, 'destroy'])
-                ->middleware('permission:notice.delete');
+            Route::get('/{id}', [NoticeController::class, 'show']);
+
+            Route::post('/', [NoticeController::class, 'store']);
+
+            Route::put('/{id}', [NoticeController::class, 'update']);
+
+            Route::delete('/{id}', [NoticeController::class, 'destroy']);
+
+            Route::patch('/restore/{id}', [NoticeController::class, 'restore']);
+
         });
 
         /**

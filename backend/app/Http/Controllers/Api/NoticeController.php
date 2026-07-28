@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\NoticeRequest;
-use App\Models\Notice;
-use App\Http\Resources\NoticeResource;
-use Illuminate\Http\Request;
-use App\Helpers\QueryFilter;
 use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreNoticeRequest;
+use App\Http\Requests\UpdateNoticeRequest;
+use App\Http\Resources\NoticeResource;
+use App\Services\NoticeService;
+use Illuminate\Http\JsonResponse;
 
 class NoticeController extends Controller
 {
-    
+    public function __construct(
+        protected NoticeService $service
+    ) {}
     /**
      * List Notices
      *
@@ -24,31 +26,16 @@ class NoticeController extends Controller
      *
      * @response 200 {"success": true}
      */
-    public function index(Request $request)
+    public function index(): JsonResponse
     {
-        $notices = QueryFilter::apply(
-            Notice::query(),
-            $request,
-
-            [
-                'title'
-            ],
-
-            [
-                'status'
-            ],
-
-            [
-                'id',
-                'title',
-                'publish_date'
-            ]
-        );
-
         return ApiResponse::success(
-            NoticeResource::collection($notices),
-            'Notices retrieved successfully',
-            $notices
+
+            NoticeResource::collection(
+                $this->service->getAll()
+            ),
+
+            'Notices retrieved successfully.'
+
         );
     }
 
@@ -72,13 +59,22 @@ class NoticeController extends Controller
      *   "message": "Notice created successfully."
      * }
      */
-    public function store(NoticeRequest $request)
-    {
-        $notice = Notice::create($request->validated());
+    public function store(
+        StoreNoticeRequest $request
+    ): JsonResponse {
 
         return ApiResponse::created(
-            new NoticeResource($notice),
-            'Notice created successfully'
+
+            new NoticeResource(
+
+                $this->service->store(
+                    $request->validated()
+                )
+
+            ),
+
+            'Notice created successfully.'
+
         );
     }
 
@@ -95,11 +91,18 @@ class NoticeController extends Controller
      *
      * @response 200 {"success": true}
      */
-    public function show(Notice $notice)
+    public function show(int $id): JsonResponse
     {
         return ApiResponse::success(
-            new NoticeResource($notice),
-            'Notice retrieved successfully'
+
+            new NoticeResource(
+
+                $this->service->getById($id)
+
+            ),
+
+            'Notice retrieved successfully.'
+
         );
     }
 
@@ -125,13 +128,24 @@ class NoticeController extends Controller
      *   "message": "Notice updated successfully."
      * }
      */
-    public function update(NoticeRequest $request, Notice $notice)
-    {
-        $notice->update($request->validated());
+    public function update(
+        UpdateNoticeRequest $request,
+        int $id
+    ): JsonResponse {
 
         return ApiResponse::success(
-            new NoticeResource($notice),
-            'Notice updated successfully'
+
+            new NoticeResource(
+
+                $this->service->update(
+                    $id,
+                    $request->validated()
+                )
+
+            ),
+
+            'Notice updated successfully.'
+
         );
     }
 
@@ -151,12 +165,84 @@ class NoticeController extends Controller
      *   "message": "Notice deleted successfully."
      * }
      */
-    public function destroy(Notice $notice)
-    {
-        $notice->delete();
+    public function destroy(
+        int $id
+    ): JsonResponse {
 
-        return ApiResponse::deleted(
-            'Notice deleted successfully'
+        $this->service->delete($id);
+
+        return ApiResponse::success(
+
+            null,
+
+            'Notice deleted successfully.'
+
+        );
+    }
+
+    public function restore(
+        int $id
+    ): JsonResponse {
+
+        return ApiResponse::success(
+
+            new NoticeResource(
+
+                $this->service->restore($id)
+
+            ),
+
+            'Notice restored successfully.'
+
+        );
+    }
+
+    public function published(): JsonResponse
+    {
+        return ApiResponse::success(
+
+            NoticeResource::collection(
+
+                $this->service->getPublished()
+
+            ),
+
+            'Published notices retrieved successfully.'
+
+        );
+    }
+
+    public function pinned(): JsonResponse
+    {
+        return ApiResponse::success(
+
+            NoticeResource::collection(
+
+                $this->service->getPinned()
+
+            ),
+
+            'Pinned notices retrieved successfully.'
+
+        );
+    }
+
+    public function audience(
+        string $audience
+    ): JsonResponse {
+
+        return ApiResponse::success(
+
+            NoticeResource::collection(
+
+                $this->service->getByAudience(
+                    $audience
+                )
+
+            ),
+
+            'Audience notices retrieved successfully.'
+
         );
     }
 }

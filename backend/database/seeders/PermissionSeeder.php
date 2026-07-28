@@ -109,6 +109,7 @@ class PermissionSeeder extends Seeder
                 'create',
                 'update',
                 'delete',
+                'restore',
             ],
 
             'fee' => [

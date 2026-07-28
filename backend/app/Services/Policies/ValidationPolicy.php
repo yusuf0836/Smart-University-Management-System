@@ -4,6 +4,8 @@ namespace App\Services\Policies;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Validation\ValidationException;
+use App\Models\Notice;
+
 
 class ValidationPolicy
 {
@@ -61,5 +63,31 @@ class ValidationPolicy
         throw ValidationException::withMessages([
             $field => [$message]
         ]);
+    }
+
+    public function validateUniqueNoticeTitle(
+        string $title,
+        ?int $ignoreId = null
+    ): void {
+
+        $query = Notice::where('title', $title);
+
+        if ($ignoreId) {
+
+            $query->where('id', '!=', $ignoreId);
+
+        }
+
+        if ($query->exists()) {
+
+            throw ValidationException::withMessages([
+
+                'title' => [
+                    'This notice title already exists.',
+                ],
+
+            ]);
+
+        }
     }
 }
