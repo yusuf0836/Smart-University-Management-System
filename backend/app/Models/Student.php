@@ -75,4 +75,9 @@ class Student extends Model
     {
         return $this->hasMany(Attendance::class);
     }
+
+    public function marks()
+    {
+        return $this->hasMany(Mark::class);
+    }
 }

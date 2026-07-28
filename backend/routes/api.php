@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\TranscriptController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\AcademicSessionController;
 use App\Http\Controllers\Api\TeacherCourseAssignmentController;
+use App\Http\Controllers\Api\MarkController;
 
 Route::prefix('v1')->group(function () {
 
@@ -61,6 +62,8 @@ Route::prefix('v1')->group(function () {
                 'teacher-course-assignments',
                 TeacherCourseAssignmentController::class
             );
+
+            Route::apiResource('marks', MarkController::class);
 
         });
 

@@ -130,6 +130,13 @@ class PermissionSeeder extends Seeder
                 'delete',
             ],
 
+            'mark' => [
+                'view',
+                'create',
+                'update',
+                'delete',
+            ],
+
         ];
 
         foreach ($modules as $module => $actions) {

@@ -109,6 +109,11 @@ class RolePermissionSeeder extends Seeder
             'transcript.download',
 
             'examination.view',
+
+            'mark.view',
+            'mark.create',
+            'mark.update',
+            'mark.delete',
         ]);
 
         /*
