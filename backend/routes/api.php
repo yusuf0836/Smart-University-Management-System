@@ -45,8 +45,7 @@ Route::prefix('v1')->group(function () {
          */
         Route::prefix('dashboard')->group(function () {
 
-            Route::get('/', [DashboardController::class, 'index'])
-                ->middleware('permission:dashboard.view');
+            
 
         });
         
@@ -73,6 +72,21 @@ Route::prefix('v1')->group(function () {
             Route::get(
                 'transcripts/{studentId}/{semesterId}',
                 [TranscriptController::class, 'show']
+            );
+
+            Route::get(
+                'dashboard/admin',
+                [DashboardController::class, 'admin']
+            );
+
+            Route::get(
+                'dashboard/teacher/{teacherId}',
+                [DashboardController::class, 'teacher']
+            );
+
+            Route::get(
+                'dashboard/student/{studentId}',
+                [DashboardController::class, 'student']
             );
 
         });

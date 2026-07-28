@@ -2,97 +2,355 @@
 
 namespace App\Services;
 
-use App\Models\Attendance;
-use App\Models\Course;
-use App\Models\Department;
-use App\Models\Enrollment;
-use App\Models\Examination;
+use Carbon\Carbon;
+
 use App\Models\Faculty;
-use App\Models\Fee;
-use App\Models\Notice;
-use App\Models\Result;
-use App\Models\Semester;
-use App\Models\Student;
+use App\Models\Department;
 use App\Models\Teacher;
-use App\Models\User;
+use App\Models\Student;
+use App\Models\Course;
+use App\Models\Enrollment;
+use App\Models\Routine;
+use App\Models\Attendance;
+use App\Models\Examination;
+use App\Models\Result;
+use App\Models\TeacherCourseAssignment;
+
+use Illuminate\Support\Facades\Cache;
 
 class DashboardService
 {
-    public function getDashboard(User $user): array
+    /**
+     * ==========================================================
+     * Admin Dashboard
+     * ==========================================================
+     */
+    public function adminDashboard(): array
     {
-        if ($user->hasRole('Super Admin') || $user->hasRole('Admin')) {
-            return $this->adminDashboard();
-        }
+        return Cache::remember(
 
-        if ($user->hasRole('Teacher')) {
-            return $this->teacherDashboard($user);
-        }
+            'admin_dashboard',
 
-        if ($user->hasRole('Student')) {
-            return $this->studentDashboard($user);
-        }
+            now()->addMinutes(5),
 
-        return [];
+            function () {
+
+                $today = Carbon::today();
+
+                $todayDay = $today->format('l');
+
+                return [
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Statistics
+                    |--------------------------------------------------------------------------
+                    */
+
+                    'statistics' => [
+
+                        'faculties' => Faculty::count(),
+
+                        'departments' => Department::count(),
+
+                        'teachers' => Teacher::count(),
+
+                        'students' => Student::count(),
+
+                        'courses' => Course::count(),
+
+                        'enrollments' => Enrollment::count(),
+
+                        'examinations' => Examination::count(),
+
+                        'results' => Result::count(),
+
+                    ],
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Today's Summary
+                    |--------------------------------------------------------------------------
+                    */
+
+                    'today' => [
+
+                        'classes' => Routine::where('day', $todayDay)
+                            ->count(),
+
+                        'attendance' => Attendance::whereDate(
+                            'attendance_date',
+                            $today
+                        )->count(),
+
+                        'examinations' => Examination::whereDate(
+                            'exam_date',
+                            $today
+                        )->count(),
+
+                    ],
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Upcoming Examinations
+                    |--------------------------------------------------------------------------
+                    */
+
+                    'upcoming' => [
+
+                        'examinations' => Examination::with([
+
+                            'department',
+
+                            'semester',
+
+                        ])
+                        ->whereDate('exam_date', '>=', $today)
+                        ->orderBy('exam_date')
+                        ->limit(10)
+                        ->get(),
+
+                    ],
+
+                ];
+
+            }
+
+        );
     }
-
-    private function adminDashboard(): array
+        /**
+     * ==========================================================
+     * Teacher Dashboard
+     * ==========================================================
+     */
+    public function teacherDashboard(int $teacherId): array
     {
-        return [
+        return Cache::remember(
 
-            'statistics' => [
+            "teacher_dashboard_{$teacherId}",
 
-                'faculties' => Faculty::count(),
+            now()->addMinutes(2),
 
-                'departments' => Department::count(),
+            function () use ($teacherId) {
 
-                'teachers' => Teacher::count(),
+                $today = Carbon::today()->format('l');
 
-                'students' => Student::count(),
+                $assignedCourses = TeacherCourseAssignment::with([
 
-                'semesters' => Semester::count(),
+                    'teacher',
 
-                'courses' => Course::count(),
+                    'course',
 
-                'enrollments' => Enrollment::count(),
+                    'semester',
 
-                'results' => Result::count(),
+                    'academicSession',
 
-                'attendances' => Attendance::count(),
+                ])
+                ->where('teacher_id', $teacherId)
+                ->where('status', true)
+                ->get();
 
-                'examinations' => Examination::count(),
+                $todayRoutine = Routine::with([
 
-                'fees' => Fee::count(),
+                    'course',
 
-                'notices' => Notice::count(),
+                    'department',
 
-            ],
+                    'semester',
 
-            'recent_students' => Student::latest()->take(5)->get(),
+                ])
+                ->where('teacher_id', $teacherId)
+                ->where('day', $today)
+                ->where('status', true)
+                ->orderBy('start_time')
+                ->get();
 
-            'recent_notices' => Notice::latest()->take(5)->get(),
+                /*
+                |--------------------------------------------------------------------------
+                | Pending Attendance
+                |--------------------------------------------------------------------------
+                */
 
-            'recent_enrollments' => Enrollment::latest()->take(5)->get(),
+                $pendingAttendance = $todayRoutine->count();
 
-            'upcoming_examinations' => Examination::latest()->take(5)->get(),
+                /*
+                |--------------------------------------------------------------------------
+                | Pending Marks
+                |--------------------------------------------------------------------------
+                */
 
-        ];
+                $pendingMarks = $assignedCourses->count();
+
+                return [
+
+                    'assigned_courses' => $assignedCourses,
+
+                    'today' => [
+
+                        'routine' => $todayRoutine,
+
+                        'total_classes' => $todayRoutine->count(),
+
+                    ],
+
+                    'pending' => [
+
+                        'attendance' => $pendingAttendance,
+
+                        'marks' => $pendingMarks,
+
+                    ],
+
+                ];
+
+            }
+
+        );
     }
-
-    private function teacherDashboard(User $user): array
+        /**
+     * ==========================================================
+     * Student Dashboard
+     * ==========================================================
+     */
+    public function studentDashboard(int $studentId): array
     {
-        return [
+        return Cache::remember(
 
-            'message' => 'Teacher dashboard is under development.'
+            "student_dashboard_{$studentId}",
 
-        ];
-    }
+            now()->addMinutes(2),
 
-    private function studentDashboard(User $user): array
-    {
-        return [
+            function () use ($studentId) {
 
-            'message' => 'Student dashboard is under development.'
+                $today = Carbon::today();
 
-        ];
+                $todayDay = $today->format('l');
+
+                $student = Student::findOrFail($studentId);
+
+                $currentSemester = Enrollment::with([
+                    'semester',
+                ])
+                ->where('student_id', $studentId)
+                ->latest()
+                ->first();
+
+                $enrolledCourses = Enrollment::with([
+
+                    'course',
+
+                    'semester',
+
+                    'academicSession',
+
+                ])
+                ->where('student_id', $studentId)
+                ->get();
+
+                $todayRoutine = Routine::with([
+
+                    'course',
+
+                    'teacher',
+
+                ])
+                ->where('semester_id', optional($currentSemester)->semester_id)
+                ->where('day', $todayDay)
+                ->where('status', true)
+                ->orderBy('start_time')
+                ->get();
+
+                $attendanceSummary = [
+
+                    'present' => Attendance::where(
+                        'student_id',
+                        $studentId
+                    )->where(
+                        'status',
+                        'Present'
+                    )->count(),
+
+                    'absent' => Attendance::where(
+                        'student_id',
+                        $studentId
+                    )->where(
+                        'status',
+                        'Absent'
+                    )->count(),
+
+                    'late' => Attendance::where(
+                        'student_id',
+                        $studentId
+                    )->where(
+                        'status',
+                        'Late'
+                    )->count(),
+
+                ];
+
+                $cgpa = app(CGPAService::class)
+                    ->calculate($studentId);
+
+                $latestResults = Result::with([
+                    'student',
+                    'semester',
+                    'academicSession',
+                    'enrollment',
+                    'course',
+                ])
+                ->where('student_id', $studentId)
+                ->where('status', true)
+                ->latest()
+                ->take(5)
+                ->get();
+
+                $upcomingExaminations = Examination::with([
+
+                    'department',
+
+                    'semester',
+
+                ])
+                ->whereDate(
+                    'exam_date',
+                    '>=',
+                    $today
+                )
+                ->where(
+                    'semester_id',
+                    optional($currentSemester)->semester_id
+                )
+                ->orderBy('exam_date')
+                ->get();
+
+                return [
+
+                    'student' => $student,
+
+                    'current_semester' => optional($currentSemester)->semester,
+
+                    'enrolled_courses' => $enrolledCourses,
+
+                    'today' => [
+
+                        'routine' => $todayRoutine,
+
+                        'total_classes' => $todayRoutine->count(),
+
+                    ],
+
+                    'attendance_summary' => $attendanceSummary,
+
+                    'cgpa' => $cgpa,
+
+                    'latest_result' => $latestResults,
+
+                    'upcoming_examinations' => $upcomingExaminations,
+
+                ];
+
+            }
+
+        );
     }
 }

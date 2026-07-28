@@ -15,7 +15,9 @@ class PermissionSeeder extends Seeder
         $modules = [
 
             'dashboard' => [
-                'view',
+                'admin',
+                'teacher',
+                'student',
             ],
 
             'academic_session' => [

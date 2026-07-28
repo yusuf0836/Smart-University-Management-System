@@ -51,4 +51,9 @@ class TeacherCourseAssignment extends Model
     {
         return $this->belongsTo(AcademicSession::class);
     }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
 }

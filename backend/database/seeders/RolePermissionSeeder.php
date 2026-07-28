@@ -73,7 +73,9 @@ class RolePermissionSeeder extends Seeder
 
         $teacher->syncPermissions([
 
-            'dashboard.view',
+            'dashboard.admin',
+            'dashboard.teacher',
+            'dashboard.student',
 
             'faculty.view',
             'department.view',

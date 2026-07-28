@@ -72,4 +72,9 @@ class Result extends Model
     {
         return $query->where('status', true);
     }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
 }
