@@ -6,12 +6,27 @@ use App\Models\Enrollment;
 use App\Models\Mark;
 use App\Models\Result;
 use Illuminate\Validation\ValidationException;
+use App\Services\Policies\GradeCalculationService;
+use App\Services\Policies\ValidationPolicy;
 
 class ResultService
 {
+    public function __construct(
+        protected GradeCalculationService $gradePolicy,
+        protected ValidationPolicy $validation
+    ) {}
+
     public function store(array $data): Result
     {
-        $this->validateDuplicate($data);
+        $query = Result::where('student_id', $data['student_id'])
+            ->where('semester_id', $data['semester_id'])
+            ->where('academic_session_id', $data['academic_session_id']);
+
+        $this->validation->validateDuplicate(
+            $query,
+            'student_id',
+            'Result already exists for this student in this semester and academic session.'
+        );
 
         $summary = $this->calculateResult($data);
 
@@ -20,7 +35,16 @@ class ResultService
 
     public function update(Result $result, array $data): Result
     {
-        $this->validateDuplicate($data, $result);
+        $query = Result::where('student_id', $data['student_id'])
+            ->where('semester_id', $data['semester_id'])
+            ->where('academic_session_id', $data['academic_session_id']);
+
+        $this->validation->validateDuplicate(
+            $query,
+            'student_id',
+            'Result already exists for this student in this semester and academic session.',
+            $result->id
+        );
 
         $summary = $this->calculateResult($data);
 
@@ -34,24 +58,6 @@ class ResultService
         return $result->delete();
     }
 
-    private function validateDuplicate(array $data, ?Result $result = null): void
-    {
-        $query = Result::where('student_id', $data['student_id'])
-            ->where('semester_id', $data['semester_id'])
-            ->where('academic_session_id', $data['academic_session_id']);
-
-        if ($result) {
-            $query->where('id', '!=', $result->id);
-        }
-
-        if ($query->exists()) {
-            throw ValidationException::withMessages([
-                'student_id' => [
-                    'Result already exists for this student in this semester and academic session.'
-                ]
-            ]);
-        }
-    }
 
     private function calculateResult(array $data): array
     {
@@ -81,9 +87,11 @@ class ResultService
             $totalGradePoint += ($mark->grade_point * $credit);
         }
 
-        $gpa = $totalCredit > 0
-            ? round($totalGradePoint / $totalCredit, 2)
-            : 0;
+        $gpa = $this->gradePolicy
+            ->calculateGpa(
+                $totalGradePoint,
+                $totalCredit
+            );
 
         return [
 
@@ -95,7 +103,8 @@ class ResultService
 
             'gpa' => $gpa,
 
-            'result_status' => $gpa > 0 ? 'Pass' : 'Fail',
+            'result_status' => $this->gradePolicy
+                ->calculateResultStatus($gpa),
         ];
     }
 }

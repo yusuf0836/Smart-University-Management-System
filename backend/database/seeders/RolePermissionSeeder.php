@@ -114,6 +114,8 @@ class RolePermissionSeeder extends Seeder
             'mark.create',
             'mark.update',
             'mark.delete',
+
+            'cgpa.view',
         ]);
 
         /*

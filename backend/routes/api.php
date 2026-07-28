@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\AcademicSessionController;
 use App\Http\Controllers\Api\TeacherCourseAssignmentController;
 use App\Http\Controllers\Api\MarkController;
+use App\Http\Controllers\Api\CGPAController;
 
 Route::prefix('v1')->group(function () {
 
@@ -64,6 +65,10 @@ Route::prefix('v1')->group(function () {
             );
 
             Route::apiResource('marks', MarkController::class);
+            Route::get(
+                'cgpa/{studentId}',
+                [CGPAController::class, 'show']
+            );
 
         });
 

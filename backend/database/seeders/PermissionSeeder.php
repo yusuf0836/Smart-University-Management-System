@@ -137,6 +137,10 @@ class PermissionSeeder extends Seeder
                 'delete',
             ],
 
+            'cgpa' => [
+                'view',
+            ],
+
         ];
 
         foreach ($modules as $module => $actions) {
