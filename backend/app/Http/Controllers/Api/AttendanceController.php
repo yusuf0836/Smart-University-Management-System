@@ -15,7 +15,7 @@ class AttendanceController extends Controller
 {
     
     public function __construct(
-        protected AttendanceService $attendanceService
+        protected AttendanceService $service
     ) {}
     /**
      * List Attendances
@@ -69,7 +69,7 @@ class AttendanceController extends Controller
      */
     public function store(StoreAttendanceRequest $request)
     {
-        $attendance = $this->attendanceService->store(
+        $attendance = $this->service->store(
             $request->validated()
         );
 
@@ -141,7 +141,7 @@ class AttendanceController extends Controller
         UpdateAttendanceRequest $request,
         Attendance $attendance
     ) {
-        $attendance = $this->attendanceService->update(
+        $attendance = $this->service->update(
             $attendance,
             $request->validated()
         );
@@ -177,7 +177,7 @@ class AttendanceController extends Controller
      */
     public function destroy(Attendance $attendance)
     {
-        $this->attendanceService->destroy($attendance);
+        $this->service->destroy($attendance);
 
         return ApiResponse::deleted(
             'Attendance deleted successfully.'

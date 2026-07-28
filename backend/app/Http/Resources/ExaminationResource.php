@@ -13,21 +13,22 @@ class ExaminationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+
             'id' => $this->id,
 
-            'department' => new DepartmentResource(
-                $this->whenLoaded('department')
-            ),
+            'academic_session' => $this->academicSession,
 
-            'semester' => new SemesterResource(
-                $this->whenLoaded('semester')
-            ),
+            'department' => $this->department,
+
+            'semester' => $this->semester,
+
+            'course' => $this->course,
 
             'exam_name' => $this->exam_name,
 
             'exam_type' => $this->exam_type,
 
-            'exam_date' => $this->exam_date?->format('Y-m-d'),
+            'exam_date' => $this->exam_date,
 
             'start_time' => $this->start_time,
 
@@ -35,11 +36,17 @@ class ExaminationResource extends JsonResource
 
             'venue' => $this->venue,
 
+            'total_marks' => $this->total_marks,
+
+            'pass_marks' => $this->pass_marks,
+
             'status' => $this->status,
 
-            'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
+            'remarks' => $this->remarks,
 
-            'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
+            'created_at' => $this->created_at,
+
+            'updated_at' => $this->updated_at,
         ];
     }
 }

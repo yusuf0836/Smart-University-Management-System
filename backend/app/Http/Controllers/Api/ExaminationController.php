@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ExaminationRequest;
-use App\Models\Examination;
-use App\Http\Resources\ExaminationResource;
-use Illuminate\Http\Request;
-use App\Helpers\QueryFilter;
 use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreExaminationRequest;
+use App\Http\Requests\UpdateExaminationRequest;
+use App\Http\Resources\ExaminationResource;
+use App\Models\Examination;
+use App\Services\ExaminationService;
+use Illuminate\Http\Request;
 
 class ExaminationController extends Controller
 {
-    
+    public function __construct(
+        protected ExaminationService $service
+    ) {}
     /**
      * List Examinations
      *
@@ -26,33 +29,18 @@ class ExaminationController extends Controller
      */
     public function index(Request $request)
     {
-        $examinations = QueryFilter::apply(
-            Examination::with([
-                'department',
-                'semester'
-            ]),
-            $request,
-
-            [
-                'title'
-            ],
-
-            [
-                'department_id',
-                'semester_id',
-                'status'
-            ],
-
-            [
-                'id',
-                'exam_date',
-                'created_at'
-            ]
-        );
+        $examinations = Examination::with([
+            'academicSession',
+            'department',
+            'semester',
+            'course',
+        ])
+        ->latest()
+        ->paginate($request->get('per_page', 10));
 
         return ApiResponse::success(
             ExaminationResource::collection($examinations),
-            'Examinations retrieved successfully',
+            'Examination list retrieved successfully.',
             $examinations
         );
     }
@@ -81,13 +69,22 @@ class ExaminationController extends Controller
      *   "message": "Examination created successfully."
      * }
      */
-    public function store(ExaminationRequest $request)
+    public function store(StoreExaminationRequest $request)
     {
-        $examination = Examination::create($request->validated());
+        $examination = $this->service->store(
+            $request->validated()
+        );
 
         return ApiResponse::created(
-            new ExaminationResource($examination),
-            'Examination created successfully'
+            new ExaminationResource(
+                $examination->load([
+                    'academicSession',
+                    'department',
+                    'semester',
+                    'course',
+                ])
+            ),
+            'Examination created successfully.'
         );
     }
 
@@ -106,14 +103,16 @@ class ExaminationController extends Controller
      */
     public function show(Examination $examination)
     {
-        $examination->load([
-            'department',
-            'semester',
-        ]);
-
         return ApiResponse::success(
-            new ExaminationResource($examination),
-            'Examination retrieved successfully'
+            new ExaminationResource(
+                $examination->load([
+                    'academicSession',
+                    'department',
+                    'semester',
+                    'course',
+                ])
+            ),
+            'Examination retrieved successfully.'
         );
     }
 
@@ -143,13 +142,25 @@ class ExaminationController extends Controller
      *   "message": "Examination updated successfully."
      * }
      */
-    public function update(ExaminationRequest $request, Examination $examination)
-    {
-        $examination->update($request->validated());
+    public function update(
+        UpdateExaminationRequest $request,
+        Examination $examination
+    ) {
+        $examination = $this->service->update(
+            $examination,
+            $request->validated()
+        );
 
         return ApiResponse::success(
-            new ExaminationResource($examination),
-            'Examination updated successfully'
+            new ExaminationResource(
+                $examination->load([
+                    'academicSession',
+                    'department',
+                    'semester',
+                    'course',
+                ])
+            ),
+            'Examination updated successfully.'
         );
     }
 
@@ -171,10 +182,10 @@ class ExaminationController extends Controller
      */
     public function destroy(Examination $examination)
     {
-        $examination->delete();
+        $this->service->destroy($examination);
 
         return ApiResponse::deleted(
-            'Examination deleted successfully'
+            'Examination deleted successfully.'
         );
     }
 }
