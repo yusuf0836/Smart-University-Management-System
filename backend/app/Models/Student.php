@@ -80,4 +80,9 @@ class Student extends Model
     {
         return $this->hasMany(Mark::class);
     }
+
+    public function results()
+    {
+        return $this->hasMany(Result::class);
+    }
 }

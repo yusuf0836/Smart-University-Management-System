@@ -44,4 +44,9 @@ class AcademicSession extends Model
     {
         return $this->hasMany(Examination::class);
     }
+
+    public function results()
+    {
+        return $this->hasMany(Result::class);
+    }
 }

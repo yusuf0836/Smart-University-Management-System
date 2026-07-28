@@ -76,4 +76,9 @@ class Semester extends Model
     {
         return $this->hasMany(TeacherCourseAssignment::class);
     }
+
+    public function results()
+    {
+        return $this->hasMany(Result::class);
+    }
 }

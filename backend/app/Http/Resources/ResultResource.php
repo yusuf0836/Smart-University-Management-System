@@ -10,23 +10,35 @@ class ResultResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+
             'id' => $this->id,
 
-            'enrollment' => new EnrollmentResource(
-                $this->whenLoaded('enrollment')
-            ),
+            'enrollment' => $this->enrollment,
 
-            'marks' => $this->marks,
+            'student' => $this->student,
 
-            'grade' => $this->grade,
+            'semester' => $this->semester,
 
-            'grade_point' => $this->grade_point,
+            'academic_session' => $this->academicSession,
+
+            'total_credit' => $this->total_credit,
+
+            'earned_credit' => $this->earned_credit,
+
+            'total_grade_point' => $this->total_grade_point,
+
+            'gpa' => $this->gpa,
+
+            'result_status' => $this->result_status,
 
             'remarks' => $this->remarks,
 
-            'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
+            'status' => $this->status,
 
-            'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
+            'created_at' => $this->created_at,
+
+            'updated_at' => $this->updated_at,
+
         ];
     }
 }

@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ResultRequest;
-use App\Models\Result;
-use App\Http\Resources\ResultResource;
-use Illuminate\Http\Request;
-use App\Helpers\QueryFilter;
 use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreResultRequest;
+use App\Http\Requests\UpdateResultRequest;
+use App\Http\Resources\ResultResource;
+use App\Models\Result;
+use App\Services\ResultService;
+use Illuminate\Http\Request;
 
 class ResultController extends Controller
 {
-    
+    public function __construct(
+        protected ResultService $service
+    ) {}
     /**
      * List Results
      *
@@ -26,34 +29,18 @@ class ResultController extends Controller
      */
     public function index(Request $request)
     {
-        $results = QueryFilter::apply(
-            Result::with([
-                'enrollment.student',
-                'enrollment.course',
-                'enrollment.semester'
-            ]),
-            $request,
-
-            [
-                'grade'
-            ],
-
-            [
-                'enrollment_id',
-                'status'
-            ],
-
-            [
-                'id',
-                'gpa',
-                'grade',
-                'created_at'
-            ]
-        );
+        $results = Result::with([
+            'enrollment',
+            'student',
+            'semester',
+            'academicSession',
+        ])
+        ->latest()
+        ->paginate($request->get('per_page', 10));
 
         return ApiResponse::success(
             ResultResource::collection($results),
-            'Results retrieved successfully',
+            'Result list retrieved successfully.',
             $results
         );
     }
@@ -76,20 +63,22 @@ class ResultController extends Controller
      *   "message": "Result created successfully."
      * }
      */
-    public function store(ResultRequest $request)
+    public function store(StoreResultRequest $request)
     {
-        $data = $request->validated();
-
-        [$grade, $gradePoint] = $this->calculateGrade($data['marks']);
-
-        $data['grade'] = $grade;
-        $data['grade_point'] = $gradePoint;
-
-        $result = Result::create($data);
+        $result = $this->service->store(
+            $request->validated()
+        );
 
         return ApiResponse::created(
-            new ResultResource($result),
-            'Result created successfully'
+            new ResultResource(
+                $result->load([
+                    'enrollment',
+                    'student',
+                    'semester',
+                    'academicSession',
+                ])
+            ),
+            'Result created successfully.'
         );
     }
 
@@ -108,15 +97,16 @@ class ResultController extends Controller
      */
     public function show(Result $result)
     {
-        $result->load([
-            'enrollment.student',
-            'enrollment.course',
-            'enrollment.semester',
-        ]);
-
         return ApiResponse::success(
-            new ResultResource($result),
-            'Result retrieved successfully'
+            new ResultResource(
+                $result->load([
+                    'enrollment',
+                    'student',
+                    'semester',
+                    'academicSession',
+                ])
+            ),
+            'Result retrieved successfully.'
         );
     }
 
@@ -140,20 +130,26 @@ class ResultController extends Controller
      *   "message": "Result updated successfully."
      * }
      */
-    public function update(ResultRequest $request, Result $result)
-    {
-        $data = $request->validated();
+    public function update(
+        UpdateResultRequest $request,
+        Result $result
+    ) {
 
-        [$grade, $gradePoint] = $this->calculateGrade($data['marks']);
-
-        $data['grade'] = $grade;
-        $data['grade_point'] = $gradePoint;
-
-        $result->update($data);
+        $result = $this->service->update(
+            $result,
+            $request->validated()
+        );
 
         return ApiResponse::success(
-            new ResultResource($result),
-            'Result updated successfully'
+            new ResultResource(
+                $result->load([
+                    'enrollment',
+                    'student',
+                    'semester',
+                    'academicSession',
+                ])
+            ),
+            'Result updated successfully.'
         );
     }
 
@@ -175,28 +171,12 @@ class ResultController extends Controller
      */
     public function destroy(Result $result)
     {
-        $result->delete();
+        $this->service->destroy($result);
 
         return ApiResponse::deleted(
-            'Result deleted successfully'
+            'Result deleted successfully.'
         );
     }
 
-    /**
-     * Calculate grade and grade point.
-     */
-    private function calculateGrade($marks): array
-    {
-        if ($marks >= 80) return ['A+', 4.00];
-        if ($marks >= 75) return ['A', 3.75];
-        if ($marks >= 70) return ['A-', 3.50];
-        if ($marks >= 65) return ['B+', 3.25];
-        if ($marks >= 60) return ['B', 3.00];
-        if ($marks >= 55) return ['B-', 2.75];
-        if ($marks >= 50) return ['C+', 2.50];
-        if ($marks >= 45) return ['C', 2.25];
-        if ($marks >= 40) return ['D', 2.00];
-
-        return ['F', 0.00];
-    }
+    
 }
