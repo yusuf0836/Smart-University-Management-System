@@ -2,75 +2,65 @@
 
 namespace App\Services;
 
-use App\Models\Transcript;
 use App\Models\Result;
+use App\Models\Student;
+use App\Models\Transcript;
 
 class TranscriptService
 {
-    public function generate(int $studentId, int $semesterId): Transcript
-    {
-        $results = Result::with('enrollment.course')
-            ->whereHas('enrollment', function ($query) use ($studentId, $semesterId) {
-                $query->where('student_id', $studentId)
-                      ->where('semester_id', $semesterId);
-            })
-            ->get();
+    public function __construct(
+        protected CGPAService $cgpaService
+    ) {}
 
-        $totalCredits = 0;
-        $totalGradePoints = 0;
+    public function generate(
+        int $studentId,
+        int $semesterId
+    ): array {
 
-        foreach ($results as $result) {
+        $student = Student::with([
+            'department',
+        ])->findOrFail($studentId);
 
-            $credit = $result->enrollment->course->credit;
-            $gradePoint = $result->grade_point;
+        $results = Result::with([
+            'semester',
+            'academicSession',
+        ])
+        ->where('student_id', $studentId)
+        ->where('semester_id', $semesterId)
+        ->get();
 
-            $totalCredits += $credit;
-            $totalGradePoints += ($credit * $gradePoint);
-        }
-
-        $semesterGpa = $totalCredits > 0
-            ? round($totalGradePoints / $totalCredits, 2)
-            : 0;
-
-        $cgpa = $semesterGpa;
+        $cgpa = $this->cgpaService
+            ->calculate($studentId);
 
         $transcript = Transcript::updateOrCreate(
+
             [
                 'student_id' => $studentId,
                 'semester_id' => $semesterId,
             ],
+
             [
-                'semester_gpa' => $semesterGpa,
-                'cgpa' => $cgpa,
-                'total_credits' => $totalCredits,
+                'transcript_no' => 'TEMP-' . time(),
+
+                'generated_by' => auth()->id(),
+
+                'generated_at' => now(),
+
                 'status' => 'Published',
             ]
+
         );
 
-        
-        $transcripts = Transcript::where('student_id', $studentId)
-            ->orderBy('semester_id')
-            ->get();
+        return [
 
-        $totalCredits = 0;
-        $totalGradePoints = 0;
+            'student' => $student,
 
-        foreach ($transcripts as $item) {
-            $totalCredits += $item->total_credits;
-            $totalGradePoints += $item->semester_gpa * $item->total_credits;
-        }
+            'cgpa' => $cgpa,
 
-        $cgpa = $totalCredits > 0
-            ? round($totalGradePoints / $totalCredits, 2)
-            : 0;
+            'results' => $results,
 
-        Transcript::where('student_id', $studentId)
-            ->update([
-                'cgpa' => $cgpa,
-            ]);
+            'transcript' => $transcript,
 
-        $transcript->refresh();
-
-        return $transcript;
+        ];
     }
 }

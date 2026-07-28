@@ -11,27 +11,56 @@ class TranscriptResource extends JsonResource
     {
         return [
 
-            'id' => $this->id,
-
             'student' => new StudentResource(
-                $this->whenLoaded('student')
+                $this['student']
             ),
 
-            'semester' => new SemesterResource(
-                $this->whenLoaded('semester')
+            'cgpa' => [
+
+                'total_semester' =>
+                    $this['cgpa']['total_semester'],
+
+                'total_credit' =>
+                    $this['cgpa']['total_credit'],
+
+                'earned_credit' =>
+                    $this['cgpa']['earned_credit'],
+
+                'total_grade_point' =>
+                    $this['cgpa']['total_grade_point'],
+
+                'cgpa' =>
+                    $this['cgpa']['cgpa'],
+
+                'result_status' =>
+                    $this['cgpa']['result_status'],
+
+            ],
+
+            'semester_results' => ResultResource::collection(
+                $this['results']
             ),
 
-            'semester_gpa' => $this->semester_gpa,
+            'transcript' => [
 
-            'cgpa' => $this->cgpa,
+                'id' => $this['transcript']->id,
 
-            'total_credits' => $this->total_credits,
+                'transcript_no' =>
+                    $this['transcript']->transcript_no,
 
-            'status' => $this->status,
+                'status' =>
+                    $this['transcript']->status,
 
-            'created_at' => $this->created_at,
+                'generated_at' =>
+                    $this['transcript']->generated_at,
 
-            'updated_at' => $this->updated_at,
+                'generated_by' =>
+                    $this['transcript']->generatedBy,
+
+                'pdf_path' =>
+                    $this['transcript']->pdf_path,
+
+            ],
 
         ];
     }

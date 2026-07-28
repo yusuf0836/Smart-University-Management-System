@@ -70,6 +70,11 @@ Route::prefix('v1')->group(function () {
                 [CGPAController::class, 'show']
             );
 
+            Route::get(
+                'transcripts/{studentId}/{semesterId}',
+                [TranscriptController::class, 'show']
+            );
+
         });
 
         /**
@@ -392,7 +397,7 @@ Route::prefix('v1')->group(function () {
         /**
          * Transcript Management
          */
-        Route::prefix('transcripts')->group(function () {
+        /* Route::prefix('transcripts')->group(function () {
 
             Route::get('/', [TranscriptController::class, 'index'])
                 ->middleware('permission:transcript.view');
@@ -408,7 +413,7 @@ Route::prefix('v1')->group(function () {
 
             Route::delete('/{transcript}', [TranscriptController::class, 'destroy'])
                 ->middleware('permission:transcript.delete');
-        });
+        }); */
 
     });
 

@@ -2,24 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\Transcript;
-use App\Services\TranscriptService;
-use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
-use App\Models\Result;
-use App\Http\Resources\TranscriptResource;
-use App\Helpers\QueryFilter;
 use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\TranscriptResource;
+use App\Services\TranscriptService;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class TranscriptController extends Controller
 {
-    protected TranscriptService $transcriptService;
-
-    public function __construct(TranscriptService $transcriptService)
-    {
-        $this->transcriptService = $transcriptService;
-    }
+    public function __construct(
+        protected TranscriptService $service
+    ) {}
 
     /**
      * Generate Transcript
@@ -43,7 +37,7 @@ class TranscriptController extends Controller
      *   }
      * }
      */
-    public function generate(Request $request)
+    /* public function generate(Request $request)
     {
         $request->validate([
             'student_id' => ['required', 'exists:students,id'],
@@ -64,7 +58,7 @@ class TranscriptController extends Controller
             new TranscriptResource($transcript),
             'Transcript generated successfully.'
         );
-    }
+    } */
 
     /**
      * Show Transcript
@@ -79,16 +73,18 @@ class TranscriptController extends Controller
      *
      * @response 200 {"success": true}
      */
-    public function show(Transcript $transcript)
-    {
-        $transcript->load([
-            'student',
-            'semester'
-        ]);
+    public function show(
+        int $studentId,
+        int $semesterId
+    ) {
+        $transcript = $this->service->generate(
+            $studentId,
+            $semesterId
+        );
 
         return ApiResponse::success(
             new TranscriptResource($transcript),
-            'Transcript retrieved successfully'
+            'Transcript generated successfully.'
         );
     }
 
@@ -103,7 +99,7 @@ class TranscriptController extends Controller
      *
      * @response 200 {"success": true}
      */
-    public function index(Request $request)
+    /* public function index(Request $request)
     {
         $transcripts = QueryFilter::apply(
             Transcript::with([
@@ -133,7 +129,7 @@ class TranscriptController extends Controller
             'Transcripts retrieved successfully',
             $transcripts
         );
-    }
+    } */
     
     /**
      * Download Transcript PDF
@@ -148,7 +144,7 @@ class TranscriptController extends Controller
      *
      * @response 200
      */
-    public function downloadPdf(Transcript $transcript)
+    /* public function downloadPdf(Transcript $transcript)
     {
         $transcript->load([
             'student',
@@ -175,7 +171,7 @@ class TranscriptController extends Controller
         return $pdf->download(
             'Transcript_'.$student->student_id.'_'.$semester->name.'.pdf'
         );
-    }
+    } */
     
     /**
      * Delete Transcript
@@ -193,12 +189,12 @@ class TranscriptController extends Controller
      *   "message": "Transcript deleted successfully."
      * }
      */
-    public function destroy(Transcript $transcript)
+    /* public function destroy(Transcript $transcript)
     {
         $transcript->delete();
 
         return ApiResponse::deleted(
             'Transcript deleted successfully'
         );
-    }
+    } */
 }

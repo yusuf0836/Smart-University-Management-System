@@ -10,20 +10,34 @@ class Transcript extends Model
     use SoftDeletes;
 
     protected $fillable = [
+
         'student_id',
+
         'semester_id',
-        'semester_gpa',
-        'cgpa',
-        'total_credits',
+
+        'transcript_no',
+
+        'generated_by',
+
+        'generated_at',
+
+        'pdf_path',
+
         'status',
+
     ];
 
     protected $casts = [
-        'semester_gpa' => 'decimal:2',
-        'cgpa' => 'decimal:2',
-        'total_credits' => 'decimal:2',
-        'status' => 'boolean',
+
+        'generated_at' => 'datetime',
+
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
 
     public function student()
     {
@@ -33,5 +47,10 @@ class Transcript extends Model
     public function semester()
     {
         return $this->belongsTo(Semester::class);
+    }
+
+    public function generatedBy()
+    {
+        return $this->belongsTo(User::class, 'generated_by');
     }
 }
