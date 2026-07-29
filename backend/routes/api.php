@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\TeacherCourseAssignmentController;
 use App\Http\Controllers\Api\MarkController;
 use App\Http\Controllers\Api\CGPAController;
 use App\Http\Controllers\Api\AttendanceReportController;
+use App\Http\Controllers\Api\MarksReportController;
 
 Route::prefix('v1')->group(function () {
 
@@ -89,6 +90,69 @@ Route::prefix('v1')->group(function () {
                 'dashboard/student/{studentId}',
                 [DashboardController::class, 'student']
             );
+
+        });
+
+        /**
+         * Marks Report
+         */
+
+        Route::prefix('marks-reports')->group(function () {
+
+            Route::get('/student/{studentId}', [
+                MarksReportController::class,
+                'student'
+            ]);
+
+            Route::get('/course/{courseId}', [
+                MarksReportController::class,
+                'course'
+            ]);
+
+            Route::get('/teacher/{teacherId}', [
+                MarksReportController::class,
+                'teacher'
+            ]);
+
+            Route::get('/semester/{semesterId}', [
+                MarksReportController::class,
+                'semester'
+            ]);
+
+            Route::get('/department/{departmentId}', [
+                MarksReportController::class,
+                'department'
+            ]);
+
+            Route::get('/examination/{examinationId}', [
+                MarksReportController::class,
+                'examination'
+            ]);
+
+            Route::get('/highest', [
+                MarksReportController::class,
+                'highest'
+            ]);
+
+            Route::get('/lowest', [
+                MarksReportController::class,
+                'lowest'
+            ]);
+
+            Route::get('/average', [
+                MarksReportController::class,
+                'average'
+            ]);
+
+            Route::get('/summary', [
+                MarksReportController::class,
+                'summary'
+            ]);
+
+            Route::post('/date-range', [
+                MarksReportController::class,
+                'dateRange'
+            ]);
 
         });
 
