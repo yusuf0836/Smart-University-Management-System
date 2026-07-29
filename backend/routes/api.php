@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\AcademicSessionController;
 use App\Http\Controllers\Api\TeacherCourseAssignmentController;
 use App\Http\Controllers\Api\MarkController;
 use App\Http\Controllers\Api\CGPAController;
+use App\Http\Controllers\Api\AttendanceReportController;
 
 Route::prefix('v1')->group(function () {
 
@@ -254,6 +255,42 @@ Route::prefix('v1')->group(function () {
 
             Route::delete('/{attendance}', [AttendanceController::class, 'destroy'])
                 ->middleware('permission:attendance.delete');
+        });
+        /**
+         *  Attendance Report
+         * */ 
+        Route::prefix('attendance-reports')->group(function () {
+
+            Route::get('/student/{studentId}', [
+                AttendanceReportController::class,
+                'student'
+            ]);
+
+            Route::get('/course/{courseId}', [
+                AttendanceReportController::class,
+                'course'
+            ]);
+
+            Route::get('/teacher/{teacherId}', [
+                AttendanceReportController::class,
+                'teacher'
+            ]);
+
+            Route::get('/semester/{semesterId}', [
+                AttendanceReportController::class,
+                'semester'
+            ]);
+
+            Route::get('/summary', [
+                AttendanceReportController::class,
+                'summary'
+            ]);
+
+            Route::post('/date-range', [
+                AttendanceReportController::class,
+                'dateRange'
+            ]);
+
         });
 
         /**
