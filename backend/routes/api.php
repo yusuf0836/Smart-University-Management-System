@@ -23,6 +23,7 @@ use App\Http\Controllers\Api\MarkController;
 use App\Http\Controllers\Api\CGPAController;
 use App\Http\Controllers\Api\AttendanceReportController;
 use App\Http\Controllers\Api\MarksReportController;
+use App\Http\Controllers\Api\ResultReportController;
 
 Route::prefix('v1')->group(function () {
 
@@ -152,6 +153,53 @@ Route::prefix('v1')->group(function () {
             Route::post('/date-range', [
                 MarksReportController::class,
                 'dateRange'
+            ]);
+
+        });
+
+        /**
+         * Result Report
+         */
+        Route::prefix('result-reports')->group(function () {
+
+            Route::get('/student/{studentId}', [
+                ResultReportController::class,
+                'student'
+            ]);
+
+            Route::get('/semester/{semesterId}', [
+                ResultReportController::class,
+                'semester'
+            ]);
+
+            Route::get('/department/{departmentId}', [
+                ResultReportController::class,
+                'department'
+            ]);
+
+            Route::get('/passed', [
+                ResultReportController::class,
+                'passedStudents'
+            ]);
+
+            Route::get('/failed', [
+                ResultReportController::class,
+                'failedStudents'
+            ]);
+
+            Route::get('/top-students', [
+                ResultReportController::class,
+                'topStudents'
+            ]);
+
+            Route::get('/gpa', [
+                ResultReportController::class,
+                'gpaReport'
+            ]);
+
+            Route::get('/summary', [
+                ResultReportController::class,
+                'summary'
             ]);
 
         });
