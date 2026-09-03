@@ -25,6 +25,7 @@ use App\Http\Controllers\Api\AttendanceReportController;
 use App\Http\Controllers\Api\MarksReportController;
 use App\Http\Controllers\Api\ResultReportController;
 use App\Http\Controllers\Api\StudentReportController;
+use App\Http\Controllers\Api\TeacherReportController;
 
 Route::prefix('v1')->group(function () {
 
@@ -242,6 +243,48 @@ Route::prefix('v1')->group(function () {
 
             Route::post('/date-range', [
                 StudentReportController::class,
+                'dateRange'
+            ]);
+
+        });
+
+        /**
+         * Teacher Report
+         */
+        Route::prefix('teacher-reports')->group(function () {
+
+            Route::get('/teacher/{teacherId}', [
+                TeacherReportController::class,
+                'teacher'
+            ]);
+
+            Route::get('/department/{departmentId}', [
+                TeacherReportController::class,
+                'department'
+            ]);
+
+            Route::get('/active', [
+                TeacherReportController::class,
+                'active'
+            ]);
+
+            Route::get('/inactive', [
+                TeacherReportController::class,
+                'inactive'
+            ]);
+
+            Route::get('/assigned-courses/{teacherId}', [
+                TeacherReportController::class,
+                'assignedCourses'
+            ]);
+
+            Route::get('/summary', [
+                TeacherReportController::class,
+                'summary'
+            ]);
+
+            Route::post('/date-range', [
+                TeacherReportController::class,
                 'dateRange'
             ]);
 
