@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\MarksReportController;
 use App\Http\Controllers\Api\ResultReportController;
 use App\Http\Controllers\Api\StudentReportController;
 use App\Http\Controllers\Api\TeacherReportController;
+use App\Http\Controllers\Api\DepartmentSummaryController;
 
 Route::prefix('v1')->group(function () {
 
@@ -286,6 +287,33 @@ Route::prefix('v1')->group(function () {
             Route::post('/date-range', [
                 TeacherReportController::class,
                 'dateRange'
+            ]);
+
+        });
+
+        /**
+         * Department Summary
+         */
+        Route::prefix('department-summary')->group(function () {
+
+            Route::get('/all', [
+                DepartmentSummaryController::class,
+                'all'
+            ]);
+
+            Route::get('/department/{departmentId}', [
+                DepartmentSummaryController::class,
+                'department'
+            ]);
+
+            Route::get('/statistics/{departmentId}', [
+                DepartmentSummaryController::class,
+                'statistics'
+            ]);
+
+            Route::get('/overall', [
+                DepartmentSummaryController::class,
+                'overall'
             ]);
 
         });
