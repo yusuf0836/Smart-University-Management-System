@@ -27,6 +27,7 @@ use App\Http\Controllers\Api\ResultReportController;
 use App\Http\Controllers\Api\StudentReportController;
 use App\Http\Controllers\Api\TeacherReportController;
 use App\Http\Controllers\Api\DepartmentSummaryController;
+use App\Http\Controllers\Api\StudentPhotoController;
 
 Route::prefix('v1')->group(function () {
 
@@ -314,6 +315,29 @@ Route::prefix('v1')->group(function () {
             Route::get('/overall', [
                 DepartmentSummaryController::class,
                 'overall'
+            ]);
+
+        });
+
+        /**
+         * Student Photo Management
+         */
+        
+        Route::prefix('students')->group(function () {
+
+            Route::get('/{studentId}/photo', [
+                StudentPhotoController::class,
+                'show'
+            ]);
+
+            Route::post('/{studentId}/photo', [
+                StudentPhotoController::class,
+                'upload'
+            ]);
+
+            Route::delete('/{studentId}/photo', [
+                StudentPhotoController::class,
+                'destroy'
             ]);
 
         });
