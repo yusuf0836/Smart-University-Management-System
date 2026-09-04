@@ -29,6 +29,9 @@ use App\Http\Controllers\Api\TeacherReportController;
 use App\Http\Controllers\Api\DepartmentSummaryController;
 use App\Http\Controllers\Api\StudentPhotoController;
 use App\Http\Controllers\Api\TeacherPhotoController;
+use App\Http\Controllers\Api\NoticeAttachmentController;
+use App\Http\Controllers\Api\ProfileImageController;
+use App\Http\Controllers\Api\PdfFileController;
 
 Route::prefix('v1')->group(function () {
 
@@ -360,6 +363,82 @@ Route::prefix('v1')->group(function () {
 
             Route::delete('/{teacherId}/photo', [
                 TeacherPhotoController::class,
+                'destroy'
+            ]);
+
+        });
+
+        /**
+         * Notice Attachment Management
+         */
+        Route::prefix('notices')->group(function () {
+
+            Route::get('/{noticeId}/attachment', [
+                NoticeAttachmentController::class,
+                'show'
+            ]);
+
+            Route::post('/{noticeId}/attachment', [
+                NoticeAttachmentController::class,
+                'upload'
+            ]);
+
+            Route::delete('/{noticeId}/attachment', [
+                NoticeAttachmentController::class,
+                'destroy'
+            ]);
+
+        });
+
+        /**
+         * Profile Image Management
+         */
+        Route::prefix('profile')->group(function () {
+
+            Route::get('/image', [
+                ProfileImageController::class,
+                'show'
+            ]);
+
+            Route::post('/image', [
+                ProfileImageController::class,
+                'upload'
+            ]);
+
+            Route::delete('/image', [
+                ProfileImageController::class,
+                'destroy'
+            ]);
+
+        });
+
+        /**
+         * PDF File Management
+         */
+        Route::prefix('pdf-files')->group(function () {
+
+            Route::post('/upload', [
+                PdfFileController::class,
+                'upload'
+            ]);
+
+            Route::get('/', [
+                PdfFileController::class,
+                'index'
+            ]);
+
+            Route::get('/{id}', [
+                PdfFileController::class,
+                'show'
+            ]);
+
+            Route::post('/upload', [
+                PdfFileController::class,
+                'upload'
+            ]);
+
+            Route::delete('/{id}', [
+                PdfFileController::class,
                 'destroy'
             ]);
 
